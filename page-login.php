@@ -6,7 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
 
    
-    $conn = new mysqli("localhost", "root", "", "medical");
+    $conn = new mysqli("192.185.129.71", "medha_mycare", "peO*aDq0=Hb&", "medha_mycare");
 
     
     $email = $conn->real_escape_string($email);
