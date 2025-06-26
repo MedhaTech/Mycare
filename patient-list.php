@@ -18,7 +18,7 @@
                             </div>
 
                             <?php
-                            $conn = new mysqli("localhost", "root", "", "medical");
+                            $conn = new mysqli("192.185.129.71", "medha_mycare", "peO*aDq0=Hb&", "medha_mycare");
                             if ($conn->connect_error) {
                                 die("Connection failed: " . $conn->connect_error);
                             }
