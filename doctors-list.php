@@ -26,6 +26,9 @@
 
                             $sql = "SELECT * FROM doctors";
                             $result = $conn->query($sql);
+                            if (!$result) {
+                                die("Query error: " . $conn->error);
+                            }
                             ?>
 
                             <div class="table-responsive">
