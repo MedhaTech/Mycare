@@ -1,9 +1,12 @@
 <?php
+error_reporting(E_ALL); 
+ini_set('display_errors', '1'); 
+ini_set('display_startup_errors', '1'); 
 /*
 $servername = "localhost";
 $username = "root"; 
 $password = "";     
-$database = "medical";
+$database = "my_care";
 
 
 $conn = new mysqli($servername, $username, $password, $database);
