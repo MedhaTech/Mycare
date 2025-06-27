@@ -1,4 +1,4 @@
-name: FTP Auto-deployment
+name: FTP Auto-deploym ent
 
 on:
   push:
