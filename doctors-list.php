@@ -16,7 +16,7 @@
                             <?php
                             include 'dbconnection.php';
 
-                            die();
+                            
                             if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggleStatus'])) {
                                 $id = $_POST['id'];
                                 $newStatus = $_POST['currentStatus'] === 'Active' ? 'Inactive' : 'Active';
