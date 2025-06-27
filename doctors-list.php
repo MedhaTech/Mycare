@@ -11,6 +11,7 @@
                         <div class="widget-body">
                             <h2 class="box-title">Doctors List</h2>
                             <p>A list of all doctors in your clinic with their details.</p>
+                        </div> 
 
                             <?php
                             include 'dbconnection.php';
