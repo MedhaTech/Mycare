@@ -73,7 +73,7 @@ $conn->close();
                                 <div class="alert alert-danger"><?php echo $error; ?></div>
                             <?php endif; ?>
 
-                            <form method="POST" action="">
+                            <form method="POST" class="bg-white p-4 rounded shadow-sm" action="">
                                 <div class="row">
                                     <div class="form-group col-md-6">
                                         <label>Doctor Name</label>
