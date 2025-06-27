@@ -1,4 +1,3 @@
-
 <?php
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -8,7 +7,6 @@ echo "DEBUG: Top of doctors-list.php reached<br>";
 <?php include 'header.php';
 echo "DEBUG: After including header.php<br>";
 ?>
-
 <main class="main-wrapper clearfix" style="margin-top: 30px;">
     <div class="container">
         <div class="widget-list">
