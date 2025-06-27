@@ -1,12 +1,8 @@
 
-
 <?php include 'header.php'; ?>
 
 <?php
-$conn = new mysqli("192.185.129.71", "medha_mycare", "peO*aDq0=Hb&", "medha_mycare");
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include 'dbconnection.php';
 
 function generateDoctorID($conn) {
     $result = $conn->query("SELECT MAX(CAST(SUBSTRING(doctor_id, 3) AS UNSIGNED)) AS max_id FROM doctors");

@@ -18,10 +18,7 @@
                             </div>
 
                             <?php
-                            $conn = new mysqli("192.185.129.71", "medha_mycare", "peO*aDq0=Hb&", "medha_mycare");
-                            if ($conn->connect_error) {
-                                die("Connection failed: " . $conn->connect_error);
-                            }
+                            include 'dbconnection.php';
 
                             $sql = "SELECT patients.id, patients.name, patients.phone, doctors.name AS doctor_name
                                     FROM patients
