@@ -19,6 +19,7 @@
 
                             <?php
                             include 'dbconnection.php';
+                            include 'init.php';
 
                             $sql = "SELECT patients.id, patients.name, patients.phone, doctors.name AS doctor_name
                                     FROM patients

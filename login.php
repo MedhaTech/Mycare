@@ -6,6 +6,7 @@ session_start();
 
 
 include 'dbconnection.php';
+include 'init.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = isset($_POST['email']) ? mysqli_real_escape_string($conn, $_POST['email']) : '';
@@ -28,4 +29,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 $conn->close();
 ?>
-

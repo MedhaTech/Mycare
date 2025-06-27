@@ -9,6 +9,7 @@ if (!isset($_SESSION['email'])) {
 <?php
 
 include 'dbconnection.php';
+include 'init.php';
 
 
 $name = $conn->real_escape_string($_POST['name']);

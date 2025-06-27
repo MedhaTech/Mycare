@@ -7,6 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
    
 include 'dbconnection.php';
+include 'init.php';
 
     
     $email = $conn->real_escape_string($email);

@@ -8,6 +8,7 @@ if (!isset($_SESSION['email'])) {
 
 <?php
 include 'dbconnection.php';
+include 'init.php';
 $conn->close();
 header("Location: doctors-list.php");
 exit();
