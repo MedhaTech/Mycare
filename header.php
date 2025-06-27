@@ -76,7 +76,7 @@ if (!isset($_SESSION['loggedin'])) {
                     <li class="menu-item-has-children">
                         <a href="#"><i class="list-icon material-icons">people</i><span class="hide-menu">Patients</span></a>
                         <ul class="list-unstyled sub-menu">
-                            <li><a href="patients-list.php">Patients List</a></li>
+                            <li><a href="patient-list.php">Patients List</a></li>
                             <li><a href="add-patient.php">Add Patient</a></li>
                         </ul>
                     </li>
