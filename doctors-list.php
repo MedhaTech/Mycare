@@ -1,6 +1,13 @@
 
-
-<?php include 'header.php'; ?>
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+echo "DEBUG: Top of doctors-list.php reached<br>";
+?>
+<?php include 'header.php';
+echo "DEBUG: After including header.php<br>";
+?>
 
 <main class="main-wrapper clearfix" style="margin-top: 30px;">
     <div class="container">
