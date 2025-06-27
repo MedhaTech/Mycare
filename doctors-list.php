@@ -1,7 +1,7 @@
-
-
-<?php include 'header.php'; ?>
-
+<?php
+include 'init.php';
+include 'header.php';
+?>
 <main class="main-wrapper clearfix" style="margin-top: 30px;">
     <div class="container">
         <div class="widget-list">
@@ -11,6 +11,7 @@
                         <div class="widget-body">
                             <h2 class="box-title">Doctors List</h2>
                             <p>A list of all doctors in your clinic with their details.</p>
+                        </div> 
 
                             <?php
                             include 'dbconnection.php';
@@ -26,6 +27,9 @@
 
                             $sql = "SELECT * FROM doctors";
                             $result = $conn->query($sql);
+                            if (!$result) {
+                                die("Query error: " . $conn->error);
+                            }
                             ?>
 
                             <div class="table-responsive">

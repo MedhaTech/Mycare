@@ -65,6 +65,7 @@ $conn->close();
                         <div class="widget-body">
                             <h4 class="box-title">Add New Doctor</h4>
                             <p>Fill out the form to add a new doctor.</p>
+                        </div>
 
                             <?php if ($success): ?>
                                 <div class="alert alert-success"><?php echo $success; ?></div>
