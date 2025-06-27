@@ -1,9 +1,10 @@
-
 <?php include 'header.php'; ?>
 
 <?php
 include 'dbconnection.php';
+include 'init.php';
 
+// Generate next doctor ID like MC001, MC002, ...
 function generateDoctorID($conn) {
     $result = $conn->query("SELECT MAX(CAST(SUBSTRING(doctor_id, 3) AS UNSIGNED)) AS max_id FROM doctors");
     $row = $result->fetch_assoc();
