@@ -5,10 +5,7 @@ session_start();
 
 
 
-$conn = new mysqli("192.185.129.71", "medha_mycare", "peO*aDq0=Hb&", "medha_mycare");
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include 'dbconnection.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = isset($_POST['email']) ? mysqli_real_escape_string($conn, $_POST['email']) : '';
