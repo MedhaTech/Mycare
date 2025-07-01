@@ -1,7 +1,6 @@
 <?php
 include 'header.php';
 include 'dbconnection.php';
-include 'init.php';
 
 $appointment_id = $_GET['id'] ?? null;
 $message = '';

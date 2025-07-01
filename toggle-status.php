@@ -9,7 +9,6 @@ if (!isset($_SESSION['email'])) {
 <?php
 if (isset($_GET['id'])) {
     include 'dbconnection.php';
-    include 'init.php';
 
     $doctorId = $_GET['id'];
 

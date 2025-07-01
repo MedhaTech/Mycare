@@ -1,6 +1,5 @@
 <?php
 include 'dbconnection.php';
-include 'init.php';
 
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 
