@@ -6,7 +6,6 @@ if (!isset($_SESSION['loggedin'])) {
     exit();
 }
 include 'dbconnection.php';
-include 'init.php';
 $doctor_id = $_GET['id'];
 $sql = "SELECT * FROM doctors WHERE doctor_id='$doctor_id'";
 $result = $conn->query($sql);

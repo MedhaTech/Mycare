@@ -1,6 +1,5 @@
 <?php
 include 'dbconnection.php';
-include 'init.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $patient_id = $_POST['patient_id'];
