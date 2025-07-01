@@ -1,6 +1,7 @@
 <?php
 include 'header.php';
 include 'dbconnection.php';
+include 'init.php';
 
 $message = '';
 

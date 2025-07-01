@@ -33,6 +33,7 @@
 
         <?php
         include 'dbconnection.php';
+        include 'init.php';
         $sql = "SELECT patients.*, doctors.name AS doctor_name
                 FROM patients
                 LEFT JOIN doctors ON patients.doctor_id = doctors.id

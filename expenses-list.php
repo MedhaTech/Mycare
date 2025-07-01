@@ -1,5 +1,6 @@
 <?php include 'header.php'; ?>
-<?php include 'dbconnection.php'; ?>
+<?php include 'dbconnection.php';
+include 'init.php'; ?>
 
 <!-- Breadcrumb + Heading -->
 

@@ -6,6 +6,7 @@ if (!isset($_SESSION['email'])) {
 }
 
 include 'dbconnection.php';
+include 'init.php';
 
 if (isset($_POST['id'])) {
     $id = $_POST['id'];

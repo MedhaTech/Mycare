@@ -1,5 +1,6 @@
 <?php
 include 'dbconnection.php';
+include 'init.php';
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     die("Invalid expense ID.");
