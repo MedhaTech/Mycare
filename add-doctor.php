@@ -104,7 +104,7 @@ $conn->close();
                     <div class="widget-bg">
                         <div class="widget-body">
                             <h4 class="box-title">Add New Doctor</h4>
-                            <p>Fill out the form to add a new doctor.</p>
+                            <p>Fill out the form to add a new Doctor.</p>
                             <form method="POST" action="">
                                 <div class="row">
                                     <div class="form-group col-md-4">
@@ -255,7 +255,7 @@ document.querySelector("form").addEventListener("submit", function(e) {
     const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.(com|in)$/i;
 
     if (!phoneRegex.test(phone)) {
-        alert("Please enter a valid 10-digit phone number.");
+        alert("Please enter a valid 10-digit phone no.");
         e.preventDefault();
     }
 
@@ -265,5 +265,7 @@ document.querySelector("form").addEventListener("submit", function(e) {
     }
 });
 </script>
+ 
+
 
 <?php include 'footer.php'; ?>
