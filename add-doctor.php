@@ -76,7 +76,7 @@ $conn->close();
                             <form method="POST" class="bg-white p-4 rounded shadow-sm" action="">
                                 <div class="row">
                                     <div class="form-group col-md-6">
-                                        <label>Doctor Name</label>
+                                        <label>Doctor Names</label>
                                         <input type="text" name="name" class="form-control" required>
                                     </div>
                                     <div class="form-group col-md-3">
