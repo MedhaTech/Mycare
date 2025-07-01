@@ -1,162 +1,174 @@
+
+<?php include 'header.php'; ?>
+
 <?php
-include 'header.php';
 include 'dbconnection.php';
+include 'init.php';
 
-$message = '';
+function generateDoctorID($conn) {
+    $result = $conn->query("SELECT MAX(CAST(SUBSTRING(doctor_id, 3) AS UNSIGNED)) AS max_id FROM doctors");
+    $row = $result->fetch_assoc();
+    $next = $row['max_id'] + 1;
+    return 'MC' . str_pad($next, 3, '0', STR_PAD_LEFT);
+}
 
-// Handle form submission
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
+$success = "";
+$error = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $doctor_id = generateDoctorID($conn);
     $name = $_POST['name'];
     $phone = $_POST['phone'];
+    $email = $_POST['email'];
+    $department = $_POST['department'];
+    $designation = $_POST['designation'];
     $dob = $_POST['dob'];
     $gender = $_POST['gender'];
-    $abha = $_POST['abha_number'];
-    $aadhar = $_POST['aadhar_number'];
+    $qualification = $_POST['qualification'];
+    $license = $_POST['license'];
+    $experience = $_POST['experience'];
     $address1 = $_POST['address1'];
     $address2 = $_POST['address2'];
     $city = $_POST['city'];
     $state = $_POST['state'];
     $pincode = $_POST['pincode'];
-    $blood = $_POST['blood_group'];
-    $height = $_POST['height_cm'];
-    $weight = $_POST['weight_kg'];
-    $sugar = $_POST['sugar_level'];
-    $bp = $_POST['bp'];
-    $doctor_id = $_POST['doctor_id'];
+    $bank_name = $_POST['bank_name'];
+    $account_name = $_POST['account_name'];
+    $account_number = $_POST['account_number'];
+    $branch = $_POST['branch'];
+    $ifsc = $_POST['ifsc'];
+    $status = 'Active';
 
-    $stmt = $conn->prepare("INSERT INTO patients (
-        name, phone, dob, gender, abha_number, aadhar_number,
-        address1, address2, city, state, pincode, blood_group,
-        height_cm, weight_kg, sugar_level, bp, doctor_id
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO doctors (doctor_id, name, phone, email, department, designation, dob, gender, qualification, license, experience, address1, address2, city, state, pincode, bank_name, account_name, account_number, branch, ifsc, status)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-    $stmt->bind_param(
-        "ssssssssssssddssi",
-        $name, $phone, $dob, $gender, $abha, $aadhar,
-        $address1, $address2, $city, $state, $pincode, $blood,
-        $height, $weight, $sugar, $bp, $doctor_id
-    );
+    $stmt->bind_param("sssssssssisissssssssss", $doctor_id, $name, $phone, $email, $department, $designation, $dob, $gender, $qualification, $license, $experience, $address1, $address2, $city, $state, $pincode, $bank_name, $account_name, $account_number, $branch, $ifsc, $status);
 
     if ($stmt->execute()) {
-        $message = "<div class='alert alert-success'> Patient added successfully.</div>";
+        $success = "Doctor added successfully with ID <strong>$doctor_id</strong>.";
     } else {
-        $message = "<div class='alert alert-danger'> Failed to add patient: " . $conn->error . "</div>";
+        $error = "Error: " . $stmt->error;
     }
 
     $stmt->close();
 }
 
-// Fetch doctor list
-$doctors = $conn->query("SELECT id, name FROM doctors WHERE status='Active'");
+$conn->close();
 ?>
 
-<div class="container mt-5">
-    <h3 class="mb-4"> Add New Patient</h3>
-    <?= $message ?>
-    <form method="POST" class="bg-white p-4 shadow rounded">
+<main class="main-wrapper clearfix" style="margin-top: 30px;">
+    <div class="container">
+        <div class="widget-list">
+            <div class="row">
+                <div class="widget-holder col-md-12">
+                    <div class="widget-bg">
+                        <div class="widget-body">
+                            <h4 class="box-title">Add New Doctor</h4>
+                            <p>Fill out the form to add a new doctor.</p>
 
-        <div class="row">
-            <div class="form-group col-md-6">
-                <label>Full Name</label>
-                <input type="text" name="name" class="form-control" required>
-            </div>
+                            <?php if ($success): ?>
+                                <div class="alert alert-success"><?php echo $success; ?></div>
+                            <?php elseif ($error): ?>
+                                <div class="alert alert-danger"><?php echo $error; ?></div>
+                            <?php endif; ?>
 
-            <div class="form-group col-md-6">
-                <label>Phone Number</label>
-                <input type="text" name="phone" class="form-control" required>
-            </div>
+                            <form method="POST" action="">
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label>Doctor Name</label>
+                                        <input type="text" name="name" class="form-control" required>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Phone</label>
+                                        <input type="text" name="phone" class="form-control" required>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Email</label>
+                                        <input type="email" name="email" class="form-control" required>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Department</label>
+                                        <input type="text" name="department" class="form-control">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Designation</label>
+                                        <input type="text" name="designation" class="form-control">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>DOB</label>
+                                        <input type="date" name="dob" class="form-control">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Gender</label>
+                                        <select name="gender" class="form-control">
+                                            <option>Male</option>
+                                            <option>Female</option>
+                                            <option>Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Qualification</label>
+                                        <input type="text" name="qualification" class="form-control">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>License</label>
+                                        <input type="text" name="license" class="form-control">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Experience (Years)</label>
+                                        <input type="number" name="experience" class="form-control">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Address Line 1</label>
+                                        <input type="text" name="address1" class="form-control">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Address Line 2</label>
+                                        <input type="text" name="address2" class="form-control">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>City</label>
+                                        <input type="text" name="city" class="form-control">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>State</label>
+                                        <input type="text" name="state" class="form-control">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Pincode</label>
+                                        <input type="text" name="pincode" class="form-control">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Bank Name</label>
+                                        <input type="text" name="bank_name" class="form-control">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Account Name</label>
+                                        <input type="text" name="account_name" class="form-control">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Account Number</label>
+                                        <input type="text" name="account_number" class="form-control">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Branch</label>
+                                        <input type="text" name="branch" class="form-control">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>IFSC</label>
+                                        <input type="text" name="ifsc" class="form-control">
+                                    </div>
+                                </div>
 
-            <div class="form-group col-md-4">
-                <label>Date of Birth</label>
-                <input type="date" name="dob" class="form-control" required>
-            </div>
+                                <button type="submit" class="btn btn-primary btn-rounded">Add Doctor</button>
+                            </form>
 
-            <div class="form-group col-md-4">
-                <label>Gender</label>
-                <select name="gender" class="form-control" required>
-                    <option value="">-- Select --</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
-
-            <div class="form-group col-md-4">
-                <label>Blood Group</label>
-                <input type="text" name="blood_group" class="form-control">
-            </div>
-
-            <div class="form-group col-md-4">
-                <label>ABHA Number</label>
-                <input type="text" name="abha_number" class="form-control">
-            </div>
-
-            <div class="form-group col-md-4">
-                <label>Aadhar Number</label>
-                <input type="text" name="aadhar_number" class="form-control">
-            </div>
-
-            <div class="form-group col-md-6">
-                <label>Address Line 1</label>
-                <input type="text" name="address1" class="form-control">
-            </div>
-
-            <div class="form-group col-md-6">
-                <label>Address Line 2</label>
-                <input type="text" name="address2" class="form-control">
-            </div>
-
-            <div class="form-group col-md-4">
-                <label>City</label>
-                <input type="text" name="city" class="form-control">
-            </div>
-
-            <div class="form-group col-md-4">
-                <label>State</label>
-                <input type="text" name="state" class="form-control">
-            </div>
-
-            <div class="form-group col-md-4">
-                <label>Pincode</label>
-                <input type="text" name="pincode" class="form-control">
-            </div>
-
-            <div class="form-group col-md-4">
-                <label>Height (cm)</label>
-                <input type="number" step="0.01" name="height_cm" class="form-control">
-            </div>
-
-            <div class="form-group col-md-4">
-                <label>Weight (kg)</label>
-                <input type="number" step="0.01" name="weight_kg" class="form-control">
-            </div>
-
-            <div class="form-group col-md-4">
-                <label>Sugar Level</label>
-                <input type="number" step="0.01" name="sugar_level" class="form-control">
-            </div>
-
-            <div class="form-group col-md-6">
-                <label>Blood Pressure (BP)</label>
-                <input type="text" name="bp" class="form-control">
-            </div>
-
-            <div class="form-group col-md-6">
-                <label>Consulting Doctor</label>
-                <select name="doctor_id" class="form-control">
-                    <option value="">-- Select Doctor --</option>
-                    <?php while ($d = $doctors->fetch_assoc()): ?>
-                        <option value="<?= $d['id'] ?>"><?= htmlspecialchars($d['name']) ?></option>
-                    <?php endwhile; ?>
-                </select>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <div class="text-right mt-3">
-            <button type="submit" class="btn btn-primary">Save Patient</button>
-            <a href="patient-list.php" class="btn btn-secondary">Cancel</a>
-        </div>
-    </form>
-</div>
+    </div>
+</main>
 
 <?php include 'footer.php'; ?>

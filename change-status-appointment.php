@@ -1,5 +1,6 @@
 <?php
 include 'dbconnection.php';
+include 'init.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['id'], $_POST['status'])) {
