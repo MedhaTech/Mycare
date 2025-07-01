@@ -1,5 +1,6 @@
 <?php
 include 'dbconnection.php';
+include 'init.php';
 
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);

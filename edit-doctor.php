@@ -9,6 +9,7 @@ if (!isset($_SESSION['email'])) {
 <?php
 include 'header.php';
 include 'dbconnection.php';
+include 'init.php';
 $success = $error = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateDoctor'])) {

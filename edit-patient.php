@@ -10,6 +10,7 @@ if (!isset($_GET['id'])) {
 
 $patientId = $_GET['id'];
 include 'dbconnection.php';
+include 'init.php';
 
 $sql = "SELECT * FROM patients WHERE id = ?";
 $stmt = $conn->prepare($sql);

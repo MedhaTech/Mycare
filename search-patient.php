@@ -1,5 +1,6 @@
 <?php
 include 'dbconnection.php';
+include 'init.php';
 $q = $_GET['q'] ?? '';
 $response = [];
 

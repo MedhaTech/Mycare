@@ -7,6 +7,7 @@ if (!isset($_SESSION['email'])) {
 
 include 'header.php';
 include 'dbconnection.php';
+include 'init.php';
 ?>
 
 <!-- Breadcrumb -->

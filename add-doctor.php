@@ -1,6 +1,7 @@
 <?php include 'header.php'; ?>
 <?php
 include 'dbconnection.php';
+include 'init.php';
 
 $success = "";
 $error = "";
