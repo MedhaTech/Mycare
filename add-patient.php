@@ -14,21 +14,25 @@
 
 
 <main class="main-wrapper clearfix" style="margin-top: 30px;">
-    <div class="container">
-        <div class="col-12 d-flex justify-content-end">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb bg-transparent p-0 mb-3">
-                    <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Add Patient</li>
-                </ol>
-            </nav>
+    <div class="container mt-4">
+    <div class="row page-title clearfix">
+        <div class="page-title-left">
+            <h6 class="page-title-heading mr-0 mr-r-5"> Add Patients</h6>
+            <p class="page-title-description mr-0 d-none d-md-inline-block">Fill below details to add the new patient</p>
         </div>
+        <div class="page-title-right d-none d-sm-inline-flex">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
+                <li class="breadcrumb-item active">Add Patients</li>
+            </ol>
+        </div>
+    </div>
+</div>
 
-        <div class="widget-holder col-md-12">
+        <div class="widget-holder col-md-9 mx-auto">
             <div class="widget-bg">
                 <div class="widget-body">
                     <h4 class="box-title">Add Patient</h4>
-                    <p>Fill below details to add the new patient</p>
                     <form method="POST" action="save-patient.php">
                         <div class="row">
                             <div class="form-group col-md-3">

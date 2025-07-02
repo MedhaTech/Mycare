@@ -11,18 +11,19 @@
 
     <!-- Breadcrumb Heading -->
     <div class="container mt-4">
-    <div class="row align-items-center justify-content-between">
-        <div class="col-md-6">
+    <div class="row page-title clearfix">
+        <div class="page-title-left">
+            <h6 class="page-title-heading mr-0 mr-r-5">Doctors List</h6>
+            <p class="page-title-description mr-0 d-none d-md-inline-block">Record of Doctors in MyCare Clinic.</p>
         </div>
-        <div class="col-md-6 text-right">
-            <ol class="breadcrumb bg-transparent p-1 mb-1 justify-content-end">
+        <div class="page-title-right d-none d-sm-inline-flex">
+            <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-                <li class="breadcrumb-item active">Doctors</li>
+                <li class="breadcrumb-item active">Doctors List</li>
             </ol>
         </div>
     </div>
 </div>
-
 
     <!-- Top Action Bar -->
     <!-- Top Buttons Row (Add + Search aligned horizontally) -->
@@ -31,8 +32,7 @@
         <div class="page-title-left">
                             <div class="row align-items-center mb-3">
                             <div class="col-md-6">
-                                <h5 class="page-title-heading mb-1">Doctors</h5>
-                                <p class="page-title-description d-none d-md-inline-block mb-0">Manage MyCare clinic's doctors</p>
+                                <h4 class="page-title-heading mb-1">Doctors List</h4>
                             </div>
                             <div class="col-md-6 text-right">
                                 <a href="add-doctor.php" class="btn btn-primary">+ Add New Doctor</a>

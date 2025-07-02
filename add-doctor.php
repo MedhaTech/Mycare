@@ -91,21 +91,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $conn->close();
 ?>
 <main class="main-wrapper clearfix" style="margin-top: 30px;">
-    <div class="container">
-        <div class="widget-list">
-           <div class="col-12 d-flex justify-content-end">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb bg-transparent p-0 mb-3">
-                        <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Add Doctor</li>
-                    </ol>
-                </nav>
+    <div class="container mt-4">
+        <div class="row page-title clearfix">
+            <div class="page-title-left">
+                <h6 class="page-title-heading mr-0 mr-r-5"> Add Doctor</h6>
+                <p class="page-title-description mr-0 d-none d-md-inline-block">Fill out the form to add a new doctor</p>
             </div>
-                <div class="widget-holder col-md-12">
+            <div class="page-title-right d-none d-sm-inline-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Add Doctor</li>
+                </ol>
+            </div>
+       </div>
+    </div>
+                <div class="widget-holder col-md-9 mx-auto">
                     <div class="widget-bg">
                         <div class="widget-body">
                             <h4 class="box-title">Add New Doctor</h4>
-                            <p>Fill out the form to add a new doctor.</p>
                             <form method="POST" action="">
                                 <div class="row">
                                     <div class="form-group col-md-4">
