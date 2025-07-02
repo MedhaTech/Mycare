@@ -1,133 +1,188 @@
 <?php
+include 'dbconnection.php';
 
-include 'header.php';
-
-
-if (!isset($_GET['id'])) {
-    echo "<p class='text-danger'>No patient ID specified.</p>";
-    exit();
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+    die("Invalid Patient ID");
 }
 
-$patientId = $_GET['id'];
-include 'dbconnection.php';
-include 'init.php';
-
-$sql = "SELECT * FROM patients WHERE id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $patientId);
-$stmt->execute();
-$result = $stmt->get_result();
+$patient_id = intval($_GET['id']);
+$result = $conn->query("SELECT * FROM patients WHERE id = $patient_id");
 
 if ($result->num_rows !== 1) {
-    echo "<p class='text-danger'>Patient not found.</p>";
-    exit();
+    die("Patient not found.");
 }
 
 $patient = $result->fetch_assoc();
-$stmt->close();
-$conn->close();
+include 'header.php';
 ?>
+<style>
+@media (min-width: 768px) {
+  .col-md-2-3 {
+    flex: 0 0 auto;
+    width: 19%;
+    margin-right: 1%;
+  }
+  .col-md-2-3:last-child {
+    margin-right: 0;
+  }
+}
+</style>
 
-<main class="main-wrapper clearfix">
+<main class="main-wrapper clearfix" style="margin-top: 30px;">
     <div class="container">
-        <div class="widget-list">
-            <div class="row">
-                <div class="widget-holder col-md-12">
-                    <div class="widget-bg">
-                        <div class="widget-body">
-                            <h4 class="mt-0">Edit Patient</h4>
-                            <form action="update-patient.php" method="POST">
-                                <input type="hidden" name="id" value="<?php echo $patient['id']; ?>">
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="name">Name</label>
-                                        <input type="text" class="form-control" id="name" name="name" value="<?php echo htmlspecialchars($patient['name']); ?>" required>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="phone">Phone Number</label>
-                                        <input type="text" class="form-control" id="phone" name="phone" value="<?php echo htmlspecialchars($patient['phone']); ?>" required>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="dob">Date of Birth</label>
-                                        <input type="date" class="form-control" id="dob" name="dob" value="<?php echo htmlspecialchars($patient['dob']); ?>">
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="gender">Gender</label>
-                                        <select class="form-control" id="gender" name="gender">
-                                            <option value="Male" <?php if ($patient['gender'] == 'Male') echo 'selected'; ?>>Male</option>
-                                            <option value="Female" <?php if ($patient['gender'] == 'Female') echo 'selected'; ?>>Female</option>
-                                            <option value="Other" <?php if ($patient['gender'] == 'Other') echo 'selected'; ?>>Other</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="abha_number">ABHA Number</label>
-                                        <input type="text" class="form-control" id="abha" name="abha" value="<?php echo htmlspecialchars($patient['abha_number']); ?>">
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="aadhar_number">AADHAR Number</label>
-                                        <input type="text" class="form-control" id="aadhar" name="aadhar" value="<?php echo htmlspecialchars($patient['aadhar_number']); ?>">
-                                    </div>
-                                </div>
+        <div class="col-12 d-flex justify-content-end">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-transparent p-0 mb-3">
+                    <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Edit Patient</li>
+                </ol>
+            </nav>
+        </div>
 
-                                <h5 class="mt-4">Address Information</h5>
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="address1">Address 1</label>
-                                        <input type="text" class="form-control" id="address1" name="address1" value="<?php echo htmlspecialchars($patient['address1']); ?>">
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="address2">Address 2</label>
-                                        <input type="text" class="form-control" id="address2" name="address2" value="<?php echo htmlspecialchars($patient['address2']); ?>">
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="city">City</label>
-                                        <input type="text" class="form-control" id="city" name="city" value="<?php echo htmlspecialchars($patient['city']); ?>">
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="state">State</label>
-                                        <input type="text" class="form-control" id="state" name="state" value="<?php echo htmlspecialchars($patient['state']); ?>">
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="pincode">Pincode</label>
-                                        <input type="text" class="form-control" id="pincode" name="pincode" value="<?php echo htmlspecialchars($patient['pincode']); ?>">
-                                    </div>
-                                </div>
-
-                                <h5 class="mt-4">Health Information</h5>
-                                <div class="form-row">
-                                    <div class="form-group col-md-3">
-                                        <label for="blood_group">Blood Group</label>
-                                        <input type="text" class="form-control" id="blood_group" name="blood_group" value="<?php echo htmlspecialchars($patient['blood_group']); ?>">
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label for="height_cm">Height</label>
-                                        <input type="text" class="form-control" id="height" name="height" value="<?php echo htmlspecialchars($patient['height_cm']); ?>">
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label for="weight_kg">Weight</label>
-                                        <input type="text" class="form-control" id="weight" name="weight" value="<?php echo htmlspecialchars($patient['weight_kg']); ?>">
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label for="sugar">Sugar</label>
-                                        <input type="text" class="form-control" id="sugar" name="sugar" value="<?php echo htmlspecialchars($patient['sugar_level']); ?>">
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label for="bp">BP</label>
-                                        <input type="text" class="form-control" id="bp" name="bp" value="<?php echo htmlspecialchars($patient['bp']); ?>">
-                                    </div>
-                                </div>
-
-                                <div class="form-group mt-3">
-                                    <button type="submit" class="btn btn-primary">Update Patient</button>
-                                    <a href="patient-list.php" class="btn btn-secondary">Cancel</a>
-                                </div>
-
-                            </form>
+        <div class="widget-holder col-md-12">
+            <div class="widget-bg">
+                <div class="widget-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="box-title">Edit Patient</h4>
+                            <p>Edit here to update patient details</p>
+                        </div>
+                        <div class="text-muted font-weight-bold" style="font-size: 16px;">
+                          Patient ID : <span style="color: #999;">#PT<?= str_pad($patient['id'], 3, '0', STR_PAD_LEFT); ?></span>
                         </div>
                     </div>
+                    <form method="POST" action="update-patient.php">
+                        <input type="hidden" name="id" value="<?= $patient['id'] ?>">
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label>Name <span style="color:red">*</span></label>
+                                <input type="text" name="name" class="form-control" value="<?= htmlspecialchars($patient['name']) ?>" required>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Phone Number <span style="color:red">*</span></label>
+                                <input type="text" name="phone" class="form-control" value="<?= $patient['phone'] ?>" required pattern="[0-9]{10}" maxlength="10" title="Enter a 10-digit phone number">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Date of Birth <span style="color:red">*</span></label>
+                                <input type="date" name="dob" class="form-control" id="dob" value="<?= $patient['dob'] ?>" required>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Age</label>
+                                <input type="text" name="age" class="form-control" id="age" readonly>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Gender <span style="color:red">*</span></label>
+                                <select name="gender" class="form-control" required>
+                                    <option value="" disabled>Select</option>
+                                    <option value="Male" <?= $patient['gender'] == 'Male' ? 'selected' : '' ?>>Male</option>
+                                    <option value="Female" <?= $patient['gender'] == 'Female' ? 'selected' : '' ?>>Female</option>
+                                    <option value="Other" <?= $patient['gender'] == 'Other' ? 'selected' : '' ?>>Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>ABHA Number <span style="color:red">*</span></label>
+                                <input type="text" name="abha_number" class="form-control" value="<?= $patient['abha_number'] ?>" required>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Aadhar Number <span style="color:red">*</span></label>
+                                <input type="text" name="aadhar_number" class="form-control" value="<?= $patient['aadhar_number'] ?>" required pattern="[0-9]{12}" maxlength="12" title="Enter a 12-digit Aadhar number">
+                            </div>
+
+                            <div class="form-group col-12">
+                                <h5 class="mt-4">Address Information</h5>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Address 1</label>
+                                <input type="text" name="address1" class="form-control" value="<?= $patient['address1'] ?>">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Address 2</label>
+                                <input type="text" name="address2" class="form-control" value="<?= $patient['address2'] ?>">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>City</label>
+                                <input type="text" name="city" class="form-control" value="<?= $patient['city'] ?>">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>State</label>
+                                <select name="state" class="form-control">
+                                    <option value="" disabled>Select</option>
+                                    <?php
+                                    $states = ["Karnataka", "Telangana", "Tamil Nadu", "Kerala", "Andhra Pradesh"];
+                                    foreach ($states as $state) {
+                                        $selected = ($patient['state'] == $state) ? 'selected' : '';
+                                        echo "<option value='$state' $selected>$state</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Pincode</label>
+                                <input type="text" name="pincode" class="form-control" value="<?= $patient['pincode'] ?>" pattern="[0-9]{6}" maxlength="6" title="Enter a 6-digit pincode">
+                            </div>
+
+                            <div class="form-group col-12">
+                                <h5 class="mt-4">Health Information</h5>
+                            </div>
+                            <div class="form-group col-md-2-3">
+                                <label>Blood Group <span style="color:red">*</span></label>
+                                <select name="blood_group" class="form-control" required>
+                                    <?php
+                                    $bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
+                                    foreach ($bloodGroups as $bg) {
+                                        $selected = ($patient['blood_group'] == $bg) ? 'selected' : '';
+                                        echo "<option value='$bg' $selected>$bg</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2-3">
+                                <label>Height</label>
+                                <input type="text" name="height_cm" class="form-control" value="<?= $patient['height_cm'] ?>">
+                            </div>
+                            <div class="form-group col-md-2-3">
+                                <label>Weight</label>
+                                <input type="text" name="weight_kg" class="form-control" value="<?= $patient['weight_kg'] ?>">
+                            </div>
+                            <div class="form-group col-md-2-3">
+                                <label>Sugar</label>
+                                <input type="text" name="sugar_level" class="form-control" value="<?= $patient['sugar_level'] ?>">
+                            </div>
+                            <div class="form-group col-md-2-3">
+                                <label>BP</label>
+                                <input type="text" name="bp" class="form-control" value="<?= $patient['bp'] ?>">
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-6 text-left">
+                                <button type="submit" class="btn btn-primary">Update Patient</button>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <a href="patient-list.php" class="btn btn-secondary">Back to list</a>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </main>
+
+<script>
+    document.getElementById('dob').addEventListener('change', function () {
+        const dob = new Date(this.value);
+        const today = new Date();
+        let age = today.getFullYear() - dob.getFullYear();
+        const m = today.getMonth() - dob.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+            age--;
+        }
+        document.getElementById('age').value = age;
+    });
+
+    // Trigger change on load
+    document.getElementById('dob').dispatchEvent(new Event('change'));
+</script>
+
 <?php include 'footer.php'; ?>
