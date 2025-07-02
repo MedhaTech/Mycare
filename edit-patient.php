@@ -29,23 +29,27 @@ include 'header.php';
 </style>
 
 <main class="main-wrapper clearfix" style="margin-top: 30px;">
-    <div class="container">
-        <div class="col-12 d-flex justify-content-end">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb bg-transparent p-0 mb-3">
-                    <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Edit Patient</li>
-                </ol>
-            </nav>
+    <div class="container mt-4">
+    <div class="row page-title clearfix">
+        <div class="page-title-left">
+            <h6 class="page-title-heading mr-0 mr-r-5"> Edit Patients</h6>
+            <p class="page-title-description mr-0 d-none d-md-inline-block">Fill below details to edit the patient</p>
         </div>
+        <div class="page-title-right d-none d-sm-inline-flex">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
+                <li class="breadcrumb-item active">Edit Patients</li>
+            </ol>
+        </div>
+    </div>
+</div>
 
-        <div class="widget-holder col-md-12">
+        <div class="widget-holder col-md-9 mx-auto">
             <div class="widget-bg">
                 <div class="widget-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h4 class="box-title">Edit Patient</h4>
-                            <p>Edit here to update patient details</p>
+                            <h6 class="box-title">Edit Patient</h6>
                         </div>
                         <div class="text-muted font-weight-bold" style="font-size: 16px;">
                           Patient ID : <span style="color: #999;">#PT<?= str_pad($patient['id'], 3, '0', STR_PAD_LEFT); ?></span>
@@ -89,7 +93,7 @@ include 'header.php';
                             </div>
 
                             <div class="form-group col-12">
-                                <h5 class="mt-4">Address Information</h5>
+                                <h6 class="mt-4">Address Information</h6>
                             </div>
                             <div class="form-group col-md-6">
                                 <label>Address 1</label>
@@ -122,7 +126,7 @@ include 'header.php';
                             </div>
 
                             <div class="form-group col-12">
-                                <h5 class="mt-4">Health Information</h5>
+                                <h6 class="mt-4">Health Information</h6>
                             </div>
                             <div class="form-group col-md-2-3">
                                 <label>Blood Group <span style="color:red">*</span></label>

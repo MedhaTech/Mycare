@@ -71,6 +71,21 @@ if ($current_page !== 'login.php' && !isset($_SESSION['email'])) {
 .modal-footer .btn {
     min-width: 100px;
 }
+.dropdown-toggle::after {
+    display: inline-block;
+    vertical-align: middle;
+    content: "";
+    border-top: 0.3em solid;
+    border-right: 0.3em solid transparent;
+    border-bottom: 0;
+    border-left: 0.3em solid transparent;
+}
+
+.dropdown-menu.show {
+    display: block !important;
+    position: absolute !important;
+    z-index: 1000;
+}
 
 </style>
 
@@ -149,9 +164,6 @@ if ($current_page !== 'login.php' && !isset($_SESSION['email'])) {
         </div>
     </li>
 </ul>
-
-
-
         </div>
     </nav>
 
@@ -177,6 +189,7 @@ if ($current_page !== 'login.php' && !isset($_SESSION['email'])) {
 
 <!-- JS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/template.js"></script>
 <script src="assets/js/custom.js"></script>

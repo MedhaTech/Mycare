@@ -1,16 +1,21 @@
 <?php
+session_start();
+if (!isset($_SESSION['loggedin'])) {
+    header("Location: login.php");
+    exit();
+}
+
 include 'header.php';
 include 'dbconnection.php';
 include 'init.php';
 
 $appointment_id = $_GET['id'] ?? null;
 
-if (!$appointment_id) {
+if (!$appointment_id || !is_numeric($appointment_id)) {
     echo "<script>alert('Invalid appointment ID'); window.location.href='appointments.php';</script>";
     exit();
 }
 
-// Fetch appointment with patient and doctor names
 $stmt = $conn->prepare("
     SELECT a.*, p.name AS patient_name, d.name AS doctor_name
     FROM appointments a
@@ -28,61 +33,67 @@ if (!$appointment) {
     echo "<script>alert('Appointment not found'); window.location.href='appointments.php';</script>";
     exit();
 }
+
+$apt_id = "APT" . str_pad($appointment['id'], 3, '0', STR_PAD_LEFT);
 ?>
 
 <div class="container mt-5">
-    <h2>Appointment Details</h2>
-    <div class="card mt-4 shadow-sm">
+    <h3>Appointment Profile: #<?= $apt_id ?></h3>
+    <div class="card mt-3 shadow-sm">
         <div class="card-body">
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <strong>Patient:</strong><br><?= htmlspecialchars($appointment['patient_name']) ?>
-                </div>
-                <div class="col-md-6">
-                    <strong>Doctor:</strong><br><?= htmlspecialchars($appointment['doctor_name']) ?>
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <strong>Date:</strong><br><?= $appointment['appointment_date'] ?>
-                </div>
-                <div class="col-md-4">
-                    <strong>Time:</strong><br><?= date("h:i A", strtotime($appointment['appointment_time'])) ?>
-                </div>
-                <div class="col-md-4">
-                    <strong>Type:</strong><br><?= htmlspecialchars($appointment['type']) ?>
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <strong>Duration:</strong><br><?= $appointment['duration'] ?> minutes
-                </div>
-                <div class="col-md-4">
-                    <strong>Status:</strong><br>
-                    <?php
-                    $status = $appointment['status'];
-                    $badgeClass = match ($status) {
-                        'Scheduled' => 'badge-primary',
-                        'Tentative' => 'badge-warning',
-                        'Add to Waitlist' => 'badge-info',
-                        default => 'badge-secondary'
-                    };
-                    ?>
-                    <span class="badge <?= $badgeClass ?>"><?= htmlspecialchars($status) ?></span>
-                </div>
-                <div class="col-md-4">
-                    <strong>Consultation Fee:</strong><br>₹<?= number_format($appointment['fee'], 2) ?>
-                </div>
-            </div>
-
-            <div class="row mb-4">
-                <div class="col-md-12">
-                    <strong>Reason for Visit:</strong><br><?= htmlspecialchars($appointment['reason']) ?>
-                </div>
-            </div>
-
+            <table class="table table-bordered">
+                <tr>
+                    <th>Patient</th>
+                    <td><?= htmlspecialchars($appointment['patient_name']) ?></td>
+                </tr>
+                <tr>
+                    <th>Doctor</th>
+                    <td><?= htmlspecialchars($appointment['doctor_name']) ?></td>
+                </tr>
+                <tr>
+                    <th>Date</th>
+                    <td><?= $appointment['appointment_date'] ?></td>
+                </tr>
+                <tr>
+                    <th>Time</th>
+                    <td><?= date("h:i A", strtotime($appointment['appointment_time'])) ?></td>
+                </tr>
+                <tr>
+                    <th>Type</th>
+                    <td><?= htmlspecialchars($appointment['type']) ?></td>
+                </tr>
+                <tr>
+                    <th>Duration</th>
+                    <td><?= $appointment['duration'] ?> minutes</td>
+                </tr>
+                <tr>
+                    <th>Status</th>
+                    <td>
+                        <?php
+                        $status = $appointment['status'];
+                        $badgeClass = match ($status) {
+                            'Scheduled' => 'badge-primary',
+                            'Tentative' => 'badge-warning',
+                            'Add to Waitlist', 'WAITLIST' => 'badge-info',
+                            'Confirmed' => 'badge-success',
+                            'In Progress' => 'badge-dark',
+                            'Completed' => 'badge-success',
+                            'Cancelled' => 'badge-danger',
+                            default => 'badge-secondary'
+                        };
+                        ?>
+                        <span class="badge <?= $badgeClass ?>"><?= htmlspecialchars($status) ?></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Consultation Fee</th>
+                    <td>₹<?= number_format($appointment['fee'], 2) ?></td>
+                </tr>
+                <tr>
+                    <th>Reason for Visit</th>
+                    <td><?= htmlspecialchars($appointment['reason']) ?></td>
+                </tr>
+            </table>
             <a href="appointments.php" class="btn btn-secondary">← Back to Appointments</a>
         </div>
     </div>

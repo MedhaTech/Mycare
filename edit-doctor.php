@@ -4,9 +4,7 @@ if (!isset($_SESSION['email'])) {
     header("Location: login.php");
     exit();
 }
-?>
 
-<?php
 include 'header.php';
 include 'dbconnection.php';
 include 'init.php';
@@ -61,170 +59,153 @@ if (isset($_GET['id'])) {
 ?>
 
 <main class="main-wrapper clearfix" style="margin-top: 30px;">
-    <div class="container">
-        <div class="widget-list">
+    <div class="container mt-4">
+    <div class="row page-title clearfix">
+        <div class="page-title-left">
+            <h6 class="page-title-heading mr-0 mr-r-5"> Edit Doctor</h6>
+            <p class="page-title-description mr-0 d-none d-md-inline-block">Fill the form to edit a doctor.</p>
+        </div>
+        <div class="page-title-right d-none d-sm-inline-flex">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
+                <li class="breadcrumb-item active">Edit Doctor</li>
+            </ol>
+        </div>
+    </div>
+    </div>
             <div class="row">
-                <div class="widget-holder col-md-10 mx-auto">
+                <div class="widget-holder col-md-9 mx-auto">
                     <div class="widget-bg">
                         <div class="widget-body">
-                            <h4 class="box-title">Edit Doctor Details</h4>
                             <?php if ($success): ?>
                                 <div class="alert alert-success"><?php echo $success; ?></div>
                             <?php elseif ($error): ?>
                                 <div class="alert alert-danger"><?php echo $error; ?></div>
                             <?php endif; ?>
-
                             <form method="POST" action="">
-                                <input type="hidden" name="id" value="<?php echo $doctor['id']; ?>">
-
-                                <div class="d-flex justify-content-between align-items-center mb-4">
-                                    <h5><strong>Edit Doctor Info</strong></h5>
-                                    <?php if (isset($doctor['id'])): ?>
-                                     <span><strong>Doctor ID :</strong> #<?php echo "MC" . str_pad($doctor['id'], 3, "0", STR_PAD_LEFT); ?></span>
-                                     <?php endif; ?>
-                                </div>
+                                <input type="hidden" name="id" value="<?= $doctor['id'] ?>">
                                 <div class="row">
                                     <div class="form-group col-md-4">
-                                        <label>Doctor Name <span class="text-danger">*</span></label>
-                                        <input type="text" name="name" class="form-control" value="<?php echo $doctor['name']; ?>" required>
+                                        <label>Doctor Name<span style="color: red;">*</span></label>
+                                        <input type="text" name="name" class="form-control" required value="<?= $doctor['name'] ?>">
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>Phone <span class="text-danger">*</span></label>
-                                        <input type="text" name="phone" class="form-control" value="<?php echo $doctor['phone']; ?>" required>
+                                        <label>Phone<span style="color: red;">*</span></label>
+                                        <input type="text" name="phone" class="form-control" required pattern="\d{10}" value="<?= $doctor['phone'] ?>">
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>Email <span class="text-danger">*</span></label>
-                                        <input type="email" name="email" class="form-control" value="<?php echo $doctor['email']; ?>" required>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="form-group col-md-4">
-                                        <label>Department<span style="color: red;">  *  </span></label>
-                                        <select name="department" class="form-control">
-                                            <option>General Practitioner</option>
-                                            <option>Cardiologist </option>
-                                            <option>Dermatologist r</option>
-                                            <option>Gastroenterologist</option>
-                                            <option>Neurologist </option>
-                                            <option>Orthopedic </option>
-                                            <option>Pediatrician </option>
-                                            <option>Psychiatrist </option>
-                                            <option>Physician </option>
-                                            </select>
+                                        <label>Email<span style="color: red;">*</span></label>
+                                        <input type="email" name="email" class="form-control" required value="<?= $doctor['email'] ?>">
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>Designation <span class="text-danger">*</span></label>
-                                        <input type="text" name="designation" class="form-control" value="<?php echo $doctor['designation']; ?>" required>
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label>Gender <span class="text-danger">*</span></label>
-                                        <select name="gender" class="form-control" required>
+                                        <label>Department<span style="color: red;">*</span></label>
+                                        <select name="department" class="form-control" required>
                                             <option value="">Select</option>
-                                            <option <?php if ($doctor['gender'] == 'Male') echo 'selected'; ?>>Male</option>
-                                            <option <?php if ($doctor['gender'] == 'Female') echo 'selected'; ?>>Female</option>
+                                            <?php
+                                            $departments = ["General Practitioner", "Cardiologist", "Dermatologist", "Gastroenterologist", "Neurologist", "Orthopedic", "Pediatrician", "Psychiatrist", "Physician"];
+                                            foreach ($departments as $dept) {
+                                                $selected = ($doctor['department'] === $dept) ? 'selected' : '';
+                                                echo "<option value=\"$dept\" $selected>$dept</option>";
+                                            }
+                                            ?>
                                         </select>
                                     </div>
-                                </div>
-
-                                <div class="row">
                                     <div class="form-group col-md-4">
-                                        <label>Date of Birth <span class="text-danger">*</span></label>
-                                        <input type="date" name="dob" class="form-control" value="<?php echo $doctor['dob']; ?>" required>
+                                        <label>Designation<span style="color: red;">*</span></label>
+                                        <input type="text" name="designation" class="form-control" required value="<?= $doctor['designation'] ?>">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label>Gender<span style="color: red;">*</span></label>
+                                        <select name="gender" class="form-control" required>
+                                            <option value="">Select</option>
+                                            <option value="Male" <?= $doctor['gender'] === 'Male' ? 'selected' : '' ?>>Male</option>
+                                            <option value="Female" <?= $doctor['gender'] === 'Female' ? 'selected' : '' ?>>Female</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label>DOB<span style="color: red;">*</span></label>
+                                        <input type="date" name="dob" class="form-control" required value="<?= $doctor['dob'] ?>">
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>Qualification <span class="text-danger">*</span></label>
-                                        <input type="text" name="qualification" class="form-control" value="<?php echo $doctor['qualification']; ?>" required>
+                                        <label>Qualification<span style="color: red;">*</span></label>
+                                        <input type="text" name="qualification" class="form-control" required value="<?= $doctor['qualification'] ?>">
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>License <span class="text-danger">*</span></label>
-                                        <input type="text" name="license" class="form-control" value="<?php echo $doctor['license']; ?>" required>
+                                        <label>License<span style="color: red;">*</span></label>
+                                        <input type="text" name="license" class="form-control" required value="<?= $doctor['license'] ?>">
                                     </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="form-group col-md-4">
-                                        <label>Experience (Years) <span class="text-danger">*</span></label>
-                                        <input type="number" name="experience" class="form-control" value="<?php echo $doctor['experience']; ?>" required>
+                                    <div class="form-group col-md-2">
+                                        <label>Experience (Years)<span style="color: red;">*</span></label>
+                                        <input type="number" name="experience" class="form-control" required value="<?= $doctor['experience'] ?>">
                                     </div>
-                                    <div class="form-group col-md-4">
-                                        <label>Date of Joining <span class="text-danger">*</span></label>
-                                        <input type="date" name="doj" class="form-control" value="<?php echo $doctor['doj'] ?? ''; ?>" required>
+                                    <div class="form-group col-md-2">
+                                        <label>DOJ<span style="color: red;">*</span></label>
+                                        <input type="date" name="doj" class="form-control" required value="<?= $doctor['doj'] ?? '' ?>">
                                     </div>
-                                
-                                <div class="form-group col-md-4">
-                                    <label>Status<span class="text-danger"> * </span></label>
-                                    <select name="status" class="form-control" required>
-                                        <option value="Active" <?= ($doctor['status'] === 'Active') ? 'selected' : ''; ?>>Active</option>
-                                        <option value="Inactive" <?= ($doctor['status'] === 'Inactive') ? 'selected' : ''; ?>>Inactive</option>
-                                    </select>
-                                </div>
-                            </div>
-                                <h5 class="mt-4"><strong>Address Info</strong></h5>
-
-                                <div class="row">
                                     <div class="form-group col-md-6">
-                                        <label>Address Line 1 <span class="text-danger">*</span></label>
-                                        <input type="text" name="address1" class="form-control" value="<?php echo $doctor['address1']; ?>" required>
+                                        <label>Address Line 1<span style="color: red;">*</span></label>
+                                        <input type="text" name="address1" class="form-control" required value="<?= $doctor['address1'] ?>">
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label>Address Line 2</label>
-                                        <input type="text" name="address2" class="form-control" value="<?php echo $doctor['address2']; ?>">
+                                        <input type="text" name="address2" class="form-control" value="<?= $doctor['address2'] ?>">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>City<span style="color: red;">*</span></label>
+                                        <input type="text" name="city" class="form-control" required value="<?= $doctor['city'] ?>">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>State<span style="color: red;">*</span></label>
+                                        <select name="state" class="form-control" required>
+                                            <option value="">Select</option>
+                                            <?php
+                                            $states = ["Karnataka", "Andhra Pradesh", "Tamil Nadu", "Telangana", "Kerala"];
+                                            foreach ($states as $state) {
+                                                $selected = ($doctor['state'] === $state) ? 'selected' : '';
+                                                echo "<option value=\"$state\" $selected>$state</option>";
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Pincode<span style="color: red;">*</span></label>
+                                        <input type="text" name="pincode" class="form-control" required value="<?= $doctor['pincode'] ?>">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Bank Name<span style="color: red;">*</span></label>
+                                        <input type="text" name="bank_name" class="form-control" required value="<?= $doctor['bank_name'] ?>">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Account Name<span style="color: red;">*</span></label>
+                                        <input type="text" name="account_name" class="form-control" required value="<?= $doctor['account_name'] ?>">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Account Number<span style="color: red;">*</span></label>
+                                        <input type="text" name="account_number" class="form-control" required value="<?= $doctor['account_number'] ?>">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Branch<span style="color: red;">*</span></label>
+                                        <input type="text" name="branch" class="form-control" required value="<?= $doctor['branch'] ?>">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>IFSC<span style="color: red;">*</span></label>
+                                        <input type="text" name="ifsc" class="form-control" required value="<?= $doctor['ifsc'] ?>">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Status<span style="color: red;">*</span></label>
+                                        <select name="status" class="form-control" required>
+                                            <option value="Active" <?= $doctor['status'] === 'Active' ? 'selected' : '' ?>>Active</option>
+                                            <option value="Inactive" <?= $doctor['status'] === 'Inactive' ? 'selected' : '' ?>>Inactive</option>
+                                        </select>
                                     </div>
                                 </div>
-
-                                <div class="row">
-                                    <div class="form-group col-md-4">
-                                        <label>City <span class="text-danger">*</span></label>
-                                        <input type="text" name="city" class="form-control" value="<?php echo $doctor['city']; ?>" required>
+                                <div class="row mt-4">
+                                    <div class="col-md-6 text-left">
+                                        <button type="submit" name="updateDoctor" class="btn btn-primary">Update Doctor</button>
                                     </div>
-                                    <div class="form-group col-md-4">
-                                        <label>State<span style="color: red;">  *  </span></label>
-                                        <select name="state" class="form-control">
-                                            <option>Karnataka</option>
-                                            <option>Andhra Pradesh</option>
-                                            <option>Tamil Nadu</option>
-                                            <option>Telangana</option>
-                                            <option>Kerala</option>
-                                            </select>
+                                    <div class="col-md-6 text-right">
+                                        <a href="doctors-list.php" class="btn btn-secondary">Back to List</a>
                                     </div>
-                                    <div class="form-group col-md-4">
-                                        <label>Pincode <span class="text-danger">*</span></label>
-                                        <input type="text" name="pincode" class="form-control" value="<?php echo $doctor['pincode']; ?>" required>
-                                    </div>
-                                </div>
-
-                                <h5 class="mt-4"><strong>Account Info</strong></h5>
-
-                                <div class="row">
-                                    <div class="form-group col-md-4">
-                                        <label>Bank Name <span class="text-danger">*</span></label>
-                                        <input type="text" name="bank_name" class="form-control" value="<?php echo $doctor['bank_name']; ?>" required>
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label>Account Name <span class="text-danger">*</span></label>
-                                        <input type="text" name="account_name" class="form-control" value="<?php echo $doctor['account_name']; ?>" required>
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label>Account Number <span class="text-danger">*</span></label>
-                                        <input type="text" name="account_number" class="form-control" value="<?php echo $doctor['account_number']; ?>" required>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="form-group col-md-6">
-                                        <label>Branch <span class="text-danger">*</span></label>
-                                        <input type="text" name="branch" class="form-control" value="<?php echo $doctor['branch']; ?>" required>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label>IFSC <span class="text-danger">*</span></label>
-                                        <input type="text" name="ifsc" class="form-control" value="<?php echo $doctor['ifsc']; ?>" required>
-                                    </div>
-                                </div>
-
-                                <div class="form-group text-end mt-4">
-                                    <button type="submit" name="updateDoctor" class="btn btn-primary">Update</button>
-                                    <a href="doctors-list.php" class="btn btn-secondary">Back to List</a>
                                 </div>
                             </form>
                         </div>
@@ -232,7 +213,7 @@ if (isset($_GET['id'])) {
                 </div>
             </div>
         </div>
-    </div>  
+    </div>
 </main>
 
 <?php include 'footer.php'; ?>
