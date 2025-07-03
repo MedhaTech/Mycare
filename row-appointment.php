@@ -22,16 +22,27 @@ $badgeClass = match ($status) {
     <td><?= htmlspecialchars($row['type'] ?? '') ?></td>
     <td><?= intval($row['duration']) ?> min</td>
     <td>
-        <div class="dropdown">
-            <button class="btn btn-sm btn-outline-dark dropdown-toggle" type="button" id="dropdownMenu<?= $row['id'] ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                ⋮
-            </button>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu<?= $row['id'] ?>">
-                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#viewAppointment<?= $row['id'] ?>">View</a>
-                <a class="dropdown-item" href="edit-appointment.php?id=<?= $row['id'] ?>">Edit</a>
-            </div>
-        </div>
-    </td>
+  <div class="dropdown">
+    <button class="btn btn-sm btn-outline-dark dropdown-toggle" type="button" id="dropdownMenu<?= $row['id'] ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        ⋮
+    </button>
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu<?= $row['id'] ?>">
+        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#viewAppointment<?= $row['id'] ?>">View</a>
+
+        <?php if (in_array($status, ['CONFIRMED', 'IN PROGRESS'])): ?>
+            <a class="dropdown-item" href="edit-appointment.php?id=<?= $row['id'] ?>">Edit Appointment</a>
+            <a class="dropdown-item" href="javascript:void(0);" onclick="loadSlip('<?= $row['id'] ?>', '<?= $row['patient_name'] ?>')">Appointment Slip</a>
+            <a class="dropdown-item" href="add-procedure.php?appointment_id=<?= $apt_id ?>">Add Procedure</a>
+            <a class="dropdown-item text-danger" href="#" data-toggle="modal" data-target="#cancelModal<?= $row['id'] ?>">Cancel Appointment</a>
+
+        <?php elseif ($status === 'COMPLETED'): ?>
+            <a class="dropdown-item" href="javascript:void(0);" onclick="loadSlip('<?= $row['id'] ?>', '<?= $row['patient_name'] ?>')">Appointment Slip</a>
+            <a class="dropdown-item" href="add-procedure.php?appointment_id=<?= $apt_id ?>">Add Procedure</a>
+            <a class="dropdown-item" href="medical-records.php?appointment_id=<?= $apt_id ?>">Medical Records</a>
+        <?php endif; ?>
+    </div>
+  </div>
+</td>
 </tr>
 <!-- Appointment View Modal -->
 <div class="modal fade" id="viewAppointment<?= $row['id']; ?>" tabindex="-1">
