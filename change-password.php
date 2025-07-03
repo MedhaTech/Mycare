@@ -3,7 +3,7 @@
 include 'dbconnection.php';
 include 'init.php';
 
-session_start();
+
 $_SESSION['id'] = 1; // Simulate user login for testing
 
 $currentError = $newError = $confirmError = "";

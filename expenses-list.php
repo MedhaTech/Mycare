@@ -4,7 +4,7 @@ include 'init.php'; ?>
 
 <!-- Breadcrumb + Heading -->
 
- <div class="container mt-4">
+ <div class="container">
                 <div class="row page-title clearfix">
                     <div class="page-title-left">
                         <h6 class="page-title-heading mr-0 mr-r-5">Expenses</h6>

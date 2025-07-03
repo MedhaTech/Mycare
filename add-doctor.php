@@ -90,8 +90,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 $conn->close();
 ?>
-<main class="main-wrapper clearfix" style="margin-top: 30px;">
-    <div class="container mt-4">
+<main class="main-wrapper clearfix">
+    <div class="container">
         <div class="row page-title clearfix">
             <div class="page-title-left">
                 <h6 class="page-title-heading mr-0 mr-r-5"> Add Doctor</h6>
@@ -105,7 +105,7 @@ $conn->close();
             </div>
        </div>
     </div>
-                <div class="widget-holder col-md-9 mx-auto">
+                <div class="widget-holder col-md-10 mx-auto">
                     <div class="widget-bg">
                         <div class="widget-body">
                             <h4 class="box-title">Add New Doctor</h4>
