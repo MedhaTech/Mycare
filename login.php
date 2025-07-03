@@ -70,14 +70,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-size: 15px;
         }
 
-        .toggle-password {
+        #togglePassword {
             position: absolute;
-            top: 50%;
-            right: 12px;
+            top: 69%;
+            right: 10px;
             transform: translateY(-50%);
             font-size: 1.1em;
             cursor: pointer;
             color: #666;
+            z-index: 1;
         }
 
         .btn {

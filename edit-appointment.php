@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="page-title-right d-none d-sm-inline-flex">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-                <li class="breadcrumb-item active">Doctors List</li>
+                <li class="breadcrumb-item active">Edit Appointment</li>
             </ol>
         </div>
     </div>
@@ -202,5 +202,51 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 </div>
+
+<!-- 🔍 Search + Autofill Script -->
+<script>
+document.getElementById('searchPatient').addEventListener('input', function () {
+    const query = this.value.trim();
+    const results = document.getElementById('patientResults');
+    results.innerHTML = '';
+    if (query.length < 2) return;
+
+    fetch('search-patient.php?q=' + encodeURIComponent(query))
+        .then(response => response.json())
+        .then(data => {
+            if (data.length === 0) {
+                results.innerHTML = '<li class="list-group-item text-muted">No patients found</li>';
+            } else {
+                data.forEach(patient => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item list-group-item-action';
+                    li.textContent = `${patient.name} (${patient.phone})`;
+                    li.onclick = () => {
+                        document.getElementById('selectedPatientId').value = patient.id;
+                        document.getElementById('p_name').value = patient.name;
+                        document.getElementById('p_phone').value = patient.phone;
+                        document.getElementById('p_id').value = 'MCP' + patient.id.toString().padStart(4, '0');
+                        results.innerHTML = '';
+                    };
+                    results.appendChild(li);
+                });
+            }
+        });
+});
+
+// Prefill patient data on page load
+document.addEventListener("DOMContentLoaded", function () {
+    const patientId = <?= json_encode($appointment['patient_id']) ?>;
+    if (patientId) {
+        fetch(`get-patient-details.php?id=${patientId}`)
+            .then(res => res.json())
+            .then(patient => {
+                document.getElementById("p_name").value = patient.name || "";
+                document.getElementById("p_phone").value = patient.phone || "";
+                document.getElementById("p_id").value = 'MCP' + patient.id.toString().padStart(4, '0');
+            });
+    }
+});
+</script>
 
 <?php include 'footer.php'; ?>
