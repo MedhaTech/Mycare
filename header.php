@@ -173,13 +173,13 @@ if ($current_page !== 'login.php' && !isset($_SESSION['email'])) {
 </div>
 
 <!-- JS -->
+<!-- JS Scripts (Single jQuery + Bootstrap) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Your Custom Scripts -->
 <script src="assets/js/template.js"></script>
 <script src="assets/js/custom.js"></script>
-<!-- jQuery and Bootstrap JS (for modals to work) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
 </html>
