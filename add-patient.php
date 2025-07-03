@@ -13,27 +13,32 @@
 </style>
 
 
-<main class="main-wrapper clearfix" style="margin-top: 30px;">
-    <div class="container mt-4">
-    <div class="row page-title clearfix">
-        <div class="page-title-left">
-            <h6 class="page-title-heading mr-0 mr-r-5"> Add Patients</h6>
-            <p class="page-title-description mr-0 d-none d-md-inline-block">Fill below details to add the new patient</p>
-        </div>
-        <div class="page-title-right d-none d-sm-inline-flex">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-                <li class="breadcrumb-item active">Add Patients</li>
-            </ol>
-        </div>
-    </div>
-</div>
+<main class="main-wrapper clearfix">
+    <div class="container">
+      <div class="row page-title clearfix">
+                    <div class="page-title-left">
+                        <h6 class="page-title-heading mr-0 mr-r-5">Add Patient</h6>
+                        <p class="page-title-description mr-0 d-none d-md-inline-block">Fill below details to add the new patient</p>
+                    </div>
+                    <!-- /.page-title-left -->
+                    <div class="page-title-right d-none d-sm-inline-flex">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html">Dashboard</a>
+                            </li>
+                            <li class="breadcrumb-item active">Add Patient</li>
+                        </ol>
+                    </div>
+                    <!-- /.page-title-right -->
+                </div>
 
-        <div class="widget-holder col-md-9 mx-auto">
+        <div class="widget-holder col-md-12">
             <div class="widget-bg">
                 <div class="widget-body">
-                    <h4 class="box-title">Add Patient</h4>
+                   <div>
+                            <h6>Add Patient form</h6>
+                        </div>
                     <form method="POST" action="save-patient.php">
+                        <br>
                         <div class="row">
                             <div class="form-group col-md-3">
                                 <label>Name <span style="color:red">*</span></label>
@@ -44,12 +49,12 @@
                                 <input type="text" name="phone" class="form-control" required pattern="[0-9]{10}" maxlength="10" title="Enter a 10-digit phone number">
                             </div>
                             <div class="form-group col-md-3">
-                                <label>Date of Birth <span style="color:red">*</span></label>
-                                <input type="date" name="dob" class="form-control" id="dob" required>
+                                <label>Date of Birth </label>
+                                <input type="date" name="dob" class="form-control" id="dob" >
                             </div>
                             <div class="form-group col-md-3">
                                 <label>Age</label>
-                                <input type="text" name="age" class="form-control" id="age" readonly>
+                                <input type="text" name="age" class="form-control" id="age" style="color: #333; background-color: #f9f9f9;" readonly>
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Gender <span style="color:red">*</span></label>
@@ -61,16 +66,16 @@
                                 </select>
                             </div>
                             <div class="form-group col-md-4">
-                                <label>ABHA Number <span style="color:red">*</span></label>
-                                <input type="text" name="abha_number" class="form-control" required>
+                                <label>ABHA Number </label>
+                                <input type="text" name="abha_number" class="form-control" >
                             </div>
                             <div class="form-group col-md-4">
-                                <label>Aadhar Number <span style="color:red">*</span></label>
-                                <input type="text" name="aadhar_number" class="form-control" required pattern="[0-9]{12}" maxlength="12" title="Enter a valid 12-digit Aadhar number">
+                                <label>Aadhar Number </label>
+                                <input type="text" name="aadhar_number" class="form-control"  pattern="[0-9]{12}" maxlength="12" title="Enter a valid 12-digit Aadhar number">
                             </div>
 
                             <div class="form-group col-12">
-                                <h5 class="mt-4">Address Information</h5>
+                                <h6>Address Information</h6>
                             </div>
                             <div class="form-group col-md-6">
                                 <label>Address 1</label>
@@ -101,11 +106,11 @@
                             </div>
 
                             <div class="form-group col-12">
-                                <h5 class="mt-4">Health Information</h5>
+                                <h6>Health Information</h6>
                             </div>
-                            <div class="form-group col-md-2-3">
-                                <label>Blood Group <span style="color:red">*</span></label>
-                                <select name="blood_group" class="form-control" required>
+                            <div class="form-group col-md-2">
+                                <label>Blood Group </label>
+                                <select name="blood_group" class="form-control" >
                                     <option value="" selected disabled>Select</option>
                                     <option>A+</option>
                                     <option>A-</option>
@@ -117,19 +122,19 @@
                                     <option>O-</option>
                                 </select>
                             </div>
-                            <div class="form-group col-md-2-3">
+                            <div class="form-group col-md-2">
                                 <label>Height</label>
                                 <input type="text" name="height" class="form-control">
                             </div>
-                            <div class="form-group col-md-2-3">
+                            <div class="form-group col-md-2">
                                 <label>Weight</label>
                                 <input type="text" name="weight" class="form-control">
                             </div>
-                            <div class="form-group col-md-2-3">
+                            <div class="form-group col-md-2">
                                 <label>Sugar</label>
                                 <input type="text" name="sugar" class="form-control">
                             </div>
-                            <div class="form-group col-md-2-3">
+                            <div class="form-group col-md-2">
                              <label>BP </label>
                              <input type="text" name="bp" class="form-control" pattern="\d{2,3}/\d{2,3}" title="Enter BP like 120/80">
                                 </div>
