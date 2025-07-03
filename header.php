@@ -18,7 +18,7 @@ if ($current_page !== 'login.php' && !isset($_SESSION['email'])) {
     <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/logo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/mycareicon.png">
     <title>MyCare</title>
 
     <!-- CSS -->
@@ -122,7 +122,7 @@ if ($current_page !== 'login.php' && !isset($_SESSION['email'])) {
 
     <!-- Appointment Icon (Centered) -->
     <li class="mx-3">
-        <a href="#" class="nav-link" >
+        <a href="add-appointment.php" class="nav-link" >
             <i class="material-icons list-icon">event</i>
         </a>
     </li>
@@ -174,13 +174,13 @@ if ($current_page !== 'login.php' && !isset($_SESSION['email'])) {
 </div>
 
 <!-- JS -->
+<!-- JS Scripts (Single jQuery + Bootstrap) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Your Custom Scripts -->
 <script src="assets/js/template.js"></script>
 <script src="assets/js/custom.js"></script>
-<!-- jQuery and Bootstrap JS (for modals to work) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
 </html>
