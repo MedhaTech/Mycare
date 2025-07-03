@@ -18,7 +18,7 @@ if ($current_page !== 'login.php' && !isset($_SESSION['email'])) {
     <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/logo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/mycareicon.png">
     <title>MyCare</title>
 
     <!-- CSS -->
@@ -121,7 +121,7 @@ if ($current_page !== 'login.php' && !isset($_SESSION['email'])) {
 
     <!-- Appointment Icon (Centered) -->
     <li class="mx-3">
-        <a href="#" class="nav-link" >
+        <a href="add-appointment.php" class="nav-link" >
             <i class="material-icons list-icon">event</i>
         </a>
     </li>
