@@ -13,10 +13,10 @@ if ($result->num_rows !== 1) {
     die("Expense not found.");
 }
 
-$row = $result->fetch_assoc();
+$row = $result->fetch_assoc(); 
 ?>
 <div class="slip-container" style="font-family: 'Segoe UI', sans-serif; padding: 20px; border: 2px solid #007bff; max-width: 700px; margin: auto; background: #fff;">
-    <h2 style="text-align: center; color: #007bff; margin-top: 0;">Expense Slip</h2>
+    <h6 style="text-align: center; color: #007bff; margin-top: 0;">Expense Slip</h6>
     <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
         <tr><td><strong>Voucher No:</strong></td><td><?= htmlspecialchars($row['voucher_no']) ?></td></tr>
         <tr><td><strong>Name:</strong></td><td><?= htmlspecialchars($row['expense_name']) ?></td></tr>
