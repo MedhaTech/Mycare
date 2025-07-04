@@ -45,7 +45,7 @@
 
 
 <!-- Breadcrumb OUTSIDE card -->
-<div class="container">
+        <div class="container">
                 <div class="row page-title clearfix">
                     <div class="page-title-left">
                         <h6 class="page-title-heading mr-0 mr-r-5">Expenses</h6>
@@ -60,7 +60,8 @@
                         </ol>
                     </div>
                     <!-- /.page-title-right -->
-
+                </div>
+        </div>
 <!-- Card containing filter + table -->
 <div class="container mt-3">
     <div class="card p-4">
