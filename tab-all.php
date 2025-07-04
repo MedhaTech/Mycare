@@ -8,13 +8,15 @@ $sql = "SELECT a.*, p.name AS patient_name, d.name AS doctor_name
         ORDER BY a.id DESC";
 
 $result = $conn->query($sql);
+
+$modals = ''; // Store modals separately
 ?>
 
 <div class="table-responsive mt-3">
     <table class="table table-striped table-bordered">
         <thead>
             <tr>
-                <th>Appointment ID</th>
+                <th>OP ID</th>
                 <th>Patient</th>
                 <th>Doctor</th>
                 <th>Date & Time</th>
@@ -27,8 +29,13 @@ $result = $conn->query($sql);
         <tbody>
         <?php if ($result && $result->num_rows > 0): ?>
             <?php while ($row = $result->fetch_assoc()): ?>
-                <?php include 'row-appointment.php'; ?>
+                <?php 
+                ob_start(); 
+                include 'row-appointment.php'; 
+                echo ob_get_clean();
 
+                ob_start();
+                ?>
                 <!-- View Appointment Modal -->
                 <div class="modal fade" id="viewAppointment<?= $row['id']; ?>" tabindex="-1">
                     <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -41,7 +48,7 @@ $result = $conn->query($sql);
                                 <div class="row">
                                     <!-- LEFT COLUMN -->
                                     <div class="col-md-6">
-                                        <div><strong>Appointment ID:</strong> #APT<?= str_pad($row['id'], 3, '0', STR_PAD_LEFT); ?></div>
+                                        <div><strong>OP ID:</strong> OP<?= str_pad($row['appointment_id'], 2, '0', STR_PAD_LEFT); ?></div>
                                         <div><strong>Patient:</strong> <?= htmlspecialchars($row['patient_name'] ?? ''); ?></div>
                                         <div><strong>Doctor:</strong> Dr. <?= htmlspecialchars($row['doctor_name'] ?? ''); ?></div>
                                         <div><strong>Date:</strong> <?= $row['appointment_date']; ?></div>
@@ -80,6 +87,9 @@ $result = $conn->query($sql);
                         </div>
                     </div>
                 </div>
+                <?php
+                $modals .= ob_get_clean();
+                ?>
             <?php endwhile; ?>
         <?php else: ?>
             <tr><td colspan="8" class="text-center">No appointments found.</td></tr>
@@ -87,3 +97,6 @@ $result = $conn->query($sql);
         </tbody>
     </table>
 </div>
+
+<!-- Output all modals after the table -->
+<?= $modals ?>
