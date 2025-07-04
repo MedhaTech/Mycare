@@ -1,7 +1,11 @@
 <?php include 'header.php'; ?>
 <?php include 'dbconnection.php'; include 'init.php'; ?>
 
-<!-- Custom CSS for dropdown -->
+<!-- Styles -->
+<link href="https://cdn.jsdelivr.net/npm/metismenu/dist/metisMenu.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+
 <style>
 .daterangepicker {
     border-radius: 6px;
@@ -39,11 +43,10 @@
     border: none;
     padding: 6px 20px;
     border-radius: 4px;
-    
 }
 </style>
 
-<!-- Breadcrumb OUTSIDE card -->
+<!-- Breadcrumb -->
 <div class="container mt-4">
     <div class="row page-title clearfix">
         <div class="page-title-left">
@@ -59,20 +62,16 @@
     </div>
 </div>
 
-<!-- Card containing filter + table -->
+<!-- Card -->
 <div class="container mt-3">
     <div class="card p-4">
-
-        <!-- Filter and buttons row -->
         <div class="row align-items-center justify-content-between mb-3">
             <div class="col-md-6">
                 <label class="form-control-label d-block mb-1">PRE SELECTED DATE RANGE</label>
-                <div id="daterange"
-                     style="padding: 10px 15px; border: 1px solid #ccc; border-radius: 5px; width: 250px; cursor: pointer;">
+                <div id="daterange" style="padding: 10px 15px; border: 1px solid #ccc; border-radius: 5px; width: 250px; cursor: pointer;">
                     <span id="selected-range">Last 30 Days</span> <i class="fa fa-caret-down ml-2"></i>
                 </div>
             </div>
-
             <div class="col-md-6 text-md-right mt-3 mt-md-0">
                 <button class="btn btn-secondary mr-2" onclick="filterTable()">Get Details</button>
                 <button class="btn btn-danger mr-2" onclick="downloadExcel()">Download</button>
@@ -97,11 +96,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    $result = $conn->query("SELECT * FROM expenses ORDER BY expense_date DESC");
-                    $sl = 1;
-                    while ($row = $result->fetch_assoc()):
-                    ?>
+                <?php
+                $result = $conn->query("SELECT * FROM expenses ORDER BY expense_date DESC");
+                $sl = 1;
+                while ($row = $result->fetch_assoc()):
+                ?>
                     <tr data-date="<?= $row['expense_date']; ?>">
                         <td><?= 'VCH' . str_pad($sl, 3, '0', STR_PAD_LEFT); ?></td>
                         <td><?= $row['expense_date']; ?></td>
@@ -115,14 +114,13 @@
                                 <?= ucfirst($row['payment_status']) ?>
                             </span>
                         </td>
-
                         <td class="text-center">
                             <button class="btn btn-sm btn-light download-slip" data-id="<?= $row['id'] ?>"><i class="fa fa-download text-dark"></i></button>
                             <button class="btn btn-sm btn-light" data-toggle="modal" data-target="#viewExpense<?= $row['id'] ?>"><i class="fa fa-eye text-primary"></i></button>
                         </td>
                     </tr>
 
-                    <!-- View Expense Modal -->
+                    <!-- Modal -->
                     <div class="modal fade" id="viewExpense<?= $row['id'] ?>" tabindex="-1">
                         <div class="modal-dialog modal-lg modal-dialog-centered">
                             <div class="modal-content border-0" style="background-color: #fff;">
@@ -143,44 +141,44 @@
                                                     <?= ucfirst($row['payment_status']) ?>
                                                 </span>
                                             </div>
-                                           
                                         </div>
                                         <div class="col-md-6 text-secondary">
-                                             <div><strong>Name:</strong> <?= $row['expense_name'] ?></div>
+                                            <div><strong>Name:</strong> <?= $row['expense_name'] ?></div>
                                             <div><strong>Details:</strong> <?= $row['details'] ?: '–' ?></div>
-                                            <div><strong>Remarks:</strong> <?= $row['remarks'] ?: '–' ?></div>    
+                                            <div><strong>Remarks:</strong> <?= $row['remarks'] ?: '–' ?></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <?php $sl++; endwhile; ?>
+                <?php $sl++; endwhile; ?>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
 
-<!-- PDF Hidden container -->
 <div id="slipModalContent" style="display: none;"></div>
 
 <!-- Scripts -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/metismenu"></script>
 <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
 let startDate, endDate;
 
 $(document).ready(function () {
     $('#expenseTable').DataTable();
+
+    if ($.fn.metisMenu && $('#side-menu').length) {
+        $('#side-menu').metisMenu();
+    }
 
     $('#daterange').daterangepicker({
         opens: 'left',
@@ -190,7 +188,7 @@ $(document).ready(function () {
         autoUpdateInput: false,
         linkedCalendars: false,
         locale: {
-            format: 'MMM-D',
+            format: 'MMM D',
             applyLabel: 'Apply',
             cancelLabel: 'Cancel'
         },
@@ -202,7 +200,7 @@ $(document).ready(function () {
             'This Month': [moment().startOf('month'), moment().endOf('month')],
             'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
         }
-    }, function (start, end, label) {
+    }, function (start, end) {
         startDate = start;
         endDate = end;
         $('#selected-range').text(start.format('MMM D') + ' – ' + end.format('MMM D'));
@@ -212,8 +210,41 @@ $(document).ready(function () {
     endDate = moment();
     $('#selected-range').text(startDate.format('MMM D') + ' – ' + endDate.format('MMM D'));
 
-    $('#daterange').on('show.daterangepicker', function (ev, picker) {
-        picker.container.find('.drp-buttons').show();
+    $('body').on('click', '.download-slip', function () {
+        const id = $(this).data('id');
+        if (!id) return;
+
+        fetch('generate-expense-slip.php?id=' + id)
+            .then(res => res.text())
+            .then(async html => {
+                const slipContainer = document.getElementById("slipModalContent");
+                slipContainer.innerHTML = html;
+
+                const pdfTarget = slipContainer.querySelector(".slip-container");
+                if (!pdfTarget) return;
+
+                const rows = pdfTarget.querySelectorAll("table tr") || [];
+
+                let voucher = "Voucher", name = "Expense";
+                rows.forEach(row => {
+                    const label = row.children[0]?.innerText.trim();
+                    const value = row.children[1]?.innerText.trim();
+                    if (label?.includes("Voucher No")) voucher = value.replace(/\s+/g, '');
+                    if (label?.includes("Name")) name = value.replace(/\s+/g, '_');
+                });
+
+                const canvas = await html2canvas(pdfTarget, { scale: 2, useCORS: true });
+                const imgData = canvas.toDataURL('image/png');
+                const { jsPDF } = await import('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+
+                const pdf = new jsPDF('p', 'pt', 'a4');
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const imgWidth = pageWidth - 40;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+                pdf.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight);
+                pdf.save(`${name}_${voucher}.pdf`);
+            });
     });
 });
 
@@ -233,58 +264,11 @@ function downloadExcel() {
     const table = document.getElementById('expenseTable');
     const ws = XLSX.utils.table_to_sheet(table);
     XLSX.utils.book_append_sheet(wb, ws, 'Expenses');
-    XLSX.writeFile(wb, 'Expenses_List.xlsx');
+
+    let rangeText = $('#selected-range').text().trim();
+    rangeText = rangeText.replace(/\s*–\s*/, '-').replace(/\s+/g, '').toLowerCase();
+    XLSX.writeFile(wb, `expenses_${rangeText}.xlsx`);
 }
-
-$(document).ready(function () {
-    // Other initialization code...
-
-    $('.download-slip').on('click', function () {
-        const id = $(this).data('id');
-        if (!id) {
-            alert("Invalid expense ID.");
-            return;
-        }
-
-        fetch('generate-expense-slip.php?id=' + id)
-            .then(res => res.text())
-            .then(html => {
-                const slipContainer = document.getElementById("slipModalContent");
-                slipContainer.innerHTML = html;
-
-                const pdfTarget = slipContainer.querySelector(".slip-container");
-
-                // Extract voucher number and expense name from the generated HTML
-                const rows = pdfTarget.querySelectorAll("table tr");
-                let voucher = "Voucher", name = "Expense";
-
-                rows.forEach(row => {
-                    const label = row.children[0].innerText.trim();
-                    const value = row.children[1].innerText.trim();
-
-                    if (label.includes("Voucher No")) voucher = value.replace(/\s+/g, '');
-                    if (label.includes("Name")) name = value.replace(/\s+/g, '_');
-                });
-
-                html2canvas(pdfTarget, { scale: 2, useCORS: true }).then(canvas => {
-                    const imgData = canvas.toDataURL('image/png');
-                    const { jsPDF } = window.jspdf;
-                    const pdf = new jsPDF('p', 'pt', 'a4');
-                    const pageWidth = pdf.internal.pageSize.getWidth();
-                    const imgWidth = pageWidth;
-                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                    pdf.addImage(imgData, 'PNG', 20, 20, imgWidth - 40, imgHeight);
-                    pdf.save(`${name}_${voucher}.pdf`);
-                });
-            })
-            .catch(error => {
-                alert("Error generating PDF: " + error);
-                console.error(error);
-            });
-    });
-});
-
-
 </script>
 
 <?php include 'footer.php'; ?>
