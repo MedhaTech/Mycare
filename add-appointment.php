@@ -6,6 +6,16 @@ if (!isset($_SESSION['email'])) {
 }
 include 'dbconnection.php';
 include 'init.php';
+$preSelectedPatient = null;
+
+if (isset($_GET['patient_id'])) {
+    $pid = intval($_GET['patient_id']);
+    $pQuery = $conn->query("SELECT * FROM patients WHERE id = $pid");
+    if ($pQuery && $pQuery->num_rows > 0) {
+        $preSelectedPatient = $pQuery->fetch_assoc();
+    }
+}
+
 
 $message = '';
 
@@ -83,21 +93,21 @@ while ($doc = $doctors->fetch_assoc()) {
 
         <div class="col-md-8">
             <form method="POST" id="appointmentForm">
-                <input type="hidden" name="patient_id" id="selectedPatientId">
+                <input type="hidden" name="patient_id" id="selectedPatientId" value="<?= $preSelectedPatient['id'] ?? '' ?>">
                 <div class="card">
                     <div class="card-body">
                         <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label>Patient Name<span style="color: red;">*</span></label>
-                                <input type="text" class="form-control" id="p_name" readonly>
+                                <input type="text" class="form-control" id="p_name" value="<?= $preSelectedPatient['name'] ?? '' ?>" readonly>
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Patient Mobile No<span style="color: red;">*</span></label>
-                                <input type="text" class="form-control" id="p_phone" readonly>
+                                <input type="text" class="form-control" id="p_phone" value="<?= $preSelectedPatient['phone'] ?? '' ?>" readonly>
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Patient ID<span style="color: red;">*</span></label>
-                                <input type="text" class="form-control" id="p_id" readonly>
+                                <input type="text" class="form-control" id="p_id" value="<?= isset($preSelectedPatient['id']) ? 'MCP' . str_pad($preSelectedPatient['id'], 4, '0', STR_PAD_LEFT) : '' ?>" readonly>
                             </div>
 
                             <div class="form-group col-md-6">
