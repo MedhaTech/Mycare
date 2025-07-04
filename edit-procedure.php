@@ -7,7 +7,7 @@ $appointment_id = $_GET['id'] ?? null;
 $message = '';
 
 if (!$appointment_id) {
-    echo "<script>alert('Invalid procedure ID'); window.location.href='procedures.php';</script>";
+    echo "<script>alert('Invalid procedure ID'); window.location.href='procedure.php';</script>";
     exit();
 }
 
@@ -21,7 +21,7 @@ $appointment = $stmt->get_result()->fetch_assoc();
 $stmt->close();
 
 if (!$appointment) {
-    echo "<script>alert('Procedure not found'); window.location.href='procedures.php';</script>";
+    echo "<script>alert('Procedure not found'); window.location.href='procedure.php';</script>";
     exit();
 }
 
@@ -195,7 +195,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                             <div class="col-md-12 text-right">
                                 <button type="submit" class="btn btn-primary">Save Procedure</button>
-                                <a href="procedures.php" class="btn btn-secondary">Back to list</a>
+                                <a href="procedure.php" class="btn btn-secondary">Back to list</a>
                             </div>
                         </div>
                     </div>

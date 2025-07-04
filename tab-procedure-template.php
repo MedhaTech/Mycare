@@ -32,11 +32,28 @@
                 <td><?= $row['type'] ?></td>
                 <td><?= $row['duration'] ?> mins</td>
                 <td>
-                    <button class="btn btn-sm btn-info" onclick="loadSlip(<?= $row['id'] ?>, '<?= $row['patient_name'] ?>')">Slip</button>
-                    <?php if ($row['status'] != 'Cancelled'): ?>
-                        <button class="btn btn-sm btn-danger" onclick="openCancelModal(<?= $row['id'] ?>)">Cancel</button>
-                    <?php endif; ?>
-                </td>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-light dropdown-toggle" type="button" data-toggle="dropdown">
+                        <i class="fa fa-ellipsis-v"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="javascript:void(0)" onclick="loadSlip(<?= $row['id'] ?>, '<?= htmlspecialchars($row['patient_name']) ?>')">
+                            <i class="fa fa-file-alt text-success mr-2"></i>Slip
+                        </a>
+                        <a class="dropdown-item" href="view-procedure.php?id=<?= $row['id'] ?>">
+                            <i class="fa fa-eye text-info mr-2"></i>View
+                        </a>
+                        <a class="dropdown-item" href="edit-procedure.php?id=<?= $row['id'] ?>">
+                            <i class="fa fa-edit text-primary mr-2"></i>Edit
+                        </a>
+                        <?php if ($row['status'] != 'Cancelled'): ?>
+                        <a class="dropdown-item text-danger" href="javascript:void(0)" onclick="openCancelModal(<?= $row['id'] ?>)">
+                            <i class="fa fa-times-circle mr-2"></i>Cancel
+                        </a>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </td>
             </tr>
         <?php endwhile; ?>
     <?php else: ?>

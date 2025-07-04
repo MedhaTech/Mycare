@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $conn->query("UPDATE appointments SET appointment_id = '$appointment_id' WHERE id = $last_id");
 
         $_SESSION['success'] = "Procedure added successfully!";
-        header("Location: procedures.php");
+        header("Location: procedure.php");
         exit();
     } else {
         $message = '<div class="alert alert-danger">❌ Error: ' . $conn->error . '</div>';
@@ -190,7 +190,7 @@ while ($doc = $doctors->fetch_assoc()) {
 
                             <div class="col-md-12 text-right">
                                 <button type="submit" class="btn btn-primary">Save Procedure</button>
-                                <a href="procedures.php" class="btn btn-secondary">Back to list</a>
+                                <a href="procedure.php" class="btn btn-secondary">Back to list</a>
                             </div>
                         </div>
                     </div>

@@ -166,7 +166,7 @@ if ($current_page !== 'login.php' && !isset($_SESSION['email'])) {
                             <li><a href="doctors-list.php"><i class="list-icon material-icons">local_hospital</i><span class="hide-menu">Doctors</span></a></li>
                             <li><a href="patient-list.php"><i class="list-icon material-icons">people</i><span class="hide-menu">Patients</span></a></li>
                             <li><a href="appointments.php"><i class="list-icon material-icons">event</i><span class="hide-menu">Appointments</span></a></li>
-                            <li><a href="procedures.php"><i class="list-icon material-icons">loupe</i><span class="hide-menu">Procedures</span></a></li>
+                            <li><a href="procedure.php"><i class="list-icon material-icons">loupe</i><span class="hide-menu">Procedures</span></a></li>
                             <li><a href="expenses-list.php"><i class="list-icon material-icons">account_balance_wallet</i><span class="hide-menu">Expenses</span></a></li>
 
                         </ul>
