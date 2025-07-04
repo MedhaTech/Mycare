@@ -42,10 +42,27 @@ $result = $conn->query($query);
                 <td><?= $row['type'] ?></td>
                 <td><?= $row['duration'] ?> mins</td>
                 <td>
-                    <button class="btn btn-sm btn-info" onclick="loadSlip(<?= $row['id'] ?>, '<?= $row['patient_name'] ?>')">Slip</button>
-                    <?php if ($row['status'] != 'Cancelled'): ?>
-                        <button class="btn btn-sm btn-danger" onclick="openCancelModal(<?= $row['id'] ?>)">Cancel</button>
-                    <?php endif; ?>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-light dropdown-toggle" type="button" data-toggle="dropdown">
+                            <i class="fa fa-ellipsis-v"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#" onclick="loadSlip(<?= $row['id'] ?>, '<?= htmlspecialchars($row['patient_name']) ?>')">
+                                <i class="fa fa-file-pdf text-danger mr-1"></i> Slip
+                            </a>
+                            <a class="dropdown-item" href="view-procedure.php?id=<?= $row['id'] ?>">
+                                <i class="fa fa-eye text-info mr-1"></i> View
+                            </a>
+                            <?php if ($row['status'] != 'Cancelled'): ?>
+                                <a class="dropdown-item" href="edit-procedure.php?id=<?= $row['id'] ?>">
+                                    <i class="fa fa-edit text-primary mr-1"></i> Edit
+                                </a>
+                                <a class="dropdown-item" href="#" onclick="openCancelModal(<?= $row['id'] ?>)">
+                                    <i class="fa fa-times-circle text-danger mr-1"></i> Cancel
+                                </a>
+                            <?php endif; ?>
+                        </div>
+                    </div>
                 </td>
             </tr>
         <?php endwhile; ?>
