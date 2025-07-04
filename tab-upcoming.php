@@ -15,7 +15,7 @@ $result = $conn->query($sql);
     <table class="table table-striped table-bordered">
         <thead>
             <tr>
-                <th>Appointment ID</th>
+                <th>OP ID</th>
                 <th>Patient</th>
                 <th>Doctor</th>
                 <th>Date & Time</th>

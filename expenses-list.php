@@ -43,21 +43,23 @@
 }
 </style>
 
+
 <!-- Breadcrumb OUTSIDE card -->
-<div class="container mt-4">
-    <div class="row page-title clearfix">
-        <div class="page-title-left">
-            <h6 class="page-title-heading mr-0 mr-r-5">Expenses</h6>
-            <p class="page-title-description mr-0 d-none d-md-inline-block">Manage MyCare clinic's expenses</p>
-        </div>
-        <div class="page-title-right d-none d-sm-inline-flex">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-                <li class="breadcrumb-item active">Expenses</li>
-            </ol>
-        </div>
-    </div>
-</div>
+<div class="container">
+                <div class="row page-title clearfix">
+                    <div class="page-title-left">
+                        <h6 class="page-title-heading mr-0 mr-r-5">Expenses</h6>
+                        <p class="page-title-description mr-0 d-none d-md-inline-block">Manage MyCare clinic's expenses</p>
+                    </div>
+                    <!-- /.page-title-left -->
+                    <div class="page-title-right d-none d-sm-inline-flex">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.php">Dashboard</a>
+                            </li>
+                            <li class="breadcrumb-item active">Expenses</li>
+                        </ol>
+                    </div>
+                    <!-- /.page-title-right -->
 
 <!-- Card containing filter + table -->
 <div class="container mt-3">

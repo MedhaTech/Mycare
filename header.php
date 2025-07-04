@@ -18,7 +18,7 @@ if ($current_page !== 'login.php' && !isset($_SESSION['email'])) {
     <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/logo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/mycareicon.png">
     <title>MyCare</title>
 
     <!-- CSS -->
@@ -28,6 +28,7 @@ if ($current_page !== 'login.php' && !isset($_SESSION['email'])) {
     <link href="assets/css/style.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <!-- JS -->
     <script src="assets/js/modernizr.min.js"></script>
@@ -121,7 +122,7 @@ if ($current_page !== 'login.php' && !isset($_SESSION['email'])) {
 
     <!-- Appointment Icon (Centered) -->
     <li class="mx-3">
-        <a href="#" class="nav-link" >
+        <a href="add-appointment.php" class="nav-link" >
             <i class="material-icons list-icon">event</i>
         </a>
     </li>
