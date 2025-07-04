@@ -1,5 +1,5 @@
 <?php
-$apt_id = "APT" . str_pad($row['id'], 3, '0', STR_PAD_LEFT);
+$apt_id = $row['appointment_id']; // Already contains OPXXX
 $status = strtoupper($row['status']);
 $badgeClass = match ($status) {
     'SCHEDULED' => 'badge-primary',
@@ -14,7 +14,7 @@ $badgeClass = match ($status) {
 ?>
 
 <tr>
-    <td>#<?= $apt_id ?></td>
+    <td><?= $apt_id ?></td>
     <td><?= htmlspecialchars($row['patient_name'] ?? '') ?></td>
     <td><?= htmlspecialchars($row['doctor_name'] ?? '') ?></td>
     <td><?= $row['appointment_date'] . ' ' . date("h:i A", strtotime($row['appointment_time'])) ?></td>
@@ -56,7 +56,7 @@ $badgeClass = match ($status) {
                 <div class="row">
                     <!-- LEFT COLUMN -->
                     <div class="col-md-6">
-                        <div><strong>Appointment ID:</strong> #APT<?= str_pad($row['id'], 3, '0', STR_PAD_LEFT); ?></div>
+                        <div><strong>OP ID:</strong> <?= $row['appointment_id']; ?></div>
                         <div><strong>Patient:</strong> <?= htmlspecialchars($row['patient_name'] ?? ''); ?></div>
                         <div><strong>Doctor:</strong> Dr. <?= htmlspecialchars($row['doctor_name'] ?? ''); ?></div>
                         <div><strong>Date:</strong> <?= $row['appointment_date']; ?></div>

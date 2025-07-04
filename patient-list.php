@@ -84,7 +84,7 @@ function calculateAge($dob) {
                                         $apptResult = $conn->query($apptQuery);
                                         if ($apptResult->num_rows > 0) {
                                             while ($appt = $apptResult->fetch_assoc()) {
-                                                $aptID = 'APT' . str_pad($appt['id'], 3, '0', STR_PAD_LEFT);
+                                                $aptID = 'OP' . str_pad($appt['id'], 3, '0', STR_PAD_LEFT);
                                                 $status = strtolower($appt['status']);
                                                 
                                                 $badgeClass = in_array($status, ['confirmed', 'in progress']) ? 'success' : 'secondary';
@@ -152,7 +152,7 @@ function calculateAge($dob) {
                                                                 $apptResult = $conn->query($apptQuery);
                                                                 if ($apptResult->num_rows > 0) {
                                                                     while ($appt = $apptResult->fetch_assoc()) {
-                                                                        $aptID = 'APT' . str_pad($appt['id'], 3, '0', STR_PAD_LEFT);
+                                                                        $aptID = 'OP' . str_pad($appt['id'], 3, '0', STR_PAD_LEFT);
                                                                         $status = strtolower($appt['status']);
                                                                         
                                                                         $badgeClass = in_array($status, ['confirmed', 'in progress']) ? 'success' : 'secondary';

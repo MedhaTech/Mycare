@@ -88,20 +88,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="card-body">
                         <div class="form-row">
                             <div class="form-group col-md-4">
-                                <label>Patient Name</label>
+                                <label>Patient Name<span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" id="p_name" readonly>
                             </div>
                             <div class="form-group col-md-4">
-                                <label>Patient Mobile No</label>
+                                <label>Patient Mobile No<span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" id="p_phone" readonly>
                             </div>
                             <div class="form-group col-md-4">
-                                <label>Patient ID</label>
+                                <label>Patient ID<span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" id="p_id" readonly>
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label>Department</label>
+                                <label>Department<span style="color: red;">*</span></label>
                                 <select id="departmentSelect" class="form-control">
                                     <option>Select Department</option>
                                     <option value="General Practitioner">General Practitioner</option>
@@ -116,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </select>
                             </div>
                             <div class="form-group col-md-6">
-                                <label>Doctor</label>
+                                <label>Doctor<span style="color: red;">*</span></label>
                                 <select name="doctor_id" id="doctorSelect" class="form-control" required>
                                     <option value="">Select Doctor</option>
                                     <?php while ($d = $doctors->fetch_assoc()): ?>
@@ -128,15 +128,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
 
                             <div class="form-group col-md-4">
-                                <label>Date</label>
+                                <label>Date<span style="color: red;">*</span></label>
                                 <input type="date" name="appointment_date" class="form-control" value="<?= $appointment['appointment_date'] ?>" required>
                             </div>
                             <div class="form-group col-md-4">
-                                <label>Time</label>
+                                <label>Time<span style="color: red;">*</span></label>
                                 <input type="time" name="appointment_time" class="form-control" value="<?= $appointment['appointment_time'] ?>" required>
                             </div>
                             <div class="form-group col-md-4">
-                                <label>Duration</label>
+                                <label>Duration<span style="color: red;">*</span></label>
                                 <select name="duration" class="form-control" required>
                                     <option value="30" <?= $appointment['duration'] == 30 ? 'selected' : '' ?>>30m</option>
                                     <option value="45" <?= $appointment['duration'] == 45 ? 'selected' : '' ?>>45m</option>
@@ -147,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label>Appointment Type</label>
+                                <label>Appointment Type<span style="color: red;">*</span></label>
                                 <select name="type" class="form-control" required>
                                     <option value="Check-Up" <?= $appointment['type'] == 'Check-Up' ? 'selected' : '' ?>>Check-Up</option>
                                     <option value="Consultation" <?= $appointment['type'] == 'Consultation' ? 'selected' : '' ?>>Consultation</option>
@@ -160,16 +160,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
 
                             <div class="form-group col-md-3">
-                                <label>Fee (₹)</label>
+                                <label>Fee (₹)<span style="color: red;">*</span></label>
                                 <input type="number" step="0.01" name="fee" class="form-control" value="<?= $appointment['fee'] ?>" required>
                             </div>
                             <div class="form-group col-md-3">
-                                <label>Mode of Payment</label>
+                                <label>Mode of Payment<span style="color: red;">*</span></label>
                                 <select name="payment_mode" class="form-control">
-                                    <option value="UPI" <?= $appointment['payment_mode'] == 'UPI' ? 'selected' : '' ?>>UPI</option>
-                                    <option value="Cash" <?= $appointment['payment_mode'] == 'Cash' ? 'selected' : '' ?>>Cash</option>
-                                    <option value="Net Banking" <?= $appointment['payment_mode'] == 'Net Banking' ? 'selected' : '' ?>>Net Banking</option>
-                                    <option value="Card" <?= $appointment['payment_mode'] == 'Card' ? 'selected' : '' ?>>Card</option>
+                                    <option value="UPI">UPI</option>
+                                    <option value="Cash">Cash</option>
+                                    <option value="Net Banking">Net Banking</option>
+                                    <option value="Card">Card</option>
                                 </select>
                             </div>
                             <div class="form-group col-md-3 input-has-value">
@@ -177,7 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <input type="text" class="form-control" value="Paid" readonly>
                             </div>
                             <div class="form-group col-md-3">
-                                <label>Appointment Status</label>
+                                <label>Appointment Status<span style="color: red;">*</span></label>
                                 <select name="status" class="form-control" required>
                                     <option value="Confirmed" <?= $appointment['status'] == 'Confirmed' ? 'selected' : '' ?>>Confirmed</option>
                                     <option value="In Progress" <?= $appointment['status'] == 'In Progress' ? 'selected' : '' ?>>In Progress</option>
@@ -187,7 +187,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
 
                             <div class="form-group col-md-12">
-                                <label>Reason for Appointment</label>
+                                <label>Reason for Appointment<span style="color: red;">*</span></label>
                                 <textarea name="reason" class="form-control" rows="3" placeholder="Describe reason..." required><?= htmlspecialchars($appointment['reason']) ?></textarea>
                             </div>
 
