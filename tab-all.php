@@ -13,7 +13,7 @@ $modals = ''; // Store modals separately
 ?>
 
 <div class="table-responsive mt-3">
-    <table class="table table-striped table-bordered">
+    <table class="table table-striped table-bordered" id="appointmentTable" >
         <thead>
             <tr>
                 <th>OP ID</th>
@@ -48,7 +48,7 @@ $modals = ''; // Store modals separately
                                 <div class="row">
                                     <!-- LEFT COLUMN -->
                                     <div class="col-md-6">
-                                        <div><strong>Appointment ID:</strong> #APT<?= str_pad($row['id'], 3, '0', STR_PAD_LEFT); ?></div>
+                                        <div><strong>OP ID:</strong> OP<?= str_pad($row['appointment_id'], 2, '0', STR_PAD_LEFT); ?></div>
                                         <div><strong>Patient:</strong> <?= htmlspecialchars($row['patient_name'] ?? ''); ?></div>
                                         <div><strong>Doctor:</strong> Dr. <?= htmlspecialchars($row['doctor_name'] ?? ''); ?></div>
                                         <div><strong>Date:</strong> <?= $row['appointment_date']; ?></div>

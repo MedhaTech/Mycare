@@ -1,6 +1,5 @@
 <?php
 include 'dbconnection.php';
-include 'init.php';
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     die("Invalid expense ID.");
@@ -14,19 +13,51 @@ if ($result->num_rows !== 1) {
 }
 
 $row = $result->fetch_assoc();
+$voucherNo = 'VCH' . str_pad($row['id'], 3, '0', STR_PAD_LEFT);
+$date = date('Y-m-d', strtotime($row['expense_date']));
 ?>
-<div class="slip-container" style="font-family: 'Segoe UI', sans-serif; padding: 20px; border: 2px solid #007bff; max-width: 700px; margin: auto; background: #fff;">
-    <h2 style="text-align: center; color: #007bff; margin-top: 0;">Expense Slip</h2>
-    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-        <tr><td><strong>Voucher No:</strong></td><td><?= htmlspecialchars($row['voucher_no']) ?></td></tr>
-        <tr><td><strong>Name:</strong></td><td><?= htmlspecialchars($row['expense_name']) ?></td></tr>
-        <tr><td><strong>Mobile:</strong></td><td><?= htmlspecialchars($row['mobile']) ?></td></tr>
-        <tr><td><strong>Category:</strong></td><td><?= htmlspecialchars($row['category']) ?></td></tr>
-        <tr><td><strong>Expense Date:</strong></td><td><?= htmlspecialchars($row['expense_date']) ?></td></tr>
-        <tr><td><strong>Mode of Payment:</strong></td><td><?= htmlspecialchars($row['payment_mode']) ?></td></tr>
-        <tr><td><strong>Amount:</strong></td><td>₹ <?= number_format($row['amount'], 2) ?></td></tr>
-        <tr><td><strong>Status:</strong></td><td><?= htmlspecialchars($row['payment_status']) ?></td></tr>
-        <tr><td><strong>Details:</strong></td><td><?= nl2br(htmlspecialchars($row['details'])) ?></td></tr>
-        <tr><td><strong>Remarks:</strong></td><td><?= nl2br(htmlspecialchars($row['remarks'])) ?></td></tr>
-    </table>
+
+<div class="slip-container" style="width: 720px; font-family: 'Segoe UI', sans-serif; border: 1px solid #ccc; padding: 20px;">
+    <div style="background-color: #007bff; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;">
+        <div style="font-size: 20px; font-weight: bold;">Money Receipt</div>
+        <div style="text-align: right; font-size: 12px;">
+            <div>Voucher No: <strong><?= $voucherNo ?></strong></div>
+            <div>Date: <strong><?= $date ?></strong></div>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <div><strong>Name:</strong></div>
+            <div><?= $row['expense_name'] ?></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <div><strong>Category:</strong></div>
+            <div><?= $row['category'] ?></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <div><strong>Details:</strong></div>
+            <div><?= $row['details'] ?: '–' ?></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <div><strong>Payment Mode:</strong></div>
+            <div><?= $row['payment_mode'] ?></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <div><strong>Amount:</strong></div>
+            <div>₹ <?= number_format($row['amount'], 2) ?></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <div><strong>Payment Status:</strong></div>
+            <div><?= ucfirst($row['payment_status']) ?></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <div><strong>Remarks:</strong></div>
+            <div><?= $row['remarks'] ?: '–' ?></div>
+        </div>
+    </div>
+
+    <div style="margin-top: 30px; text-align: center; font-size: 12px; color: #666;">
+        Thank you for your payment. This is a system-generated receipt.
+    </div>
 </div>

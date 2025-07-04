@@ -11,7 +11,7 @@ if (!$appointment_id) {
 ?>
 
 <div class="container mt-5">
-    <h4>Medical Records for Appointment #APT<?= str_pad($appointment_id, 3, '0', STR_PAD_LEFT) ?></h4>
+    <h4>Medical Records for Appointment OP<?= str_pad($appointment_id, 2, '0', STR_PAD_LEFT) ?></h4>
 
     <div class="alert alert-info mt-4">
         <strong>Placeholder:</strong> Medical records for this appointment will be displayed here in the future.

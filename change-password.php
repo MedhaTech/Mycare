@@ -74,7 +74,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 <!-- Title -->
+
 <div class="container-fluid">
+
   <div class="row mb-3">
     <div class="col-md-10 offset-md-1 d-flex justify-content-between align-items-center">
       <h6 class="mb-0" style="font-weight: 600;">Change Password</h6>
@@ -90,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!-- Form -->
 <div class="d-flex justify-content-center align-items-center">
-    <div class="col-md-10 widget-holder">
+    <div class="container widget-holder">
         <div class="widget-bg">
             <div class="widget-body clearfix">
                 <h5 class="box-title mr-b-0">Reset Password</h5>

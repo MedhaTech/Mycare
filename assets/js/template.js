@@ -1660,9 +1660,9 @@
     }
 
     Unifato.init();
-    Unifato.setMenu();
+    // Unifato.setMenu();
   });
 
-  window.addEventListener('resize', Unifato.setMenu);
+  // window.addEventListener('resize', Unifato.setMenu);
   window.addEventListener('resize', Unifato.contentHeight);
 })(jQuery);
