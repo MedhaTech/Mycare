@@ -13,7 +13,7 @@ $modals = ''; // Store modals separately
 ?>
 
 <div class="table-responsive mt-3">
-    <table class="table table-striped table-bordered">
+    <table class="table table-striped table-bordered" id="appointmentTable" >
         <thead>
             <tr>
                 <th>OP ID</th>

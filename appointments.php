@@ -75,18 +75,11 @@ include 'init.php';
   </div>
 </div>
 
-<!-- DataTables + PDF Slip Modal Support -->
-<link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- ✅ 1. jQuery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script> <!-- ✅ 2. Popper -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> <!-- ✅ 3. Bootstrap -->
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script> <!-- ✅ 4. DataTables -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 
 <script>
     $(document).ready(function () {
-        $("table").DataTable(); // Applies DataTables to all tables
+        $("#appointmentTable").DataTable(); // Applies DataTables to all tables
     });
 
     function loadSlip(id, name) {
