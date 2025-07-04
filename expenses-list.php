@@ -134,21 +134,21 @@
                                     <div class="row">
                                         <div class="col-md-6 text-secondary">
                                             <div><strong>Voucher No:</strong> <?= 'VCH' . str_pad($sl, 3, '0', STR_PAD_LEFT); ?></div>
-                                            <div><strong>Name:</strong> <?= $row['expense_name'] ?></div>
                                             <div><strong>Category:</strong> <?= $row['category'] ?></div>
-                                            <div><strong>Details:</strong> <?= $row['details'] ?: '–' ?></div>
-                                            <div><strong>Remarks:</strong> <?= $row['remarks'] ?: '–' ?></div>
-                                        </div>
-                                        <div class="col-md-6 text-secondary">
-                                            <div><strong>Payment Mode:</strong> <?= $row['payment_mode'] ?></div>
                                             <div><strong>Date:</strong> <?= date('Y-m-d', strtotime($row['expense_date'])) ?></div>
+                                            <div><strong>Amount:</strong> ₹ <?= number_format($row['amount'], 2) ?></div>
+                                            <div><strong>Payment Mode:</strong> <?= $row['payment_mode'] ?></div>
                                             <div><strong>Status:</strong>
                                                 <span class="badge badge-<?= strtolower($row['payment_status']) === 'paid' ? 'success' : 'secondary' ?>">
                                                     <?= ucfirst($row['payment_status']) ?>
                                                 </span>
                                             </div>
-                                            
-                                            <div><strong>Amount:</strong> ₹ <?= number_format($row['amount'], 2) ?></div>
+                                           
+                                        </div>
+                                        <div class="col-md-6 text-secondary">
+                                             <div><strong>Name:</strong> <?= $row['expense_name'] ?></div>
+                                            <div><strong>Details:</strong> <?= $row['details'] ?: '–' ?></div>
+                                            <div><strong>Remarks:</strong> <?= $row['remarks'] ?: '–' ?></div>    
                                         </div>
                                     </div>
                                 </div>

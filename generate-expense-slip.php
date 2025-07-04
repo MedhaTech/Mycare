@@ -13,7 +13,7 @@ if ($result->num_rows !== 1) {
     die("Expense not found.");
 }
 
-$row = $result->fetch_assoc();
+$row = $result->fetch_assoc(); 
 ?>
 <div class="slip-container" style="font-family: 'Segoe UI', sans-serif; padding: 20px; border: 2px solid #007bff; max-width: 700px; margin: auto; background: #fff;">
     <h6 style="text-align: center; color: #007bff; margin-top: 0;">Expense Slip</h6>
