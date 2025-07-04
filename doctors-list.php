@@ -1,4 +1,5 @@
     <?php
+    include 'init.php';
     session_start();
     if (!isset($_SESSION['email'])) {
         header("Location: login.php");
@@ -6,7 +7,7 @@
     }
     include 'header.php';
     include 'dbconnection.php';
-    include 'init.php';
+    
     ?>
 
     <!-- Breadcrumb Heading -->

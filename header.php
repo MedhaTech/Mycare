@@ -1,5 +1,5 @@
 <?php
-include 'init.php';
+// include 'init.php';
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
