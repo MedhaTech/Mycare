@@ -25,12 +25,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("iisssissi", $patient_id, $doctor_id, $appointment_date, $appointment_time, $type, $duration, $reason, $status, $fee);
     if ($stmt->execute()) {
-        $_SESSION['success'] = "Appointment added successfully!";
-        header("Location: appointments.php");
-        exit();
-    } else {
-        $message = '<div class="alert alert-danger">❌ Error: ' . $conn->error . '</div>';
-    }
+    $last_id = $stmt->insert_id; // Step 2: Get auto-incremented ID
+    $appointment_id = 'OP' . str_pad($last_id, 3, '0', STR_PAD_LEFT); // Step 3: Format OP ID
+
+    // Step 4: Update the appointment_id in the same row
+    $conn->query("UPDATE appointments SET appointment_id = '$appointment_id' WHERE id = $last_id");
+
+    $_SESSION['success'] = "Appointment added successfully!";
+    header("Location: appointments.php");
+    exit();
+} else {
+    $message = '<div class="alert alert-danger">❌ Error: ' . $conn->error . '</div>';
+}
     $stmt->close();
 }
 include 'header.php';
@@ -82,20 +88,20 @@ while ($doc = $doctors->fetch_assoc()) {
                     <div class="card-body">
                         <div class="form-row">
                             <div class="form-group col-md-4">
-                                <label>Patient Name</label>
+                                <label>Patient Name<span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" id="p_name" readonly>
                             </div>
                             <div class="form-group col-md-4">
-                                <label>Patient Mobile No</label>
+                                <label>Patient Mobile No<span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" id="p_phone" readonly>
                             </div>
                             <div class="form-group col-md-4">
-                                <label>Patient ID</label>
+                                <label>Patient ID<span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" id="p_id" readonly>
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label>Department</label>
+                                <label>Department<span style="color: red;">*</span></label>
                                 <select id="departmentSelect" class="form-control">
                                     <option>Select Department</option>
                                     <?php foreach ($departments as $dept): ?>
@@ -104,22 +110,22 @@ while ($doc = $doctors->fetch_assoc()) {
                                 </select>
                             </div>
                             <div class="form-group col-md-6">
-                                <label>Doctor</label>
+                                <label>Doctor<span style="color: red;">*</span></label>
                                 <select name="doctor_id" id="doctorSelect" class="form-control" required>
                                     <option value="">Select Doctor</option>
                                 </select>
                             </div>
 
                             <div class="form-group col-md-4">
-                                <label>Date</label>
+                                <label>Date<span style="color: red;">*</span></label>
                                 <input type="date" name="appointment_date" class="form-control" required>
                             </div>
                             <div class="form-group col-md-4">
-                                <label>Time</label>
+                                <label>Time<span style="color: red;">*</span></label>
                                 <input type="time" name="appointment_time" class="form-control" required>
                             </div>
                             <div class="form-group col-md-4">
-                                <label>Duration</label>
+                                <label>Duration<span style="color: red;">*</span></label>
                                 <select name="duration" class="form-control" required>
                                     <option value="30">30m</option>
                                     <option value="45">45m</option>
@@ -130,7 +136,7 @@ while ($doc = $doctors->fetch_assoc()) {
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label>Appointment Type</label>
+                                <label>Appointment Type<span style="color: red;">*</span></label>
                                 <select name="type" class="form-control" required>
                                     <option value="Check-Up">Check-Up</option>
                                     <option value="Consultation">Consultation</option>
@@ -143,11 +149,11 @@ while ($doc = $doctors->fetch_assoc()) {
                             </div>
 
                             <div class="form-group col-md-3">
-                                <label>Fee (₹)</label>
+                                <label>Fee (₹)<span style="color: red;">*</span></label>
                                 <input type="number" step="0.01" name="fee" class="form-control" required>
                             </div>
                             <div class="form-group col-md-3">
-                                <label>Mode of Payment</label>
+                                <label>Mode of Payment<span style="color: red;">*</span></label>
                                 <select name="payment_mode" class="form-control">
                                     <option value="UPI">UPI</option>
                                     <option value="Cash">Cash</option>
@@ -170,7 +176,7 @@ while ($doc = $doctors->fetch_assoc()) {
                             </div>
 
                             <div class="form-group col-md-12">
-                                <label>Reason for Appointment</label>
+                                <label>Reason for Appointment<span style="color: red;"> * </span></label>
                                 <textarea name="reason" class="form-control" rows="3" placeholder="Describe reason..."></textarea>
                             </div>
 

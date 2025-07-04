@@ -11,7 +11,7 @@ if (!$appointment_id) {
 ?>
 
 <div class="container mt-4">
-    <h4>Add Procedure for Appointment #APT<?= str_pad($appointment_id, 3, '0', STR_PAD_LEFT) ?></h4>
+    <h4>Add Procedure for Appointment OP<?= str_pad($appointment_id, 2, '0', STR_PAD_LEFT) ?></h4>
     <form method="post" action="save-procedure.php">
         <input type="hidden" name="appointment_id" value="<?= $appointment_id ?>">
 
