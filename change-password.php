@@ -1,7 +1,13 @@
-
 <?php
+ob_start(); // Start output buffering to avoid header issues
+
+include 'header.php'; // Must be at top
 include 'dbconnection.php';
 include 'init.php';
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start(); // Start session if not already started
+}
 
 $_SESSION['id'] = 1; // Simulate logged-in user
 
@@ -65,19 +71,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
-
-include 'header.php';
 ?>
 
 <!-- Title -->
 
-<div class="container">
+<div class="container-fluid">
+
   <div class="row mb-3">
     <div class="col-md-10 offset-md-1 d-flex justify-content-between align-items-center">
       <h6 class="mb-0" style="font-weight: 600;">Change Password</h6>
       <nav>
-        <ol class="breadcrumb mb-0 bg-transparent p-0" style="background: none;">
-          <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+        <ol class="breadcrumb mb-0 bg-transparent p-0">
+          <li class="breadcrumb-item">Dashboard</li>
           <li class="breadcrumb-item active">Change Password</li>
         </ol>
       </nav>
@@ -85,9 +90,7 @@ include 'header.php';
   </div>
 </div>
 
-
-
-<!-- Centered Card with Form + Image -->
+<!-- Form -->
 <div class="d-flex justify-content-center align-items-center">
     <div class="container widget-holder">
         <div class="widget-bg">
@@ -141,7 +144,7 @@ include 'header.php';
                                 <div class="form-group row">
                                     <div class="col-sm-9 ml-auto btn-list">
                                         <button type="submit" class="btn btn-primary">Change Password</button>
-                                        <a href="header.php" class="btn btn-default">Cancel</a>
+                                        <a href="index.php" class="btn btn-default">Cancel</a>
                                     </div>
                                 </div>
                             </div>
@@ -154,11 +157,13 @@ include 'header.php';
                              alt="Reset Password Illustration"
                              class="img-fluid" style="max-height: 300px;">
                     </div>
-                </div> <!-- /.row -->
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-
-<?php include 'footer.php'; ?>
+<?php 
+include 'footer.php'; 
+ob_end_flush(); // Flush output buffer at end
+?>
