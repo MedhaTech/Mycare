@@ -189,7 +189,7 @@
                             <a data-toggle="modal" data-target="#deleteDoctor<?= $row['id']; ?>" class="btn btn-sm btn-light" title="Delete">
                                 <i class="fa fa-trash text-danger"></i>
                             </a>
-                            <form method="post" style="display:inline;">
+                            <form method="post" action="toggle-status.php" style="display:inline;">
                                 <input type="hidden" name="id" value="<?= $row['id']; ?>">
                                 <input type="hidden" name="currentStatus" value="<?= $row['status']; ?>">
                                 <button type="submit" name="toggleStatus" class="btn btn-sm btn-light" title="<?= $row['status'] === 'Active' ? 'Inactivate' : 'Activate'; ?>">

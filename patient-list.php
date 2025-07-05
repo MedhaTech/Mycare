@@ -96,7 +96,7 @@ function calculateAge($dob) {
                                         ?>
 
                                 </td>
-                                <td>
+                                 <td>
                                     <div class="d-flex align-items-center justify-content-start gap-2 flex-nowrap">
                                         <a data-toggle="modal" data-target="#viewPatient<?= $id ?>" class="btn btn-sm btn-light" title="View">
                                             <i class="fa fa-eye text-info"></i>
@@ -108,10 +108,11 @@ function calculateAge($dob) {
                                             <i class="fa fa-trash text-danger"></i>
                                         </a>
                                         <a href="add-appointment.php?patient_id=<?= $id ?>" class="btn btn-sm btn-light" title="Book Appointment">
-                                            <i class="fa fa-calendar-plus text-success"></i>
+                                            <i class="fa fa-calendar text-success"></i>
                                         </a>
                                     </div>
                                 </td>
+
                             </tr>
 
                             <!-- View Patient Modal -->
