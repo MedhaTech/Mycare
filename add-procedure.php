@@ -6,14 +6,36 @@ if (!isset($_SESSION['email'])) {
 }
 include 'dbconnection.php';
 include 'init.php';
-$preSelectedPatient = null;
 
-if (isset($_GET['patient_id'])) {
-    $pid = intval($_GET['patient_id']);
-    $pQuery = $conn->query("SELECT * FROM patients WHERE id = $pid");
-    if ($pQuery && $pQuery->num_rows > 0) {
-        $preSelectedPatient = $pQuery->fetch_assoc();
-    }
+$preSelectedPatient = null;
+$preSelectedDoctorId = null;
+$preSelectedDoctorDept = null;
+$appointment_id = null;
+
+if (isset($_GET['appointment_id'])) {
+    $appointment_id = $_GET['appointment_id'];
+
+    $apptQuery = $conn->query("SELECT a.*, p.name as patient_name, p.phone as patient_phone, d.name as doctor_name, d.department 
+        FROM appointments a
+        JOIN patients p ON a.patient_id = p.id
+        JOIN doctors d ON a.doctor_id = d.id
+        WHERE a.appointment_id = '$appointment_id'");
+
+    if ($apptQuery && $apptQuery->num_rows > 0) {
+    $apptData = $apptQuery->fetch_assoc();
+
+    $preSelectedPatient = [
+        'id' => $apptData['patient_id'],
+        'name' => $apptData['patient_name'],
+        'phone' => $apptData['patient_phone']
+    ];
+
+    $preSelectedDoctorId = $apptData['doctor_id'];
+    $preSelectedDoctorDept = $apptData['department'];
+    $preSelectedDate = $apptData['appointment_date'];
+    $preSelectedTime = $apptData['appointment_time'];
+}
+
 }
 
 $message = '';
@@ -21,24 +43,39 @@ $message = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $patient_id = $_POST['patient_id'];
     $doctor_id = $_POST['doctor_id'];
-    $appointment_date = $_POST['appointment_date'];
-    $appointment_time = $_POST['appointment_time'];
+    $procedure_date = $_POST['appointment_date'];
+    $procedure_time = $_POST['appointment_time'];
     $type = $_POST['type'];
     $duration = $_POST['duration'];
     $reason = $_POST['reason'];
     $status = $_POST['status'];
     $fee = $_POST['fee'];
+    $payment_mode = $_POST['payment_mode'];
+    $appointment_id = $_POST['appointment_id'];
+    $patient_name = $_POST['patient_name'];
 
-    $stmt = $conn->prepare("INSERT INTO appointments 
-        (patient_id, doctor_id, appointment_date, appointment_time, type, duration, reason, status, fee) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("iisssissi", $patient_id, $doctor_id, $appointment_date, $appointment_time, $type, $duration, $reason, $status, $fee);
+    $stmt = $conn->prepare("INSERT INTO procedures 
+        (patient_id, patient_name, doctor_id, procedure_date, procedure_time, type, duration, reason, status, fee, payment_mode, created_at, appointment_id) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)");
+
+    $stmt->bind_param("isisssisssss", 
+        $patient_id, 
+        $patient_name, 
+        $doctor_id, 
+        $procedure_date, 
+        $procedure_time, 
+        $type, 
+        $duration, 
+        $reason, 
+        $status, 
+        $fee, 
+        $payment_mode, 
+        $appointment_id
+);
+
+
     if ($stmt->execute()) {
-        $last_id = $stmt->insert_id;
-        $appointment_id = 'OP' . str_pad($last_id, 3, '0', STR_PAD_LEFT);
-        $conn->query("UPDATE appointments SET appointment_id = '$appointment_id' WHERE id = $last_id");
-
-        $_SESSION['success'] = "Procedure added successfully!";
+        $_SESSION['success'] = "✅ Procedure added successfully!";
         header("Location: procedure.php");
         exit();
     } else {
@@ -46,6 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $stmt->close();
 }
+
 include 'header.php';
 
 $departments = [
@@ -74,6 +112,7 @@ while ($doc = $doctors->fetch_assoc()) {
     </div>
 </div>
 
+<!-- Form -->
 <div class="container mt-3">
     <?= $message ?>
     <div class="row">
@@ -92,49 +131,69 @@ while ($doc = $doctors->fetch_assoc()) {
         <div class="col-md-8">
             <form method="POST" id="procedureForm">
                 <input type="hidden" name="patient_id" id="selectedPatientId" value="<?= $preSelectedPatient['id'] ?? '' ?>">
+                <input type="hidden" name="patient_name" id="hidden_patient_name" value="<?= $preSelectedPatient['name'] ?? '' ?>">
+                <input type="hidden" name="appointment_id" value="<?= htmlspecialchars($appointment_id ?? '') ?>">
+
                 <div class="card">
                     <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="font-weight-bold mb-0">Add Procedure Form</h5>
+                            <?php if ($appointment_id): ?>
+                                <div class="text-muted font-weight-bold">OP ID: #<?= htmlspecialchars($appointment_id) ?></div>
+                            <?php endif; ?>
+                        </div>
+
                         <div class="form-row">
                             <div class="form-group col-md-4">
-                                <label>Patient Name<span style="color: red;">*</span></label>
+                                <label>Patient Name<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="p_name" value="<?= $preSelectedPatient['name'] ?? '' ?>" readonly>
                             </div>
                             <div class="form-group col-md-4">
-                                <label>Patient Mobile No<span style="color: red;">*</span></label>
+                                <label>Patient Mobile No<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="p_phone" value="<?= $preSelectedPatient['phone'] ?? '' ?>" readonly>
                             </div>
                             <div class="form-group col-md-4">
-                                <label>Patient ID<span style="color: red;">*</span></label>
+                                <label>Patient ID<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="p_id" value="<?= isset($preSelectedPatient['id']) ? 'MCP' . str_pad($preSelectedPatient['id'], 4, '0', STR_PAD_LEFT) : '' ?>" readonly>
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label>Department<span style="color: red;">*</span></label>
-                                <select id="departmentSelect" class="form-control">
+                                <label>Department<span class="text-danger">*</span></label>
+                                <select id="departmentSelect" class="form-control" required>
                                     <option>Select Department</option>
                                     <?php foreach ($departments as $dept): ?>
-                                        <option value="<?= $dept ?>"><?= $dept ?></option>
+                                        <option value="<?= $dept ?>" <?= ($preSelectedDoctorDept == $dept) ? 'selected' : '' ?>><?= $dept ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
+
                             <div class="form-group col-md-6">
-                                <label>Doctor<span style="color: red;">*</span></label>
+                                <label>Doctor<span class="text-danger">*</span></label>
                                 <select name="doctor_id" id="doctorSelect" class="form-control" required>
                                     <option value="">Select Doctor</option>
+                                    <?php
+                                    if (isset($preSelectedDoctorDept) && isset($doctorList[$preSelectedDoctorDept])) {
+                                        foreach ($doctorList[$preSelectedDoctorDept] as $doc) {
+                                            $selected = ($preSelectedDoctorId == $doc['id']) ? 'selected' : '';
+                                            echo "<option value='{$doc['id']}' $selected>{$doc['name']}</option>";
+                                        }
+                                    }
+                                    ?>
                                 </select>
                             </div>
 
                             <div class="form-group col-md-4">
-                                <label>Date<span style="color: red;">*</span></label>
-                                <input type="date" name="appointment_date" class="form-control" required>
+                                <label>Date<span class="text-danger">*</span></label>
+                                <input type="date" name="appointment_date" class="form-control" required value="<?= $preSelectedDate ?? '' ?>">
                             </div>
                             <div class="form-group col-md-4">
-                                <label>Time<span style="color: red;">*</span></label>
-                                <input type="time" name="appointment_time" class="form-control" required>
+                                <label>Time<span class="text-danger">*</span></label>
+                                <input type="time" name="appointment_time" class="form-control" required value="<?= $preSelectedTime ?? '' ?>">
                             </div>
                             <div class="form-group col-md-4">
-                                <label>Duration<span style="color: red;">*</span></label>
+                                <label>Duration<span class="text-danger">*</span></label>
                                 <select name="duration" class="form-control" required>
+                                    <option value="">Select Duration</option>
                                     <option value="30">30m</option>
                                     <option value="45">45m</option>
                                     <option value="60">1hr</option>
@@ -144,12 +203,13 @@ while ($doc = $doctors->fetch_assoc()) {
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label>Procedure Type<span style="color: red;">*</span></label>
+                                <label>Procedure Type<span class="text-danger">*</span></label>
                                 <select name="type" class="form-control" required>
+                                    <option value="">Select Type</option>
                                     <option value="Check-Up">Check-Up</option>
                                     <option value="Consultation">Consultation</option>
                                     <option value="Follow-Up">Follow-Up</option>
-                                    <option value="Procedure" selected>Procedure</option>
+                                    <option value="Procedure">Procedure</option>
                                     <option value="Emergency">Emergency</option>
                                     <option value="Vaccination">Vaccination</option>
                                     <option value="Physical Therapy">Physical Therapy</option>
@@ -157,12 +217,13 @@ while ($doc = $doctors->fetch_assoc()) {
                             </div>
 
                             <div class="form-group col-md-3">
-                                <label>Fee (₹)<span style="color: red;">*</span></label>
+                                <label>Fee (₹)<span class="text-danger">*</span></label>
                                 <input type="number" step="0.01" name="fee" class="form-control" required>
                             </div>
                             <div class="form-group col-md-3">
-                                <label>Mode of Payment<span style="color: red;">*</span></label>
-                                <select name="payment_mode" class="form-control">
+                                <label>Mode of Payment<span class="text-danger">*</span></label>
+                                <select name="payment_mode" class="form-control" required>
+                                    <option value="">Select Payment </option>
                                     <option value="UPI">UPI</option>
                                     <option value="Cash">Cash</option>
                                     <option value="Net Banking">Net Banking</option>
@@ -174,17 +235,17 @@ while ($doc = $doctors->fetch_assoc()) {
                                 <input type="text" class="form-control" value="Paid" readonly>
                             </div>
                             <div class="form-group col-md-3">
-                                <label>Procedure Status</label>
+                                <label>Procedure Status<span class="text-danger">*</span></label>
                                 <select name="status" class="form-control" required>
-                                    <option value="Confirmed" selected>Confirmed</option>
+                                    <option value="">Select Status</option>
+                                    <option value="Confirmed">Confirmed</option>
                                     <option value="In Progress">In Progress</option>
                                     <option value="Completed">Completed</option>
                                     <option value="Cancelled">Cancelled</option>
                                 </select>
                             </div>
-
                             <div class="form-group col-md-12">
-                                <label>Reason for Procedure<span style="color: red;"> * </span></label>
+                                <label>Reason for Procedure<span class="text-danger"> * </span></label>
                                 <textarea name="reason" class="form-control" rows="3" placeholder="Describe reason..."></textarea>
                             </div>
 
@@ -235,6 +296,7 @@ document.getElementById('searchPatient').addEventListener('input', function () {
                     li.className = 'list-group-item list-group-item-action';
                     li.textContent = `${patient.name} (${patient.phone})`;
                     li.onclick = () => {
+                        document.getElementById('hidden_patient_name').value = patient.name;
                         document.getElementById('selectedPatientId').value = patient.id;
                         document.getElementById('p_name').value = patient.name;
                         document.getElementById('p_phone').value = patient.phone;
@@ -247,13 +309,5 @@ document.getElementById('searchPatient').addEventListener('input', function () {
         });
 });
 </script>
-
-<?php if (isset($_SESSION['success'])): ?>
-<script>
-    window.onload = function () {
-        toastr.success("<?= $_SESSION['success'] ?>");
-    }
-</script>
-<?php unset($_SESSION['success']); endif; ?>
 
 <?php include 'footer.php'; ?>

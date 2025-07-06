@@ -17,6 +17,8 @@ if ($current_page !== 'login.php' && !isset($_SESSION['email'])) {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+
+    <!-- Google Material Icons CDN only (remove local material-icons.css) -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <link rel="icon" type="image/png" sizes="32x32" href="assets/img/mycareicon.png">
@@ -24,15 +26,20 @@ if ($current_page !== 'login.php' && !isset($_SESSION['email'])) {
 
     <!-- CSS -->
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600" rel="stylesheet" type="text/css">
-    <link href="assets/vendors/material-icons/material-icons.css" rel="stylesheet" type="text/css">
+
+    <!-- Removed local material-icons.css to prevent conflict -->
+    <!-- <link href="assets/vendors/material-icons/material-icons.css" rel="stylesheet" type="text/css"> -->
+
     <link href="assets/vendors/mono-social-icons/monosocialiconsfont.css" rel="stylesheet" type="text/css">
     <link href="assets/vendors/feather-icons/feather.css" rel="stylesheet" type="text/css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.4.0/css/perfect-scrollbar.min.css" rel="stylesheet" type="text/css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-   <link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet" type="text/css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet" type="text/css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css" rel="stylesheet" type="text/css">
+
     <link href="assets/css/style.css" rel="stylesheet" type="text/css">
     <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+
     <!-- JS -->
     <script src="assets/js/modernizr.min.js"></script>
     <script data-pace-options='{ "ajax": false, "selectors": [ "img" ]}' src="assets/js/pace.min.js"></script>
@@ -58,9 +65,9 @@ if ($current_page !== 'login.php' && !isset($_SESSION['email'])) {
             font-size: 20px;
             color: #444;
             width: 24px;
-            /* fixes spacing, makes sure icon doesn't collapse */
             text-align: center;
             margin-right: 8px;
+            font-family: 'Material Icons' !important;
         }
 
         .dropdown-item span {
@@ -80,9 +87,8 @@ if ($current_page !== 'login.php' && !isset($_SESSION['email'])) {
             min-width: 100px;
         }
     </style>
-
-
 </head>
+
 
 <body class="sidebar-horizontal">
     <div id="wrapper" class="wrapper">

@@ -17,7 +17,7 @@
 
  <!-- FOOTER -->
     <footer class="foot bg-primary text-inverse text-center mt-4" >
-        <div class="container"><span class="fs-13 heading-font-family">Copyright @ 2025. All rights reserved <a class="fw-800" href="https://kinetic.dharansh.in">WiseOwl Admin</a> by <a class="fw-800" href="https://themeforest.net/user/unifato">Unifato</a></span>
+        <div class="container"><span class="fs-13 heading-font-family">Copyrights © 2025 Medha Tech. All Rights Reserved. </span>
         </div>
         <!-- /.container -->
     </footer>
