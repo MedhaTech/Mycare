@@ -114,10 +114,14 @@
                             </span>
                         </td>
                         <td class="text-center">
-                            <button class="btn btn-sm btn-light download-slip" data-id="<?= $row['id'] ?>"><i class="fa fa-download text-dark"></i></button>
+                             <button class="btn btn-sm btn-light" onclick="openExpenseSlip(<?= $row['id'] ?>)">
+                                <i class="fa fa-download text-dark"></i>
+                                </button>
+
                             <button class="btn btn-sm btn-light" data-toggle="modal" data-target="#viewExpense<?= $row['id'] ?>"><i class="fa fa-eye text-primary"></i></button>
+
                         </td>
-                    </tr>
+                    </tr> 
 
                     <!-- Modal -->
                     <div class="modal fade" id="viewExpense<?= $row['id'] ?>" tabindex="-1">
@@ -162,12 +166,15 @@
 
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script> <!-- ✅ Add this -->
 <script src="https://cdn.jsdelivr.net/npm/metismenu"></script>
 <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 
 <script>
 let startDate, endDate;
@@ -209,43 +216,10 @@ $(document).ready(function () {
     endDate = moment();
     $('#selected-range').text(startDate.format('MMM D') + ' – ' + endDate.format('MMM D'));
 
-    $('body').on('click', '.download-slip', function () {
-        const id = $(this).data('id');
-        if (!id) return;
-
-        fetch('generate-expense-slip.php?id=' + id)
-            .then(res => res.text())
-            .then(async html => {
-                const slipContainer = document.getElementById("slipModalContent");
-                slipContainer.innerHTML = html;
-
-                const pdfTarget = slipContainer.querySelector(".slip-container");
-                if (!pdfTarget) return;
-
-                const rows = pdfTarget.querySelectorAll("table tr") || [];
-
-                let voucher = "Voucher", name = "Expense";
-                rows.forEach(row => {
-                    const label = row.children[0]?.innerText.trim();
-                    const value = row.children[1]?.innerText.trim();
-                    if (label?.includes("Voucher No")) voucher = value.replace(/\s+/g, '');
-                    if (label?.includes("Name")) name = value.replace(/\s+/g, '_');
-                });
-
-                const canvas = await html2canvas(pdfTarget, { scale: 2, useCORS: true });
-                const imgData = canvas.toDataURL('image/png');
-                const { jsPDF } = await import('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
-
-                const pdf = new jsPDF('p', 'pt', 'a4');
-                const pageWidth = pdf.internal.pageSize.getWidth();
-                const imgWidth = pageWidth - 40;
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-                pdf.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight);
-                pdf.save(`${name}_${voucher}.pdf`);
-            });
-    });
+   
 });
+
+
 
 function filterTable() {
     $('#expenseTable tbody tr').each(function () {
@@ -269,5 +243,96 @@ function downloadExcel() {
     XLSX.writeFile(wb, `expenses_${rangeText}.xlsx`);
 }
 </script>
+<!-- Dummy elements to prevent template.js error -->
+<div class="chat-panel" style="display: none;"></div>
+<div class="right-sidebar" style="display: none;"></div>
+<div class="sidebar-wrapper" style="display: none;"></div>
+
+<!-- Expense Slip Modal -->
+<div class="modal fade" id="expenseSlipModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content border-0">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">Expense Slip</h5>
+        <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body" id="expenseSlipContent" style="font-family: 'Segoe UI', sans-serif;"></div>
+      <div class="modal-footer">
+        <button class="btn btn-success" id="downloadExpenseSlipBtn">Download PDF</button>
+        <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById("downloadExpenseSlipBtn").addEventListener("click", function () {
+    const content = document.getElementById("expenseSlipContent");
+    if (!content) return;
+
+    let voucher = '';
+    let name = '';
+
+    // Search all <strong> tags inside #expenseSlipContent
+    const labels = content.querySelectorAll('strong');
+
+    labels.forEach(label => {
+        const labelText = label.textContent.trim().toLowerCase();
+
+        if (labelText === 'voucher no:') {
+            const td = label.parentElement.nextElementSibling;
+            voucher = td ? td.textContent.trim() : '';
+        }
+
+        if (labelText === 'name:') {
+            const td = label.parentElement.nextElementSibling;
+            name = td ? td.textContent.trim() : '';
+        }
+    });
+
+    if (!voucher) voucher = 'VCH000';
+    if (!name) name = 'Expense';
+
+    const safeVoucher = voucher.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
+    const safeName = name.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
+    const filename = `${safeName}_${safeVoucher}.pdf`;
+
+    html2canvas(content).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const ratio = Math.min(pageWidth / canvas.width, pageHeight / canvas.height);
+
+        const imgWidth = canvas.width * ratio;
+        const imgHeight = canvas.height * ratio;
+
+        pdf.addImage(imgData, 'PNG', 10, 10, imgWidth - 20, imgHeight);
+        pdf.save(filename);
+    });
+});
+</script>
+
+
+
+
+<script>
+function openExpenseSlip(id) {
+    fetch('view-expense-slip.php?id=' + id)
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById("expenseSlipContent").innerHTML = html;
+            $('#expenseSlipModal').modal('show');
+        })
+        .catch(err => {
+            alert("Failed to load expense slip.");
+            console.error(err);
+        });
+}
+</script>
+
+
 
 <?php include 'footer.php'; ?>

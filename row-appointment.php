@@ -31,7 +31,7 @@ $badgeClass = match ($status) {
 
         <?php if (in_array($status, ['CONFIRMED', 'IN PROGRESS'])): ?>
             <a class="dropdown-item" href="edit-appointment.php?id=<?= $row['id'] ?>">Edit Appointment</a>
-            <a class="dropdown-item" href="javascript:void(0);" onclick="loadSlip('<?= $row['id'] ?>', '<?= $row['patient_name'] ?>')">Appointment Slip</a>
+            <a class="dropdown-item" href="javascript:void(0);" onclick="loadSlip(<?= $row['id'] ?>)">Appointment Slip</a>
             <a class="dropdown-item" href="add-procedure.php?appointment_id=<?= $apt_id ?>">Add Procedure</a>
             <a class="dropdown-item text-danger" href="#" data-toggle="modal" data-target="#cancelModal<?= $row['id'] ?>">Cancel Appointment</a>
 

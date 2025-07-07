@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $payment_mode = $_POST['payment_mode'];
 
     $stmt = $conn->prepare("UPDATE procedures SET patient_id=?, doctor_id=?, procedure_date=?, procedure_time=?, type=?, duration=?, reason=?, status=?, fee=?, payment_mode=? WHERE id=?");
-    $stmt->bind_param("iisssisssii", $patient_id, $doctor_id, $procedure_date, $procedure_time, $type, $duration, $reason, $status, $fee, $payment_mode, $procedure_id);
+    $stmt->bind_param("iisssisssss", $patient_id, $doctor_id, $procedure_date, $procedure_time, $type, $duration, $reason, $status, $fee, $payment_mode, $procedure_id);
     if ($stmt->execute()) {
         $message = "<div class='alert alert-success'>Procedure updated successfully.</div>";
         $procedure = getProcedure($conn, $procedure_id);

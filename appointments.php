@@ -56,7 +56,7 @@ include 'init.php';
     </div>
 </div>
 
-<!-- Slip Modal -->
+<!-- Appointment Slip Modal -->
 <div class="modal fade" id="slipModal" tabindex="-1" role="dialog" aria-labelledby="slipModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content border-0">
@@ -65,48 +65,32 @@ include 'init.php';
         <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
       </div>
       <div class="modal-body">
-        <div id="pdfSlip"><!-- Content will be dynamically loaded here --></div>
+        <div id="pdfSlipContent"><!-- Content will load here --></div>
       </div>
       <div class="modal-footer">
-        <button id="savePdfBtn" class="btn btn-success">Download PDF</button>
+        <a id="downloadPdfBtn" class="btn btn-success" target="_blank">Download PDF</a>
         <button class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div>
 
-
-
 <script>
-    $(document).ready(function () {
-        $("#appointmentTable").DataTable(); // Applies DataTables to all tables
-    });
-
-    function loadSlip(id, name) {
-        fetch('slip-content.php?id=' + id)
-            .then(res => res.text())
-            .then(html => {
-                document.getElementById('pdfSlip').innerHTML = html;
-                $('#slipModal').modal('show');
-
-                document.getElementById('savePdfBtn').onclick = async function () {
-                    const { jsPDF } = window.jspdf;
-                    const slip = document.querySelector("#pdfSlip");
-
-                    const canvas = await html2canvas(slip);
-                    const imgData = canvas.toDataURL("image/png");
-
-                    const pdf = new jsPDF('p', 'mm', 'a4');
-                    const width = pdf.internal.pageSize.getWidth();
-                    const height = (canvas.height * width) / canvas.width;
-
-                    pdf.addImage(imgData, 'PNG', 10, 10, width - 20, height);
-                    const safeName = name.replace(/\s+/g, '_');
-                    pdf.save(`${safeName}_Appointment_Slip.pdf`);
-                };
-            });
-    }
+function loadSlip(id, name) {
+    fetch('view-appointment-slip.php?id=' + id)
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById('pdfSlipContent').innerHTML = html;
+            document.getElementById('downloadPdfBtn').href = 'download-appointment-slip.php?id=' + id;
+            $('#slipModal').modal('show');
+        })
+        .catch(err => {
+            alert("Could not load appointment slip.");
+            console.error(err);
+        });
+}
 </script>
+
 
 <?php if (isset($_SESSION['success'])): ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
@@ -126,5 +110,18 @@ include 'init.php';
     });
 </script>
 <?php unset($_SESSION['success']); endif; ?>
+<script>
+  $(document).ready(function () {
+      $('#appointmentTable').DataTable({
+          responsive: true,
+          pageLength: 10,
+          lengthMenu: [5, 10, 25, 50, 100],
+          columnDefs: [
+              { targets: -1, orderable: false } // Make 'Actions' column not sortable
+          ]
+      });
+  });
+</script>
+
 
 <?php include 'footer.php'; ?>
