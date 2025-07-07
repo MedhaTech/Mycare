@@ -1,10 +1,9 @@
 <?php
-require __DIR__ . '/vendor/autoload.php';
-
-use Dompdf\Dompdf;
-
+require 'vendor/autoload.php';
 include 'dbconnection.php';
 include 'init.php';
+
+use Dompdf\Dompdf;
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     die("Invalid procedure ID.");
@@ -12,51 +11,73 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 
 $id = intval($_GET['id']);
 
-$sql = "SELECT pr.*, p.name AS patient_name, d.name AS doctor_name
-        FROM procedures pr
-        LEFT JOIN patients p ON pr.patient_id = p.id
-        LEFT JOIN doctors d ON pr.doctor_id = d.id
-        WHERE pr.id = ?";
+$sql = "SELECT 
+            p.*, 
+            pat.name AS patient_name, 
+            pat.phone, 
+            pat.gender, 
+            pat.dob,
+            d.name AS doctor_name,
+            d.designation,
+            d.department
+        FROM procedures p
+        LEFT JOIN patients pat ON p.patient_id = pat.id
+        LEFT JOIN doctors d ON p.doctor_id = d.id
+        WHERE p.id = ?";
+
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $id);
 $stmt->execute();
-$result = $stmt->get_result();
-$data = $result->fetch_assoc();
+$data = $stmt->get_result()->fetch_assoc();
 
-if (!$data) {
-    die("Procedure not found.");
-}
+if (!$data) die("Procedure not found.");
 
-// Create HTML for PDF
+$procedureId = $data['procedure_id'] ?? ('PR' . str_pad($id, 4, '0', STR_PAD_LEFT));
+$opId = $data['appointment_id'] ?? '-';
+$patientName = preg_replace('/[^a-zA-Z0-9]/', '_', $data['patient_name']);
+$filename = "{$patientName}_{$procedureId}.pdf";
+
 $html = '
-<style>
-    body { font-family: Arial, sans-serif; font-size: 14px; }
-    h2 { text-align: center; color: #007bff; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    td { padding: 8px; border-bottom: 1px solid #ccc; }
-</style>
+    <style> 
+        body { font-family: "Segoe UI", sans-serif; padding: 30px; color: #000; }
+        h2 { text-align: center; color: #007bff; }
+        h4 { color: #555; }
+        p { margin: 4px 0; }
+        hr { margin: 20px 0; }
+    </style>
+    <h2>MyCare Clinic</h2>
+    <hr>
+    <h3>Procedure Slip</h3>
+    <p><strong>Procedure ID:</strong> ' . htmlspecialchars($procedureId) . '</p>
+    <p><strong>OP ID:</strong> ' . htmlspecialchars($opId) . '</p>
+    <p><strong>Date & Time:</strong> ' . $data['procedure_date'] . ' ' . date('h:i A', strtotime($data['procedure_time'])) . '</p>
+    <hr>
+    <h4>Patient Details</h4>
+    <p><strong>Name:</strong> ' . $data['patient_name'] . '</p>
+    <p><strong>Phone:</strong> ' . ($data['phone'] ?: '—') . '</p>
+    <p><strong>Gender:</strong> ' . ($data['gender'] ?: '—') . '</p>
+    <p><strong>DOB:</strong> ' . ($data['dob'] ?: '—') . '</p>
+    <hr>
+    <h4>Doctor Details</h4>
+    <p><strong>Name:</strong> ' . $data['doctor_name'] . '</p>
+    <p><strong>Designation:</strong> ' . ($data['designation'] ?: '—') . '</p>
+    <p><strong>Department:</strong> ' . ($data['department'] ?: '—') . '</p>
+    <hr>
+    <h4>Procedure Info</h4>
+    <p><strong>Type:</strong> ' . htmlspecialchars($data['type']) . '</p>
+    <p><strong>Status:</strong> ' . ucfirst($data['status']) . '</p>
+    <p><strong>Duration:</strong> ' . $data['duration'] . ' minutes</p>
+    <p><strong>Reason:</strong> ' . nl2br(htmlspecialchars($data['reason'] ?: '—')) . '</p>
+    <p><strong>Fee:</strong> ₹' . htmlspecialchars($data['fee']) . '</p>
+    <p><strong>Payment Mode:</strong> ' . htmlspecialchars($data['payment_mode']) . '</p>';
 
-<h2>Procedure Slip</h2>
-<table>
-    <tr><td><strong>Patient Name:</strong></td><td>' . htmlspecialchars($data['patient_name']) . '</td></tr>
-    <tr><td><strong>Doctor Name:</strong></td><td>' . htmlspecialchars($data['doctor_name']) . '</td></tr>
-    <tr><td><strong>Date:</strong></td><td>' . $data['procedure_date'] . '</td></tr>
-    <tr><td><strong>Time:</strong></td><td>' . date("h:i A", strtotime($data['procedure_time'])) . '</td></tr>
-    <tr><td><strong>Type:</strong></td><td>' . htmlspecialchars($data['type']) . '</td></tr>
-    <tr><td><strong>Status:</strong></td><td>' . htmlspecialchars($data['status']) . '</td></tr>
-    <tr><td><strong>Duration:</strong></td><td>' . intval($data['duration']) . ' minutes</td></tr>
-    <tr><td><strong>Fee:</strong></td><td>₹' . $data['fee'] . '</td></tr>
-    <tr><td><strong>Reason:</strong></td><td>' . nl2br(htmlspecialchars($data['reason'])) . '</td></tr>
-</table>';
+    if ($data['status'] === 'Cancelled' && !empty($data['cancellation_reason'])) {
+        $html .= '<hr><h4>Cancellation Reason</h4><p class="text-danger">' . nl2br(htmlspecialchars($data['cancellation_reason'])) . '</p>';
+    }
 
-// Generate PDF
-$dompdf = new Dompdf();
-$dompdf->loadHtml($html);
-$dompdf->setPaper('A4', 'portrait');
-$dompdf->render();
-
-$filename = $data['patient_name'] . '-' . 'PR' . str_pad($data['id'], 4, '0', STR_PAD_LEFT) . '.pdf';
-
-// Send PDF as download
-$dompdf->stream($filename, ["Attachment" => 1]);
-exit;
+    $dompdf = new Dompdf();
+    $dompdf->loadHtml($html);
+    $dompdf->setPaper('A4');
+    $dompdf->render();
+    $dompdf->stream($filename, ['Attachment' => true]);
+    exit;

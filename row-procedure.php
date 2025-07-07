@@ -19,7 +19,7 @@ $badgeClass = match ($status) {
         <br><small class="text-muted"><?= date("h:i A", strtotime($row['procedure_time'])) ?></small>
     </td>
     <td>
-        <?= !empty($row['op_id']) ? '#' . htmlspecialchars($row['op_id']) : '<span class="text-muted">-</span>' ?>
+         <?= !empty($row['appointment_id']) ? '#' . htmlspecialchars($row['appointment_id']) : '<span class="text-muted">-</span>' ?>
     </td>
     <td>
         <span class="badge <?= $badgeClass ?>"><?= $status ?></span>
@@ -29,12 +29,12 @@ $badgeClass = match ($status) {
     <td>
         <div class="dropdown">
             <button class="btn btn-sm btn-outline-dark dropdown-toggle" type="button" id="dropdownMenu<?= $row['id'] ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                ⋮
+                ⋮ 
             </button>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu<?= $row['id'] ?>">
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#viewProcedure<?= $row['id'] ?>">View</a>
                 <a class="dropdown-item" href="edit-procedure.php?id=<?= $row['id'] ?>">Edit</a>
-                <a class="dropdown-item" href="download-procedure-slip.php?id=<?= $row['id'] ?>" target="_blank">Download Slip</a>
+                <a class="dropdown-item" href="javascript:void(0);" onclick="openProcedureSlip(<?= $row['id'] ?>)">View Procedure Slip</a>
                 <?php if (in_array($status, ['CONFIRMED', 'IN PROGRESS'])): ?>
                     <a class="dropdown-item text-danger" href="#" data-toggle="modal" data-target="#cancelProcedure<?= $row['id'] ?>">Cancel</a>
                 <?php endif; ?>
@@ -89,6 +89,8 @@ $badgeClass = match ($status) {
     </div>
 </div>
 
+
+
 <!-- Cancel Procedure Modal -->
 <?php if (in_array($status, ['CONFIRMED', 'IN PROGRESS'])): ?>
 <div class="modal fade" id="cancelProcedure<?= $row['id'] ?>" tabindex="-1" role="dialog">
@@ -112,4 +114,5 @@ $badgeClass = match ($status) {
         </form>
     </div>
 </div>
+
 <?php endif; ?>

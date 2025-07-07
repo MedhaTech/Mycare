@@ -57,58 +57,6 @@ include 'init.php';
 </div>
 
 
-
-
-<!-- Slip Modal -->
-<div class="modal fade" id="slipModal" tabindex="-1" role="dialog" aria-labelledby="slipModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content border-0">
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title" id="slipModalLabel">Procedure Slip</h5>
-        <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div id="pdfSlip"></div>
-      </div>
-      <div class="modal-footer">
-        <button id="savePdfBtn" class="btn btn-success">Download PDF</button>
-        <button class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-    $(document).ready(function () {
-        $("#procedureTable").DataTable();
-    });
-
-    function loadSlip(id, name) {
-        fetch('slip-content-procedure.php?id=' + id)
-            .then(res => res.text())
-            .then(html => {
-                document.getElementById('pdfSlip').innerHTML = html;
-                $('#slipModal').modal('show');
-
-                document.getElementById('savePdfBtn').onclick = async function () {
-                    const { jsPDF } = window.jspdf;
-                    const slip = document.querySelector("#pdfSlip");
-
-                    const canvas = await html2canvas(slip);
-                    const imgData = canvas.toDataURL("image/png");
-
-                    const pdf = new jsPDF('p', 'mm', 'a4');
-                    const width = pdf.internal.pageSize.getWidth();
-                    const height = (canvas.height * width) / canvas.width;
-
-                    pdf.addImage(imgData, 'PNG', 10, 10, width - 20, height);
-                    const safeName = name.replace(/\s+/g, '_');
-                    pdf.save(`${safeName}_Procedure_Slip.pdf`);
-                };
-            });
-    }
-</script>
-
 <?php if (isset($_SESSION['success'])): ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css" />
@@ -126,5 +74,61 @@ include 'init.php';
     });
 </script>
 <?php unset($_SESSION['success']); endif; ?>
+<!-- Dummy elements to prevent JS error from template.js -->
+<div class="right-sidebar" style="display: none;"></div>
+<div class="chat-panel" hidden></div>
+<!-- Procedure Slip Modal -->
+<div class="modal fade" id="procedureSlipModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content border-0">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">Procedure Slip</h5>
+        <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body" id="procedureSlipContent"></div>
+      <div class="modal-footer">
+        <button class="btn btn-success" id="downloadProcedureSlipBtn">Download PDF</button>
+        <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function openProcedureSlip(id, name, procedureCode) {
+    fetch('view-procedure-slip.php?id=' + id)
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById("procedureSlipContent").innerHTML = html;
+
+            // Attach click to download button
+            const btn = document.getElementById("downloadProcedureSlipBtn");
+            if (btn) {
+                btn.onclick = () => {
+                    window.location.href = 'download-procedure-slip.php?id=' + id;
+                };
+            }
+
+            $('#procedureSlipModal').modal('show');
+        })
+        .catch(err => {
+            alert("Failed to load slip.");
+            console.error(err);
+        });
+}
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#procedureTable').DataTable({
+            responsive: true,
+            pageLength: 10,
+            lengthMenu: [5, 10, 25, 50, 100],
+            columnDefs: [
+                { targets: -1, orderable: false } // Make 'Actions' column not sortable
+            ]
+        });
+    });
+</script>
 
 <?php include 'footer.php'; ?>

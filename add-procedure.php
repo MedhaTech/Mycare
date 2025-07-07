@@ -11,9 +11,27 @@ $preSelectedPatient = null;
 $preSelectedDoctorId = null;
 $preSelectedDoctorDept = null;
 $appointment_id = null;
+$display_op_id = null; // This will be shown on frontend
 
-if (isset($_GET['appointment_id'])) {
+// If not from appointment, generate OP ID before form loads
+if (!isset($_GET['appointment_id']) || empty($_GET['appointment_id'])) {
+    $getLastOpId = $conn->query("SELECT appointment_id FROM procedures WHERE appointment_id LIKE 'OP%' ORDER BY id DESC LIMIT 1");
+
+    if ($getLastOpId && $getLastOpId->num_rows > 0) {
+        $lastOp = $getLastOpId->fetch_assoc();
+        $lastNum = (int) str_replace('OP', '', $lastOp['appointment_id']);
+        $newNum = $lastNum + 1;
+    } else {
+        $newNum = 1;
+    }
+
+    $appointment_id = 'OP' . str_pad($newNum, 6, '0', STR_PAD_LEFT);
+    $display_op_id = $appointment_id;
+}
+
+if (isset($_GET['appointment_id']) && !empty($_GET['appointment_id'])) {
     $appointment_id = $_GET['appointment_id'];
+    $display_op_id = $appointment_id;
 
     $apptQuery = $conn->query("SELECT a.*, p.name as patient_name, p.phone as patient_phone, d.name as doctor_name, d.department 
         FROM appointments a
@@ -22,20 +40,19 @@ if (isset($_GET['appointment_id'])) {
         WHERE a.appointment_id = '$appointment_id'");
 
     if ($apptQuery && $apptQuery->num_rows > 0) {
-    $apptData = $apptQuery->fetch_assoc();
+        $apptData = $apptQuery->fetch_assoc();
 
-    $preSelectedPatient = [
-        'id' => $apptData['patient_id'],
-        'name' => $apptData['patient_name'],
-        'phone' => $apptData['patient_phone']
-    ];
+        $preSelectedPatient = [
+            'id' => $apptData['patient_id'],
+            'name' => $apptData['patient_name'],
+            'phone' => $apptData['patient_phone']
+        ];
 
-    $preSelectedDoctorId = $apptData['doctor_id'];
-    $preSelectedDoctorDept = $apptData['department'];
-    $preSelectedDate = $apptData['appointment_date'];
-    $preSelectedTime = $apptData['appointment_time'];
-}
-
+        $preSelectedDoctorId = $apptData['doctor_id'];
+        $preSelectedDoctorDept = $apptData['department'];
+        $preSelectedDate = $apptData['appointment_date'];
+        $preSelectedTime = $apptData['appointment_time'];
+    }
 }
 
 $message = '';
@@ -54,6 +71,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $appointment_id = $_POST['appointment_id'];
     $patient_name = $_POST['patient_name'];
 
+    // If no OP ID came from frontend (fallback)
+    if (empty($appointment_id)) {
+        $result = $conn->query("SELECT MAX(id) AS max_id FROM procedures");
+        $row = $result->fetch_assoc();
+        $newId = $row['max_id'] + 1;
+        $appointment_id = 'OP' . str_pad($newId, 6, '0', STR_PAD_LEFT);
+    }
+
     $stmt = $conn->prepare("INSERT INTO procedures 
         (patient_id, patient_name, doctor_id, procedure_date, procedure_time, type, duration, reason, status, fee, payment_mode, created_at, appointment_id) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)");
@@ -71,8 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $fee, 
         $payment_mode, 
         $appointment_id
-);
-
+    );
 
     if ($stmt->execute()) {
         $_SESSION['success'] = "✅ Procedure added successfully!";
@@ -132,15 +156,17 @@ while ($doc = $doctors->fetch_assoc()) {
             <form method="POST" id="procedureForm">
                 <input type="hidden" name="patient_id" id="selectedPatientId" value="<?= $preSelectedPatient['id'] ?? '' ?>">
                 <input type="hidden" name="patient_name" id="hidden_patient_name" value="<?= $preSelectedPatient['name'] ?? '' ?>">
-                <input type="hidden" name="appointment_id" value="<?= htmlspecialchars($appointment_id ?? '') ?>">
+                <input type="hidden" name="appointment_id" value="<?= htmlspecialchars($display_op_id ?? '') ?>" id="generated_op_id">
 
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h5 class="font-weight-bold mb-0">Add Procedure Form</h5>
-                            <?php if ($appointment_id): ?>
-                                <div class="text-muted font-weight-bold">OP ID: #<?= htmlspecialchars($appointment_id) ?></div>
-                            <?php endif; ?>
+                            <div class="text-muted font-weight-bold">
+                                OP ID: #<?= htmlspecialchars($appointment_id ?? 'Will be generated') ?>
+
+                            </div>
+
                         </div>
 
                         <div class="form-row">
