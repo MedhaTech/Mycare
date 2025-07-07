@@ -1,30 +1,61 @@
 <?php
-include 'header.php';
+session_start();
 include 'dbconnection.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $procedure_id = $_GET['id'] ?? null;
+    if (!$procedure_id) {
+        $_SESSION['toast_error'] = "Invalid procedure ID.";
+        header("Location: procedure.php");
+        exit();
+    }
+
+    $patient_id = $_POST['patient_id'];
+    $doctor_id = $_POST['doctor_id'];
+    $procedure_date = $_POST['procedure_date'];
+    $procedure_time = $_POST['procedure_time'];
+    $type = $_POST['type'];
+    $duration = $_POST['duration'];
+    $reason = $_POST['reason'];
+    $status = $_POST['status'];
+    $fee = $_POST['fee'];
+    $payment_mode = $_POST['payment_mode'];
+
+    $stmt = $conn->prepare("UPDATE procedures SET patient_id=?, doctor_id=?, procedure_date=?, procedure_time=?, type=?, duration=?, reason=?, status=?, fee=?, payment_mode=? WHERE id=?");
+    $stmt->bind_param("iisssissssi", $patient_id, $doctor_id, $procedure_date, $procedure_time, $type, $duration, $reason, $status, $fee, $payment_mode, $procedure_id);
+
+    if ($stmt->execute()) {
+        $_SESSION['toast_success'] = "Procedure updated successfully!";
+    } else {
+        $_SESSION['toast_error'] = "Failed to update procedure.";
+    }
+
+    $stmt->close();
+    header("Location: procedure.php");
+    exit();
+}
+
+// Only continue here if not POST
+include 'header.php';
 include 'init.php';
 
 $procedure_id = $_GET['id'] ?? null;
-$message = '';
-
 if (!$procedure_id) {
     echo "<script>alert('Invalid procedure ID'); window.location.href='procedure.php';</script>";
     exit();
 }
 
-// Department list
 $departments = [
     "General Practitioner", "Cardiologist", "Dermatologist", "Gastroenterologist",
     "Neurologist", "Orthopedic", "Pediatrician", "Psychiatrist", "Physician"
 ];
 
-// Doctors list by department
 $doctors = $conn->query("SELECT id, name, department FROM doctors WHERE status = 'Active'");
 $doctorList = [];
 while ($doc = $doctors->fetch_assoc()) {
     $doctorList[$doc['department']][] = $doc;
 }
 
-// Function to fetch updated procedure details
 function getProcedure($conn, $id) {
     $stmt = $conn->prepare("SELECT p.*, pa.id as patient_id, pa.name as patient_name, pa.phone as patient_phone, d.department 
                             FROM procedures p
@@ -45,31 +76,42 @@ if (!$procedure) {
     echo "<script>alert('Procedure not found'); window.location.href='procedure.php';</script>";
     exit();
 }
-
-// Handle POST form update
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $patient_id = $_POST['patient_id'];
-    $doctor_id = $_POST['doctor_id'];
-    $procedure_date = $_POST['procedure_date'];
-    $procedure_time = $_POST['procedure_time'];
-    $type = $_POST['type'];
-    $duration = $_POST['duration'];
-    $reason = $_POST['reason'];
-    $status = $_POST['status'];
-    $fee = $_POST['fee'];
-    $payment_mode = $_POST['payment_mode'];
-
-    $stmt = $conn->prepare("UPDATE procedures SET patient_id=?, doctor_id=?, procedure_date=?, procedure_time=?, type=?, duration=?, reason=?, status=?, fee=?, payment_mode=? WHERE id=?");
-    $stmt->bind_param("iisssisssss", $patient_id, $doctor_id, $procedure_date, $procedure_time, $type, $duration, $reason, $status, $fee, $payment_mode, $procedure_id);
-    if ($stmt->execute()) {
-        $message = "<div class='alert alert-success'>Procedure updated successfully.</div>";
-        $procedure = getProcedure($conn, $procedure_id);
-    } else {
-        $message = "<div class='alert alert-danger'>Update failed: " . $conn->error . "</div>";
-    }
-    $stmt->close();
-}
 ?>
+
+
+<!-- Toast Notification Support -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
+
+<?php if (isset($_SESSION['toast_success'])): ?>
+<script>
+    $(function () {
+        $.toast({
+            heading: 'Success',
+            text: '<?= $_SESSION['toast_success'] ?>',
+            showHideTransition: 'slide',
+            icon: 'success',
+            position: 'top-right'
+        });
+    });
+</script>
+<?php unset($_SESSION['toast_success']); endif; ?>
+
+<?php if (isset($_SESSION['toast_error'])): ?>
+<script>
+    $(function () {
+        $.toast({
+            heading: 'Error',
+            text: '<?= $_SESSION['toast_error'] ?>',
+            showHideTransition: 'fade',
+            icon: 'error',
+            position: 'top-right'
+        });
+    });
+</script>
+<?php unset($_SESSION['toast_error']); endif; ?>
+
 
 <div class="container mt-4">
     <div class="row page-title clearfix">
@@ -84,25 +126,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </ol>
         </div>
     </div>
-</div>
 
-<?= $message ?>
-
-<div class="container mt-3">
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Select Patient</h5>
-                    <p class="text-muted">Search and select a patient for this procedure</p>
-                    <input type="text" class="form-control mb-2" id="searchPatient" placeholder="Search">
-                    <ul class="list-group" id="patientResults"></ul>
-                    <a href="add-patient.php" class="btn btn-secondary btn-block mt-2">Register New Patient</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-8">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
             <form method="POST" id="procedureForm">
                 <input type="hidden" name="patient_id" id="selectedPatientId" value="<?= $procedure['patient_id'] ?>">
                 <div class="card">
@@ -110,22 +136,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h5 class="font-weight-bold mb-0">Edit Procedure Form</h5>
                             <div class="text-muted font-weight-bold">
-                                OP ID: #<?= 'OP' . str_pad($procedure['patient_id'], 4, '0', STR_PAD_LEFT) ?>
+                                OP ID: #<?= 'OP' . str_pad($procedure['id'], 4, '0', STR_PAD_LEFT) ?>
                             </div>
+
                         </div>
 
                         <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label>Patient Name</label>
-                                <input type="text" class="form-control" id="p_name" value="<?= htmlspecialchars($procedure['patient_name']) ?>" readonly>
+                                <input type="text" class="form-control" value="<?= htmlspecialchars($procedure['patient_name']) ?>" readonly>
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Mobile No</label>
-                                <input type="text" class="form-control" id="p_phone" value="<?= htmlspecialchars($procedure['patient_phone']) ?>" readonly>
+                                <input type="text" class="form-control" value="<?= htmlspecialchars($procedure['patient_phone']) ?>" readonly>
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Patient ID</label>
-                                <input type="text" class="form-control" id="p_id" value="MCP<?= str_pad($procedure['patient_id'], 4, '0', STR_PAD_LEFT) ?>" readonly>
+                                <input type="text" class="form-control" value="MCP<?= str_pad($procedure['patient_id'], 4, '0', STR_PAD_LEFT) ?>" readonly>
                             </div>
 
                             <div class="form-group col-md-6">
@@ -164,8 +191,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="form-group col-md-4">
                                 <label>Duration</label>
                                 <select name="duration" class="form-control" required>
+                                    <option value="">Select Duration</option>
                                     <?php foreach ([30, 45, 60, 90, 120] as $mins): ?>
-                                        <option value="<?= $mins ?>" <?= $procedure['duration'] == $mins ? 'selected' : '' ?>><?= ($mins >= 60 ? floor($mins / 60) . 'h ' : '') . ($mins % 60 ? $mins % 60 . 'm' : '') ?></option>
+                                        <option value="<?= $mins ?>" <?= $procedure['duration'] == $mins ? 'selected' : '' ?>>
+                                            <?= ($mins >= 60 ? floor($mins / 60) . 'h ' : '') . ($mins % 60 ? $mins % 60 . 'm' : '') ?>
+                                        </option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -173,6 +203,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="form-group col-md-6">
                                 <label>Procedure Type</label>
                                 <select name="type" class="form-control" required>
+                                    <option value="">Select Type</option>
                                     <?php
                                     $types = ["Check-Up", "Consultation", "Follow-Up", "Procedure", "Emergency", "Vaccination", "Physical Therapy"];
                                     foreach ($types as $type) {
@@ -191,6 +222,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="form-group col-md-3">
                                 <label>Payment Mode</label>
                                 <select name="payment_mode" class="form-control" required>
+                                    <option value="">Select Payment</option>
                                     <?php foreach (["UPI", "Cash", "Net Banking", "Card"] as $mode): ?>
                                         <option value="<?= $mode ?>" <?= $procedure['payment_mode'] == $mode ? 'selected' : '' ?>><?= $mode ?></option>
                                     <?php endforeach; ?>
@@ -205,7 +237,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="form-group col-md-3">
                                 <label>Procedure Status</label>
                                 <select name="status" class="form-control" required>
-                                    <?php foreach (["Confirmed", "In Progress", "Completed", "Cancelled"] as $stat): ?>
+                                    <option value="">Select Status</option>
+                                    <?php foreach (["Confirmed", "In Progress", "Completed"] as $stat): ?>
                                         <option value="<?= $stat ?>" <?= $procedure['status'] == $stat ? 'selected' : '' ?>><?= $stat ?></option>
                                     <?php endforeach; ?>
                                 </select>
@@ -243,35 +276,6 @@ document.getElementById('departmentSelect').addEventListener('change', function 
             docSelect.appendChild(opt);
         });
     }
-});
-
-// Patient search
-document.getElementById('searchPatient').addEventListener('input', function () {
-    const query = this.value.trim();
-    const results = document.getElementById('patientResults');
-    results.innerHTML = '';
-    if (query.length < 2) return;
-    fetch('search-patient.php?q=' + encodeURIComponent(query))
-        .then(res => res.json())
-        .then(data => {
-            if (data.length === 0) {
-                results.innerHTML = '<li class="list-group-item text-muted">No patients found</li>';
-            } else {
-                data.forEach(p => {
-                    const li = document.createElement('li');
-                    li.className = 'list-group-item list-group-item-action';
-                    li.textContent = `${p.name} (${p.phone})`;
-                    li.onclick = () => {
-                        document.getElementById('selectedPatientId').value = p.id;
-                        document.getElementById('p_name').value = p.name;
-                        document.getElementById('p_phone').value = p.phone;
-                        document.getElementById('p_id').value = 'MCP' + p.id.toString().padStart(4, '0');
-                        results.innerHTML = '';
-                    };
-                    results.appendChild(li);
-                });
-            }
-        });
 });
 </script>
 

@@ -11,23 +11,7 @@ $preSelectedPatient = null;
 $preSelectedDoctorId = null;
 $preSelectedDoctorDept = null;
 $appointment_id = null;
-$display_op_id = null; // This will be shown on frontend
-
-// If not from appointment, generate OP ID before form loads
-if (!isset($_GET['appointment_id']) || empty($_GET['appointment_id'])) {
-    $getLastOpId = $conn->query("SELECT appointment_id FROM procedures WHERE appointment_id LIKE 'OP%' ORDER BY id DESC LIMIT 1");
-
-    if ($getLastOpId && $getLastOpId->num_rows > 0) {
-        $lastOp = $getLastOpId->fetch_assoc();
-        $lastNum = (int) str_replace('OP', '', $lastOp['appointment_id']);
-        $newNum = $lastNum + 1;
-    } else {
-        $newNum = 1;
-    }
-
-    $appointment_id = 'OP' . str_pad($newNum, 6, '0', STR_PAD_LEFT);
-    $display_op_id = $appointment_id;
-}
+$display_op_id = null;
 
 if (isset($_GET['appointment_id']) && !empty($_GET['appointment_id'])) {
     $appointment_id = $_GET['appointment_id'];
@@ -65,19 +49,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $type = $_POST['type'];
     $duration = $_POST['duration'];
     $reason = $_POST['reason'];
-    $status = $_POST['status'];
+    $status = 'Confirmed'; // default
     $fee = $_POST['fee'];
     $payment_mode = $_POST['payment_mode'];
     $appointment_id = $_POST['appointment_id'];
     $patient_name = $_POST['patient_name'];
-
-    // If no OP ID came from frontend (fallback)
-    if (empty($appointment_id)) {
-        $result = $conn->query("SELECT MAX(id) AS max_id FROM procedures");
-        $row = $result->fetch_assoc();
-        $newId = $row['max_id'] + 1;
-        $appointment_id = 'OP' . str_pad($newId, 6, '0', STR_PAD_LEFT);
-    }
 
     $stmt = $conn->prepare("INSERT INTO procedures 
         (patient_id, patient_name, doctor_id, procedure_date, procedure_time, type, duration, reason, status, fee, payment_mode, created_at, appointment_id) 
@@ -98,13 +74,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $appointment_id
     );
 
-    if ($stmt->execute()) {
-        $_SESSION['success'] = "✅ Procedure added successfully!";
-        header("Location: procedure.php");
-        exit();
-    } else {
-        $message = '<div class="alert alert-danger">❌ Error: ' . $conn->error . '</div>';
-    }
+if ($stmt->execute()) {
+    $_SESSION['toast_success'] = "Procedure added successfully!";
+    header("Location: procedure.php");
+    exit();
+} else {
+    $_SESSION['toast_error'] = "Failed to save procedure.";
+    header("Location: procedure.php");
+    exit();
+}
+
+
+
     $stmt->close();
 }
 
@@ -143,14 +124,61 @@ while ($doc = $doctors->fetch_assoc()) {
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Select Patient</h5>
-                    <p class="text-muted">Search and select a patient for this procedure</p>
-                    <input type="text" class="form-control mb-2" id="searchPatient" placeholder="Search">
-                    <ul class="list-group" id="patientResults"></ul>
-                    <a href="add-patient.php" class="btn btn-secondary btn-block mt-2">Register New Patient</a>
+                    <h5 class="card-title">Select Appointment</h5>
+                    <p class="text-muted">Search using OP ID to load appointment details</p>
+                    <input type="text" class="form-control mb-2" id="searchAppointment" placeholder="Search by OP ID...">
+                    <ul class="list-group" id="appointmentResults"></ul>
+                    <a href="add-appointment.php" class="btn btn-secondary btn-block mt-2">Register New Appointment</a>
+
                 </div>
             </div>
+
         </div>
+
+
+<script>
+let selectedAppointmentId = null;
+
+document.getElementById('searchAppointment').addEventListener('input', function () {
+    const query = this.value.trim();
+    const results = document.getElementById('appointmentResults');
+    results.innerHTML = '';
+    selectedAppointmentId = null;
+    document.getElementById('selectAppointmentBtn').disabled = true;
+
+    if (query.length < 2) return;
+
+    fetch('search-appointment-op.php?q=' + encodeURIComponent(query))
+        .then(response => response.json())
+        .then(data => {
+            if (data.length === 0) {
+                results.innerHTML = '<li class="list-group-item text-muted">No appointments found</li>';
+            } else {
+                data.forEach(appt => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item list-group-item-action';
+                    li.textContent = `${appt.appointment_id} (${appt.name}, ${appt.phone})`;
+                    li.onclick = () => {
+                        selectedAppointmentId = appt.appointment_id;
+                        document.getElementById('selectAppointmentBtn').disabled = false;
+
+                        // Highlight selection
+                        [...results.children].forEach(el => el.classList.remove('active'));
+                        li.classList.add('active');
+                    };
+                    results.appendChild(li);
+                });
+            }
+        });
+});
+
+document.getElementById('selectAppointmentBtn').addEventListener('click', function () {
+    if (selectedAppointmentId) {
+        window.location.href = 'add-procedure.php?appointment_id=' + selectedAppointmentId;
+    }
+});
+
+</script>
 
         <div class="col-md-8">
             <form method="POST" id="procedureForm">
@@ -263,13 +291,12 @@ while ($doc = $doctors->fetch_assoc()) {
                             <div class="form-group col-md-3">
                                 <label>Procedure Status<span class="text-danger">*</span></label>
                                 <select name="status" class="form-control" required>
-                                    <option value="">Select Status</option>
-                                    <option value="Confirmed">Confirmed</option>
+                                    <option value="Confirmed" selected>Confirmed</option>
                                     <option value="In Progress">In Progress</option>
                                     <option value="Completed">Completed</option>
-                                    <option value="Cancelled">Cancelled</option>
                                 </select>
                             </div>
+
                             <div class="form-group col-md-12">
                                 <label>Reason for Procedure<span class="text-danger"> * </span></label>
                                 <textarea name="reason" class="form-control" rows="3" placeholder="Describe reason..."></textarea>
@@ -286,6 +313,7 @@ while ($doc = $doctors->fetch_assoc()) {
         </div>
     </div>
 </div>
+
 
 <script>
 const doctorMap = <?= json_encode($doctorList) ?>;
@@ -335,5 +363,41 @@ document.getElementById('searchPatient').addEventListener('input', function () {
         });
 });
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('searchAppointment');
+    const resultsList = document.getElementById('appointmentResults');
+
+    searchInput.addEventListener('input', function () {
+        const query = this.value.trim();
+        resultsList.innerHTML = '';
+
+        if (query.length < 2) return;
+
+        fetch('search-appointment-op.php?q=' + encodeURIComponent(query))
+            .then(res => res.json())
+            .then(data => {
+                if (data.length === 0) {
+                    resultsList.innerHTML = '<li class="list-group-item text-muted">No appointments found</li>';
+                } else {
+                    data.forEach(item => {
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item list-group-item-action';
+                        li.textContent = `${item.appointment_id} (${item.name}, ${item.phone})`;
+                        li.style.cursor = 'pointer';
+
+                        li.addEventListener('click', function () {
+                            // Redirect directly with appointment_id
+                            window.location.href = 'add-procedure.php?appointment_id=' + encodeURIComponent(item.appointment_id);
+                        });
+
+                        resultsList.appendChild(li);
+                    });
+                }
+            });
+    });
+});
+</script>
+
 
 <?php include 'footer.php'; ?>

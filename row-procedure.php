@@ -32,13 +32,21 @@ $badgeClass = match ($status) {
                 ⋮ 
             </button>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu<?= $row['id'] ?>">
+                <!-- Always show View -->
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#viewProcedure<?= $row['id'] ?>">View</a>
-                <a class="dropdown-item" href="edit-procedure.php?id=<?= $row['id'] ?>">Edit</a>
-                <a class="dropdown-item" href="javascript:void(0);" onclick="openProcedureSlip(<?= $row['id'] ?>)">View Procedure Slip</a>
+
+                <!-- Show Edit and Slip only if not CANCELLED -->
+                <?php if (!in_array($status, ['CANCELLED'])): ?>
+                    <a class="dropdown-item" href="edit-procedure.php?id=<?= $row['id'] ?>">Edit</a>
+                    <a class="dropdown-item" href="javascript:void(0);" onclick="openProcedureSlip(<?= $row['id'] ?>)">View Procedure Slip</a>
+                <?php endif; ?>
+
+                <!-- Show Cancel only for CONFIRMED or IN PROGRESS -->
                 <?php if (in_array($status, ['CONFIRMED', 'IN PROGRESS'])): ?>
                     <a class="dropdown-item text-danger" href="#" data-toggle="modal" data-target="#cancelProcedure<?= $row['id'] ?>">Cancel</a>
                 <?php endif; ?>
             </div>
+
         </div>
     </td>
 </tr>
@@ -48,7 +56,7 @@ $badgeClass = match ($status) {
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content border-0">
             <div class="modal-header bg-primary text-white py-2">
-                <h5 class="modal-title font-weight-bold mb-0">Procedure Details</h5>
+                <h5 class="modal-title font-weight-bold mb-0 text-white">Procedure Details</h5>
                 <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body px-4 pt-3 pb-4">
@@ -74,6 +82,7 @@ $badgeClass = match ($status) {
                         <div><strong>Type:</strong> <?= htmlspecialchars($row['type'] ?? '') ?></div>
                         <div><strong>Duration:</strong> <?= intval($row['duration'] ?? 0) ?> mins</div>
                         <div><strong>Doctor:</strong> Dr. <?= htmlspecialchars($row['doctor_name'] ?? '') ?></div>
+                        <div><strong>Department:</strong> <?= htmlspecialchars($row['department'] ?? 'N/A') ?></div>
                         <div><strong>Reason:</strong><br><?= nl2br(htmlspecialchars($row['reason'] ?? '')) ?></div>
 
                         <?php if (!empty($row['cancellation_reason']) && $status === 'CANCELLED'): ?>
