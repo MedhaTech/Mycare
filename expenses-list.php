@@ -335,4 +335,43 @@ function openExpenseSlip(id) {
 
 
 
+
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css" />
+<!-- Toast Messages -->
+<?php if (isset($_SESSION['toast_success'])): ?>
+<script>
+    $(function () {
+        $.toast({
+            heading: 'Success',
+            text: '<?= $_SESSION['toast_success'] ?>',
+            showHideTransition: 'slide',
+            icon: 'success',
+            position: 'top-right'
+        });
+    });
+</script>
+<?php unset($_SESSION['toast_success']); endif; ?>
+
+<?php if (isset($_SESSION['toast_error'])): ?>
+<script>
+    $(function () {
+        $.toast({
+            heading: 'Error',
+            text: '<?= $_SESSION['toast_error'] ?>',
+            showHideTransition: 'fade',
+            icon: 'error',
+            position: 'top-right'
+        });
+    });
+</script>
+<?php unset($_SESSION['toast_error']); endif; ?>
+
+<!-- DataTables CSS + JS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
 <?php include 'footer.php'; ?>

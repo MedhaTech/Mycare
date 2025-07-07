@@ -1,7 +1,6 @@
 <?php
 // tab-all-procedure.php
 include 'dbconnection.php';
-
 $sql = "SELECT pr.*, 
                p.name AS patient_name,
                p.phone AS patient_phone,
@@ -9,16 +8,13 @@ $sql = "SELECT pr.*,
                p.dob,
                p.blood_group,
                d.name AS doctor_name,
+               d.department,  -- ✅ Add this line
                a.appointment_id AS op_id
         FROM procedures pr
         LEFT JOIN patients p ON pr.patient_id = p.id
         LEFT JOIN doctors d ON pr.doctor_id = d.id
         LEFT JOIN appointments a ON pr.appointment_id = a.appointment_id
         ORDER BY pr.id DESC";
-
-
-
-
 
 $result = $conn->query($sql);
 ?>
