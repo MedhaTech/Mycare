@@ -312,4 +312,5 @@ function calculateAge($dob) {
     });
 </script>
 
+
 <?php include 'footer.php'; ?>
