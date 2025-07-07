@@ -8,7 +8,10 @@ if (!isset($_SESSION['email'])) {
 include 'header.php';
 include 'dbconnection.php';
 include 'init.php';
-$success = $error = "";
+
+$success = "";
+$error = "";
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateDoctor'])) {
     $id = $_POST['id'];
@@ -22,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateDoctor'])) {
     $qualification = $_POST['qualification'];
     $license = $_POST['license'];
     $experience = $_POST['experience'];
+    $doj = $_POST['doj'];
     $address1 = $_POST['address1'];
     $address2 = $_POST['address2'];
     $city = $_POST['city'];
@@ -34,15 +38,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateDoctor'])) {
     $ifsc = $_POST['ifsc'];
     $status = $_POST['status'];
 
-    $stmt = $conn->prepare("UPDATE doctors SET name=?, phone=?, email=?, department=?, designation=?, dob=?, gender=?, qualification=?, license=?, experience=?, address1=?, address2=?, city=?, state=?, pincode=?, bank_name=?, account_name=?, account_number=?, branch=?, ifsc=?, status=? WHERE id=?");
+    $stmt = $conn->prepare("UPDATE doctors SET name=?, phone=?, email=?, department=?, designation=?, dob=?, gender=?, qualification=?, license=?, experience=?, date_of_joining=?, address1=?, address2=?, city=?, state=?, pincode=?, bank_name=?, account_name=?, account_number=?, branch=?, ifsc=?, status=? WHERE id=?");
 
-    $stmt->bind_param("ssssssssissssssssssssi", $name, $phone, $email, $department, $designation, $dob, $gender, $qualification, $license, $experience, $address1, $address2, $city, $state, $pincode, $bank_name, $account_name, $account_number, $branch, $ifsc, $status, $id);
+    $stmt->bind_param("ssssssssisssssssssssssi", $name, $phone, $email, $department, $designation, $dob, $gender, $qualification, $license, $experience, $doj, $address1, $address2, $city, $state, $pincode, $bank_name, $account_name, $account_number, $branch, $ifsc, $status, $id);
 
     if ($stmt->execute()) {
-        $success = "Doctor updated successfully!";
+        echo "<script>
+            setTimeout(function() {
+                $.toast({
+                    heading: 'Success',
+                    text: 'Doctor updated successfully!',
+                    showHideTransition: 'slide',
+                    icon: 'success',
+                    position: 'top-right'
+                });
+            }, 300);
+            setTimeout(function() {
+                window.location.href = 'doctors-list.php';
+            }, 2000);
+        </script>";
     } else {
-        $error = "Error updating doctor: " . $stmt->error;
+        echo "<script>
+            setTimeout(function() {
+                $.toast({
+                    heading: 'Error',
+                    text: 'Failed to update doctor.',
+                    showHideTransition: 'fade',
+                    icon: 'error',
+                    position: 'top-right'
+                });
+            }, 300);
+        </script>";
     }
+
+    $stmt->close();
 }
 
 if (isset($_GET['id'])) {
@@ -56,10 +85,12 @@ if (isset($_GET['id'])) {
 } else {
     die("Invalid request.");
 }
+$conn->close();
 ?>
 
-<main class="main-wrapper clearfix" style="margin-top: 30px;">
-    <div class="container mt-4">
+
+<main class="main-wrapper clearfix">
+    <div class="container">
     <div class="row page-title clearfix">
         <div class="page-title-left">
             <h6 class="page-title-heading mr-0 mr-r-5"> Edit Doctor</h6>
@@ -77,11 +108,6 @@ if (isset($_GET['id'])) {
                 <div class="widget-holder col-md-9 mx-auto">
                     <div class="widget-bg">
                         <div class="widget-body">
-                            <?php if ($success): ?>
-                                <div class="alert alert-success"><?php echo $success; ?></div>
-                            <?php elseif ($error): ?>
-                                <div class="alert alert-danger"><?php echo $error; ?></div>
-                            <?php endif; ?>
                             <form method="POST" action="">
                                 <input type="hidden" name="id" value="<?= $doctor['id'] ?>">
                                 <div class="row">
@@ -140,7 +166,7 @@ if (isset($_GET['id'])) {
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label>DOJ<span style="color: red;">*</span></label>
-                                        <input type="date" name="doj" class="form-control" required value="<?= $doctor['doj'] ?? '' ?>">
+                                        <input type="date" name="doj" class="form-control" required value="<?= $doctor['date_of_joining'] ?? '' ?>">
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label>Address Line 1<span style="color: red;">*</span></label>
@@ -215,5 +241,13 @@ if (isset($_GET['id'])) {
         </div>
     </div>
 </main>
+
+<!-- jQuery first (required for Toastr) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!-- Toastr plugin -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
+
 
 <?php include 'footer.php'; ?>

@@ -50,7 +50,7 @@
                         text: '<?= $_SESSION['success']; ?>',
                         showHideTransition: 'slide',
                         icon: 'success',
-                        loaderBg: '#f96868',
+                        loaderBg: '#20c997 ',
                         position: 'top-right'
                     });
                 });
@@ -84,7 +84,7 @@
                     <tr>
                         <th>Doctor ID</th>
                         <th>Doctor Name</th>
-                        <th>Designation</th>
+                        <th>Department</th>
                         <th>Contact</th>
                         <th>Status</th>
                         <th>Actions</th>
@@ -172,7 +172,7 @@
 
                         <td>#<?= $doctor_id; ?></td>
                         <td>Dr. <?= $row['name']; ?></td>
-                        <td><?= $row['designation']; ?></td>
+                        <td><?= $row['department']; ?></td>
                         <td><?= $row['email']; ?><br><?= $row['phone']; ?></td>
                         <td>
                             <span class="badge badge-<?= strtolower($row['status']) === 'active' ? 'success' : 'danger'; ?>">

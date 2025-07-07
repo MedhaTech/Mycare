@@ -25,6 +25,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     $stmt = $conn->prepare("UPDATE doctors SET status = ? WHERE id = ?");
     $stmt->bind_param("si", $newStatus, $doctorId);
     $stmt->execute();
+    if ($stmt->execute()) {
+        // Set success message for Toastr
+        if ($newStatus === 'Active') {
+            $_SESSION['success'] = "Doctor activated successfully!";
+        } else {
+            $_SESSION['success'] = "Doctor inactivated successfully!";
+        }
+    } else {
+        // Error message
+        $_SESSION['error'] = "Failed to update doctor status.";
+    }
     $stmt->close();
 
     $conn->close();
