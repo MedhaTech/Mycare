@@ -5,6 +5,9 @@ include 'header.php'; // Must be at top
 include 'dbconnection.php';
 include 'init.php';
 
+$success = "";
+$error = "";
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start(); // Start session if not already started
 }
@@ -62,11 +65,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $update = $conn->prepare("UPDATE users SET password = ? WHERE id = ?");
             $update->bind_param("si", $newPassword, $userId);
             if ($update->execute()) {
-                header("Location: index.php");
-                exit;
-            } else {
-                $currentError = "Something went wrong while updating.";
-            }
+               echo "<script>
+            setTimeout(function() {
+                $.toast({
+                    heading: 'Success',
+                    text: 'Password Changed Successfully',
+                    showHideTransition: 'slide',
+                    icon: 'success',
+                    position: 'top-right'
+                });
+            }, 300);
+            setTimeout(function() {
+                window.location.href = 'index.php';
+            }, 2000);
+        </script>";
+    } else {
+        echo "<script>
+            setTimeout(function() {
+                $.toast({
+                    heading: 'Error',
+                    text: 'Failed to change the password.',
+                    showHideTransition: 'fade',
+                    icon: 'error',
+                    position: 'top-right'
+                });
+            }, 300);
+        </script>";
+    }
+
             $update->close();
         }
     }
@@ -162,6 +188,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
 </div>
+
+<!-- jQuery first (required for Toastr) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!-- Toastr plugin -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
+
 
 <?php 
 include 'footer.php'; 
