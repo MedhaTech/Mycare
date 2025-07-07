@@ -1,24 +1,22 @@
 <?php
+session_start();
 include 'dbconnection.php';
-include 'init.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = intval($_POST['id'] ?? 0);
-    $reason = trim($_POST['cancellation_reason'] ?? '');
+if (isset($_POST['cancel'])) {
+    $id = $_POST['id'];
+    $reason = $_POST['cancellation_reason'];
 
-    if ($id && $reason) {
-        $stmt = $conn->prepare("UPDATE procedures SET status = 'Cancelled', cancellation_reason = ? WHERE id = ?");
-        $stmt->bind_param("si", $reason, $id);
+    $sql = "UPDATE procedures SET status='CANCELLED', cancellation_reason=? WHERE id=?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("si", $reason, $id);
 
-        if ($stmt->execute()) {
-            echo "<script>alert('Procedure cancelled successfully.'); window.location.href='procedure.php';</script>";
-        } else {
-            echo "<script>alert('Error cancelling procedure.'); window.history.back();</script>";
-        }
-        $stmt->close();
+    if ($stmt->execute()) {
+        $_SESSION['toast_success'] = "Procedure cancelled successfully.";
     } else {
-        echo "<script>alert('Missing ID or reason.'); window.history.back();</script>";
+        $_SESSION['toast_error'] = "Failed to cancel procedure.";
     }
-} else {
-    echo "<script>alert('Invalid request.'); window.history.back();</script>";
+
+    header("Location: procedure.php"); // 👈 redirect to the parent page
+    exit();
 }
+?>

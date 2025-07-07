@@ -44,8 +44,9 @@ $opId = htmlspecialchars($data['appointment_id'] ?? '-');
     <table style="width: 100%; margin-bottom: 25px;">
         <tr>
             <td><strong>Procedure ID:</strong></td>
-            <td><?= htmlspecialchars($data['procedure_id'] ?? 'PR' . str_pad($data['id'], 4, '0', STR_PAD_LEFT)) ?></td>
+            <td><?= htmlspecialchars($data['procedure_id']) ?: 'PR' . str_pad($data['id'], 4, '0', STR_PAD_LEFT) ?></td>
         </tr>
+
         <tr>
             <td><strong>OP ID:</strong></td>
             <td>#<?= $opId ?></td>

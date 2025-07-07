@@ -25,7 +25,7 @@
                     <td><?= 'OP' . str_pad($row['id'], 4, '0', STR_PAD_LEFT) ?></td>
                     <td>
                         <?php
-                            $status = $row['status'];
+                            $status = trim($row['status']);
                             $badgeClass = '';
                             switch ($status) {
                                 case 'Confirmed':
@@ -46,23 +46,39 @@
                             }
                         ?>
                         <span class="<?= $badgeClass ?>" style="font-weight:500; font-size: 0.8rem; text-transform: capitalize;">
-                            <?= htmlspecialchars($status) ?>
+                            <?= "[" . $status . "]" ?>
                         </span>
+
                     </td>
                     <td><?= htmlspecialchars($row['type']) ?></td>
                     <td><?= htmlspecialchars($row['duration']) . ' min' ?></td>
                     <td>
+                    <td>
+                        <?php $status = strtolower(trim($row['status'])); ?>
                         <div class="dropdown">
                             <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenu<?= $row['id'] ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-ellipsis-v"></i>
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenu<?= $row['id'] ?>">
-                                <a class="dropdown-item" href="javascript:void(0)" onclick="loadSlip('<?= $row['id'] ?>', '<?= $row['patient_name'] ?>')">Slip</a>
-                                <a class="dropdown-item" href="edit-procedure.php?id=<?= $row['id'] ?>">Edit</a>
-                                <a class="dropdown-item text-danger" href="javascript:void(0);" onclick="openCancelModal('<?= $row['id'] ?>')">Cancel</a>
+                                <!-- Always show view -->
+                                <a class="dropdown-item" href="view-procedure.php?id=<?= $row['id'] ?>">View</a>
+
+                                <!-- Show slip + edit if NOT cancelled -->
+                                <?php if ($status !== 'cancelled'): ?>
+                                    <a class="dropdown-item" href="javascript:void(0)" onclick="loadSlip('<?= $row['id'] ?>', '<?= $row['patient_name'] ?>')">Slip</a>
+                                    <a class="dropdown-item" href="edit-procedure.php?id=<?= $row['id'] ?>">Edit</a>
+                                <?php endif; ?>
+
+                                <!-- Show cancel if NOT cancelled and NOT completed -->
+                                <?php if ($status !== 'cancelled' && $status !== 'completed'): ?>
+                                    <a class="dropdown-item text-danger" href="javascript:void(0);" onclick="openCancelModal('<?= $row['id'] ?>')">Cancel</a>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </td>
+
+                    </td>
+
                 </tr>
             <?php endwhile; ?>
         <?php else: ?>
