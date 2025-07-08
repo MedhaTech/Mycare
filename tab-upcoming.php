@@ -1,7 +1,7 @@
 <?php
 include 'dbconnection.php';
 
-$sql = "SELECT a.*, p.name AS patient_name, d.name AS doctor_name 
+$sql = "SELECT a.*, p.name AS patient_name, d.name AS doctor_name, d.department
         FROM appointments a
         LEFT JOIN patients p ON a.patient_id = p.id
         LEFT JOIN doctors d ON a.doctor_id = d.id
