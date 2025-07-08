@@ -73,7 +73,7 @@ if (!$appointment) {
                     <span class="badge <?= $badgeClass ?>"><?= htmlspecialchars($status) ?></span>
                 </div>
                 <div class="col-md-4">
-                    <strong>Consultation Fee:</strong><br>₹<?= number_format($appointment['fee'], 2) ?>
+                    <strong>Consultation Fee:</strong><br>Rs.<?= number_format($appointment['fee'], 2) ?>
                 </div>
             </div>
 

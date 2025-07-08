@@ -208,7 +208,7 @@ document.getElementById('selectAppointmentBtn').addEventListener('click', functi
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Patient ID<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="p_id" value="<?= isset($preSelectedPatient['id']) ? 'MCP' . str_pad($preSelectedPatient['id'], 4, '0', STR_PAD_LEFT) : '' ?>" readonly>
+                                <input type="text" class="form-control" id="p_id" value="<?= isset($preSelectedPatient['id']) ? 'PAT' . str_pad($preSelectedPatient['id'], 4, '0', STR_PAD_LEFT) : '' ?>" readonly>
                             </div>
 
                             <div class="form-group col-md-6">
@@ -271,7 +271,7 @@ document.getElementById('selectAppointmentBtn').addEventListener('click', functi
                             </div>
 
                             <div class="form-group col-md-3">
-                                <label>Fee (₹)<span class="text-danger">*</span></label>
+                                <label>Fee (Rs.)<span class="text-danger">*</span></label>
                                 <input type="number" step="0.01" name="fee" class="form-control" required>
                             </div>
                             <div class="form-group col-md-3">
@@ -354,7 +354,7 @@ document.getElementById('searchPatient').addEventListener('input', function () {
                         document.getElementById('selectedPatientId').value = patient.id;
                         document.getElementById('p_name').value = patient.name;
                         document.getElementById('p_phone').value = patient.phone;
-                        document.getElementById('p_id').value = 'MCP' + patient.id.toString().padStart(4, '0');
+                        document.getElementById('p_id').value = 'PAT' + patient.id.toString().padStart(4, '0');
                         results.innerHTML = '';
                     };
                     results.appendChild(li);

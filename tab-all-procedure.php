@@ -13,7 +13,7 @@ $sql = "SELECT pr.*,
         FROM procedures pr
         LEFT JOIN patients p ON pr.patient_id = p.id
         LEFT JOIN doctors d ON pr.doctor_id = d.id
-        LEFT JOIN appointments a ON pr.appointment_id = a.appointment_id
+        LEFT JOIN appointments a ON pr.appointment_id = a.id
         ORDER BY pr.id DESC";
 
 $result = $conn->query($sql);

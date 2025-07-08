@@ -78,16 +78,16 @@ $opId = htmlspecialchars($data['appointment_id'] ?? '-');
         <tr><td><strong>Status:</strong></td><td><?= badge($data['status']) ?></td></tr>
         <tr><td><strong>Duration:</strong></td><td><?= intval($data['duration']) ?> minutes</td></tr>
         <tr><td><strong>Reason:</strong></td><td><?= nl2br(htmlspecialchars($data['reason'] ?? '—')) ?></td></tr>
-        <tr><td><strong>Fee:</strong></td><td>₹<?= htmlspecialchars($data['fee']) ?></td></tr>
+        <tr><td><strong>Fee:</strong></td><td>Rs.<?= htmlspecialchars($data['fee']) ?></td></tr>
         <tr><td><strong>Payment Mode:</strong></td><td><?= htmlspecialchars($data['payment_mode']) ?></td></tr>
         <?php if (strtolower($data['status']) === 'cancelled' && !empty($data['cancellation_reason'])): ?>
         <tr><td><strong>Cancellation Reason:</strong></td><td class="text-danger"><?= nl2br(htmlspecialchars($data['cancellation_reason'])) ?></td></tr>
         <?php endif; ?>
     </table>
 </div>
+<div style="margin-top: 30px; text-align: center;">
+    <a href="download-procedure-slip.php?id=<?= $data['id'] ?>" class="btn btn-primary">
+        <i class="fa fa-download"></i> Download PDF
+    </a>
+</div>
 
-<script>
-    // To support setting dynamic download link
-    document.getElementById("downloadProcedureSlipBtn").setAttribute("onclick", "window.location.href='download-procedure-slip.php?id=<?= $data['id'] ?>'");
-
-</script>

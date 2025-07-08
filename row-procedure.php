@@ -19,7 +19,7 @@ $badgeClass = match ($status) {
         <br><small class="text-muted"><?= date("h:i A", strtotime($row['procedure_time'])) ?></small>
     </td>
     <td>
-         <?= !empty($row['appointment_id']) ? '#' . htmlspecialchars($row['appointment_id']) : '<span class="text-muted">-</span>' ?>
+        <?= !empty($row['op_id']) ? $row['op_id'] : '<span class="text-muted">-</span>' ?>
     </td>
     <td>
         <span class="badge <?= $badgeClass ?>"><?= $status ?></span>
@@ -71,7 +71,7 @@ $badgeClass = match ($status) {
                         <div><strong>Status:</strong>
                             <span class="badge <?= $badgeClass ?>"><?= $status ?></span>
                         </div>
-                        <div><strong>Fee:</strong> ₹<?= number_format($row['fee'] ?? 0, 2) ?></div>
+                        <div><strong>Fee:</strong> Rs.<?= number_format($row['fee'] ?? 0, 2) ?></div>
                         <div><strong>Payment Mode:</strong> <?= htmlspecialchars($row['payment_mode'] ?? '') ?></div>
                     </div>
 

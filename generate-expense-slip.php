@@ -45,7 +45,7 @@ $date = date('Y-m-d', strtotime($row['expense_date']));
         </div>
         <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
             <div><strong>Amount:</strong></div>
-            <div>₹ <?= number_format($row['amount'], 2) ?></div>
+            <div>Rs. <?= number_format($row['amount'], 2) ?></div>
         </div>
         <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
             <div><strong>Payment Status:</strong></div>

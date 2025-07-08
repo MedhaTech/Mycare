@@ -42,7 +42,7 @@ $html = '
 
 <h5>Payment Info</h5>
 <table>
-    <tr><td><strong>Amount:</strong></td><td>₹' . number_format($data['amount'], 2) . '</td></tr>
+    <tr><td><strong>Amount:</strong></td><td>Rs.' . number_format($data['amount'], 2) . '</td></tr>
     <tr><td><strong>Payment Mode:</strong></td><td>' . $data['payment_mode'] . '</td></tr>
     <tr><td><strong>Status:</strong></td><td>' . ucfirst($data['payment_status']) . '</td></tr>
 </table>

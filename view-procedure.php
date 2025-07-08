@@ -82,7 +82,7 @@ $proID = $row['procedure_id'];
                 <p><strong>Age:</strong> <?= calculateAge($row['dob']) ?></p>
                 <p><strong>Blood Group:</strong> <?= $row['blood_group'] ?></p>
                 <p><strong>Doctor:</strong> <?= $row['doctor_name'] ?: 'N/A' ?></p>
-                <p><strong>Fee:</strong> ₹<?= number_format($row['fee'], 2) ?></p>
+                <p><strong>Fee:</strong> Rs.<?= number_format($row['fee'], 2) ?></p>
                 <p><strong>Payment Mode:</strong> <?= $row['payment_mode'] ?></p>
             </div>
         </div>
