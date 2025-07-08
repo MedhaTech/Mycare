@@ -27,5 +27,21 @@
 <!-- Core Scripts (Globally required) -->
   <script src="assets/js/template.js"></script>
     <script src="assets/js/custom.js"></script>
+    <script>
+    // Ensure modals in tabbed content behave correctly
+    $(document).on('shown.bs.tab', function () {
+        $('.modal').each(function () {
+            $(this).appendTo('body');
+        });
+    });
+
+    // Also fix it on page load (in case active tab loads them)
+    $(function () {
+        $('.modal').each(function () {
+            $(this).appendTo('body');
+        });
+    });
+</script>
+
 </body>
 </html>
