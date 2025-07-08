@@ -1,19 +1,21 @@
 <?php
-include 'header.php';
+session_start();
 include 'dbconnection.php';
 include 'init.php';
 
 $appointment_id = $_GET['id'] ?? null;
 $message = '';
 
-if (!$appointment_id) {
+if (!$appointment_id || !is_numeric($appointment_id)) {
     echo "<script>alert('Invalid appointment ID'); window.location.href='appointments.php';</script>";
     exit();
 }
 
+// Fetch patient and doctor lists
 $patients = $conn->query("SELECT id, name FROM patients WHERE status='Active'");
-$doctors = $conn->query("SELECT id, name FROM doctors WHERE status='Active'");
+$doctors = $conn->query("SELECT id, name, department FROM doctors WHERE status='Active'");
 
+// Fetch appointment data
 $stmt = $conn->prepare("SELECT * FROM appointments WHERE id = ?");
 $stmt->bind_param("i", $appointment_id);
 $stmt->execute();
@@ -25,6 +27,20 @@ if (!$appointment) {
     exit();
 }
 
+// Get department of the selected doctor
+$doctor_department = '';
+if (!empty($appointment['doctor_id'])) {
+    $dep_stmt = $conn->prepare("SELECT department FROM doctors WHERE id = ?");
+    $dep_stmt->bind_param("i", $appointment['doctor_id']);
+    $dep_stmt->execute();
+    $dep_result = $dep_stmt->get_result();
+    if ($dep_row = $dep_result->fetch_assoc()) {
+        $doctor_department = $dep_row['department'];
+    }
+    $dep_stmt->close();
+}
+
+// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $patient_id = $_POST['patient_id'];
     $doctor_id = $_POST['doctor_id'];
@@ -51,6 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $update->close();
 }
+
+include 'header.php';
 ?>
 <div class="container mt-4">
     <div class="row page-title clearfix">
@@ -102,20 +120,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                             <div class="form-group col-md-6">
                                 <label>Department<span style="color: red;">*</span></label>
-                                <select id="departmentSelect" class="form-control">
-                                    <option>Select Department</option>
-                                    <option value="" selected disabled>Select</option>
-                                    <option value="General Practitioner">General Practitioner</option>
-                                    <option value="Cardiologist">Cardiologist</option>
-                                    <option value="Dermatologist">Dermatologist</option>
-                                    <option value="Gastroenterologist">Gastroenterologist</option>
-                                    <option value="Neurologist">Neurologist</option>
-                                    <option value="Orthopedic">Orthopedic</option>
-                                    <option value="Pediatrician">Pediatrician</option>
-                                    <option value="Psychiatrist">Psychiatrist</option>
-                                    <option value="Physician">Physician</option>
+                                <select id="departmentSelect" class="form-control" required>
+                                    <option value="" disabled>Select</option>
+                                    <?php
+                                    $departments = [
+                                        'General Practitioner', 'Cardiologist', 'Dermatologist',
+                                        'Gastroenterologist', 'Neurologist', 'Orthopedic',
+                                        'Pediatrician', 'Psychiatrist', 'Physician'
+                                    ];
+                                    foreach ($departments as $dept) {
+                                        $selected = ($dept === $doctor_department) ? 'selected' : '';
+                                        echo "<option value=\"$dept\" $selected>$dept</option>";
+                                    }
+                                    ?>
                                 </select>
                             </div>
+
                             <div class="form-group col-md-6">
                                 <label>Doctor<span style="color: red;">*</span></label>
                                 <select name="doctor_id" id="doctorSelect" class="form-control" required>
@@ -139,26 +159,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="form-group col-md-4">
                                 <label>Duration<span style="color: red;">*</span></label>
                                 <select name="duration" class="form-control" required>
-                                    <option value="" selected disabled>Select</option>
-                                    <option value="30" <?= $appointment['duration'] == 30 ? 'selected' : '' ?>>30m</option>
-                                    <option value="45" <?= $appointment['duration'] == 45 ? 'selected' : '' ?>>45m</option>
-                                    <option value="60" <?= $appointment['duration'] == 60 ? 'selected' : '' ?>>1hr</option>
-                                    <option value="90" <?= $appointment['duration'] == 90 ? 'selected' : '' ?>>1h 30m</option>
-                                    <option value="120" <?= $appointment['duration'] == 120 ? 'selected' : '' ?>>2h</option>
+                                    <option value="" disabled>Select</option>
+                                    <?php
+                                    foreach ([30, 45, 60, 90, 120] as $d) {
+                                        $label = $d < 60 ? "{$d}m" : ($d == 60 ? "1hr" : ($d == 90 ? "1h 30m" : "2h"));
+                                        $selected = $appointment['duration'] == $d ? 'selected' : '';
+                                        echo "<option value=\"$d\" $selected>$label</option>";
+                                    }
+                                    ?>
                                 </select>
                             </div>
 
                             <div class="form-group col-md-6">
                                 <label>Appointment Type<span style="color: red;">*</span></label>
                                 <select name="type" class="form-control" required>
-                                    <option value="" selected disabled>Select</option>
-                                    <option value="Check-Up" <?= $appointment['type'] == 'Check-Up' ? 'selected' : '' ?>>Check-Up</option>
-                                    <option value="Consultation" <?= $appointment['type'] == 'Consultation' ? 'selected' : '' ?>>Consultation</option>
-                                    <option value="Follow-Up" <?= $appointment['type'] == 'Follow-Up' ? 'selected' : '' ?>>Follow-Up</option>
-                                    <option value="Procedure" <?= $appointment['type'] == 'Procedure' ? 'selected' : '' ?>>Procedure</option>
-                                    <option value="Emergency" <?= $appointment['type'] == 'Emergency' ? 'selected' : '' ?>>Emergency</option>
-                                    <option value="Vaccination" <?= $appointment['type'] == 'Vaccination' ? 'selected' : '' ?>>Vaccination</option>
-                                    <option value="Physical Therapy" <?= $appointment['type'] == 'Physical Therapy' ? 'selected' : '' ?>>Physical Therapy</option>
+                                    <option value="" disabled>Select</option>
+                                    <?php
+                                    $types = ['Check-Up', 'Consultation', 'Follow-Up', 'Procedure', 'Emergency', 'Vaccination', 'Physical Therapy'];
+                                    foreach ($types as $t) {
+                                        $selected = $appointment['type'] === $t ? 'selected' : '';
+                                        echo "<option value=\"$t\" $selected>$t</option>";
+                                    }
+                                    ?>
                                 </select>
                             </div>
 
@@ -169,7 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="form-group col-md-3">
                                 <label>Mode of Payment<span style="color: red;">*</span></label>
                                 <select name="payment_mode" class="form-control">
-                                    <option value="" selected disabled>Select</option>
+                                    <option value="" disabled>Select</option>
                                     <option value="UPI">UPI</option>
                                     <option value="Cash">Cash</option>
                                     <option value="Net Banking">Net Banking</option>
@@ -183,16 +205,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="form-group col-md-3">
                                 <label>Appointment Status<span style="color: red;">*</span></label>
                                 <select name="status" class="form-control" required>
-                                    <option value="" selected disabled>Select</option>
-                                    <option value="Confirmed" <?= $appointment['status'] == 'Confirmed' ? 'selected' : '' ?>>Confirmed</option>
-                                    <option value="In Progress" <?= $appointment['status'] == 'In Progress' ? 'selected' : '' ?>>In Progress</option>
-                                    <option value="Completed" <?= $appointment['status'] == 'Completed' ? 'selected' : '' ?>>Completed</option>
+                                    <option value="" disabled>Select</option>
+                                    <?php
+                                    foreach (['Confirmed', 'In Progress', 'Completed'] as $s) {
+                                        $selected = $appointment['status'] === $s ? 'selected' : '';
+                                        echo "<option value=\"$s\" $selected>$s</option>";
+                                    }
+                                    ?>
                                 </select>
                             </div>
 
                             <div class="form-group col-md-12">
                                 <label>Reason for Appointment<span style="color: red;">*</span></label>
-                                <textarea name="reason" class="form-control" rows="3" placeholder="Describe reason..." required><?= htmlspecialchars($appointment['reason']) ?></textarea>
+                                <textarea name="reason" class="form-control" rows="3" required><?= htmlspecialchars($appointment['reason']) ?></textarea>
                             </div>
 
                             <div class="col-md-12 text-right">
@@ -207,7 +232,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 </div>
 
-<!-- 🔍 Search + Autofill Script -->
 <script>
 document.getElementById('searchPatient').addEventListener('input', function () {
     const query = this.value.trim();
@@ -238,7 +262,6 @@ document.getElementById('searchPatient').addEventListener('input', function () {
         });
 });
 
-// Prefill patient data on page load
 document.addEventListener("DOMContentLoaded", function () {
     const patientId = <?= json_encode($appointment['patient_id']) ?>;
     if (patientId) {
