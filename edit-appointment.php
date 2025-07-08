@@ -1,5 +1,7 @@
 <?php
+
 session_start();
+
 include 'dbconnection.php';
 include 'init.php';
 
@@ -69,6 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 include 'header.php';
+
 ?>
 <div class="container mt-4">
     <div class="row page-title clearfix">
