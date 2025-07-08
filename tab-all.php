@@ -73,7 +73,7 @@ $modals = ''; // Store modals separately
                                                 <?= strtoupper($row['status']) ?>
                                             </span>
                                         </div>
-                                        <div><strong>Fee:</strong> ₹<?= number_format($row['fee'], 2); ?></div>
+                                        <div><strong>Fee:</strong> Rs.<?= number_format($row['fee'], 2); ?></div>
                                         <div><strong>Reason:</strong><br><?= nl2br(htmlspecialchars($row['reason'])); ?></div>
 
                                         <?php if (!empty($row['cancel_reason']) && strtoupper($row['status']) == 'CANCELLED'): ?>

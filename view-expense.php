@@ -48,7 +48,7 @@ $row = $result->fetch_assoc();
         </div>
         <div class="row mb-3">
             <div class="col-md-3"><strong>Amount:</strong></div>
-            <div class="col-md-9">₹ <?= number_format($row['amount'], 2); ?></div>
+            <div class="col-md-9">Rs. <?= number_format($row['amount'], 2); ?></div>
         </div>
         <div class="row mb-3">
             <div class="col-md-3"><strong>Mode of Payment:</strong></div>

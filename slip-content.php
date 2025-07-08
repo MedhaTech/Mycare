@@ -52,6 +52,6 @@ $row = $result->fetch_assoc();
         <p><strong>Status:</strong> <?= htmlspecialchars($row['status']) ?></p>
         <p><strong>Duration:</strong> <?= htmlspecialchars($row['duration']) ?> minutes</p>
         <p><strong>Reason:</strong> <?= htmlspecialchars($row['reason']) ?></p>
-        <p><strong>Fee:</strong> ₹<?= htmlspecialchars($row['fee']) ?></p>
+        <p><strong>Fee:</strong> Rs.<?= htmlspecialchars($row['fee']) ?></p>
     </div>
 </div>

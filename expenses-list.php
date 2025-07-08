@@ -107,7 +107,7 @@
                         <td><?= $row['category']; ?></td>
                         <td><?= $row['details']; ?></td>
                         <td><?= $row['payment_mode']; ?></td>
-                        <td>₹ <?= number_format($row['amount'], 2); ?></td>
+                        <td>Rs. <?= number_format($row['amount'], 2); ?></td>
                         <td>
                             <span class="badge badge-<?= strtolower($row['payment_status']) === 'paid' ? 'success' : 'warning' ?>">
                                 <?= ucfirst($row['payment_status']) ?>
@@ -137,7 +137,7 @@
                                             <div><strong>Voucher No:</strong> <?= 'VCH' . str_pad($sl, 3, '0', STR_PAD_LEFT); ?></div>
                                             <div><strong>Category:</strong> <?= $row['category'] ?></div>
                                             <div><strong>Date:</strong> <?= date('Y-m-d', strtotime($row['expense_date'])) ?></div>
-                                            <div><strong>Amount:</strong> ₹ <?= number_format($row['amount'], 2) ?></div>
+                                            <div><strong>Amount:</strong> Rs. <?= number_format($row['amount'], 2) ?></div>
                                             <div><strong>Payment Mode:</strong> <?= $row['payment_mode'] ?></div>
                                             <div><strong>Status:</strong>
                                                 <span class="badge badge-<?= strtolower($row['payment_status']) === 'paid' ? 'success' : 'secondary' ?>">

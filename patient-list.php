@@ -188,7 +188,7 @@ function calculateAge($dob) {
                                                                 <?= $status ?>
                                                                 </span>
                                                             </div>
-                                                            <div><strong>Fee:</strong> ₹<?= number_format($appt['fee'], 2) ?></div>
+                                                            <div><strong>Fee:</strong> Rs.<?= number_format($appt['fee'], 2) ?></div>
                                                             <div><strong>Type:</strong> <?= htmlspecialchars($appt['type'] ?? 'N/A') ?></div>
                                                             <div><strong>Reason:</strong><br><?= htmlspecialchars($appt['reason'] ?? 'N/A') ?></div>
                                                             <?php if (!empty($appt['cancel_reason']) && $status === 'CANCELLED'): ?>

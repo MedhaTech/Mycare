@@ -80,6 +80,6 @@ function badge($s) {
         <tr><td><strong>Status:</strong></td><td><?= badge($data['status']) ?></td></tr>
         <tr><td><strong>Duration:</strong></td><td><?= intval($data['duration']) ?> minutes</td></tr>
         <tr><td><strong>Reason:</strong></td><td><?= nl2br(htmlspecialchars($data['reason'] ?? '—')) ?></td></tr>
-        <tr><td><strong>Fee:</strong></td><td>₹<?= htmlspecialchars($data['fee']) ?></td></tr>
+        <tr><td><strong>Fee:</strong></td><td>Rs.<?= htmlspecialchars($data['fee']) ?></td></tr>
     </table>
 </div>

@@ -65,14 +65,16 @@ while ($doc = $doctors->fetch_assoc()) {
 <!-- Breadcrumb -->
 <div class="container mt-4">
     <div class="row page-title clearfix">
-        <div class="col-12 d-flex justify-content-end">
-        <div class="col-md-6 text-right">
-            <ol class="breadcrumb bg-transparent p-1 mb-1 justify-content-end">
+        <div class="page-title-left">
+            <h6 class="page-title-heading mr-0 mr-r-5">Add Appointment</h6>
+            <p class="page-title-description mr-0 d-none d-md-inline-block">Fill the form to add an appointment.</p>
+        </div>
+        <div class="page-title-right d-none d-sm-inline-flex">
+            <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
                 <li class="breadcrumb-item active">Add Appointment</li>
             </ol>
         </div>
-    </div>
     </div>
 </div>
 
@@ -107,7 +109,7 @@ while ($doc = $doctors->fetch_assoc()) {
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Patient ID<span style="color: red;">*</span></label>
-                                <input type="text" class="form-control" id="p_id" value="<?= isset($preSelectedPatient['id']) ? 'MCP' . str_pad($preSelectedPatient['id'], 4, '0', STR_PAD_LEFT) : '' ?>" readonly>
+                                <input type="text" class="form-control" id="p_id" value="<?= isset($preSelectedPatient['id']) ? 'PAT' . str_pad($preSelectedPatient['id'], 4, '0', STR_PAD_LEFT) : '' ?>" readonly>
                             </div>
 
                             <div class="form-group col-md-6">
@@ -161,7 +163,7 @@ while ($doc = $doctors->fetch_assoc()) {
                             </div>
 
                             <div class="form-group col-md-3">
-                                <label>Fee (₹)<span style="color: red;">*</span></label>
+                                <label>Fee (Rs.)<span style="color: red;">*</span></label>
                                 <input type="number" step="0.01" name="fee" class="form-control" required>
                             </div>
                             <div class="form-group col-md-3">
@@ -242,7 +244,7 @@ document.getElementById('searchPatient').addEventListener('input', function () {
                         document.getElementById('selectedPatientId').value = patient.id;
                         document.getElementById('p_name').value = patient.name;
                         document.getElementById('p_phone').value = patient.phone;
-                        document.getElementById('p_id').value = 'MCP' + patient.id.toString().padStart(4, '0');
+                        document.getElementById('p_id').value = 'PAT' + patient.id.toString().padStart(4, '0');
                         results.innerHTML = '';
                     };
                     results.appendChild(li);

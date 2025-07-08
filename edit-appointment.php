@@ -185,7 +185,7 @@ include 'header.php';
                             </div>
 
                             <div class="form-group col-md-3">
-                                <label>Fee (₹)<span style="color: red;">*</span></label>
+                                <label>Fee (Rs.)<span style="color: red;">*</span></label>
                                 <input type="number" step="0.01" name="fee" class="form-control" value="<?= $appointment['fee'] ?>" required>
                             </div>
                             <div class="form-group col-md-3">
@@ -253,7 +253,7 @@ document.getElementById('searchPatient').addEventListener('input', function () {
                         document.getElementById('selectedPatientId').value = patient.id;
                         document.getElementById('p_name').value = patient.name;
                         document.getElementById('p_phone').value = patient.phone;
-                        document.getElementById('p_id').value = 'MCP' + patient.id.toString().padStart(4, '0');
+                        document.getElementById('p_id').value = 'PAT' + patient.id.toString().padStart(4, '0');
                         results.innerHTML = '';
                     };
                     results.appendChild(li);
@@ -270,7 +270,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(patient => {
                 document.getElementById("p_name").value = patient.name || "";
                 document.getElementById("p_phone").value = patient.phone || "";
-                document.getElementById("p_id").value = 'MCP' + patient.id.toString().padStart(4, '0');
+                document.getElementById("p_id").value = 'PAT' + patient.id.toString().padStart(4, '0');
             });
     }
 });

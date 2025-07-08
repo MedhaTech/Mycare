@@ -61,7 +61,7 @@ $html = '
 <p><strong>Status:</strong> ' . ucfirst($data['status']) . '</p>
 <p><strong>Duration:</strong> ' . $data['duration'] . ' minutes</p>
 <p><strong>Reason:</strong> ' . ($data['reason'] ?: 'N/A') . '</p>
-<p><strong>Fee:</strong> ₹' . $data['fee'] . '</p>';
+<p><strong>Fee:</strong> Rs.' . $data['fee'] . '</p>';
 
 $dompdf = new Dompdf();
 $dompdf->loadHtml($html);

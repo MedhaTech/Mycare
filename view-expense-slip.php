@@ -31,7 +31,7 @@ $voucher = 'VCH' . str_pad($data['id'], 3, '0', STR_PAD_LEFT);
 
     <h5 style="font-size: 16px; margin-bottom: 10px;">Payment Info</h5>
     <table style="width: 100%;">
-        <tr><td><strong>Amount:</strong></td><td>₹<?= number_format($data['amount'], 2) ?></td></tr>
+        <tr><td><strong>Amount:</strong></td><td>Rs.<?= number_format($data['amount'], 2) ?></td></tr>
         <tr><td><strong>Payment Mode:</strong></td><td><?= htmlspecialchars($data['payment_mode']) ?></td></tr>
         <tr><td><strong>Status:</strong></td><td>
             <span class="badge badge-<?= strtolower($data['payment_status']) === 'paid' ? 'success' : 'warning' ?>">

@@ -152,7 +152,7 @@ if (!$procedure) {
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Patient ID</label>
-                                <input type="text" class="form-control" value="MCP<?= str_pad($procedure['patient_id'], 4, '0', STR_PAD_LEFT) ?>" readonly>
+                                <input type="text" class="form-control" value="PAT<?= str_pad($procedure['patient_id'], 4, '0', STR_PAD_LEFT) ?>" readonly>
                             </div>
 
                             <div class="form-group col-md-6">
@@ -215,7 +215,7 @@ if (!$procedure) {
                             </div>
 
                             <div class="form-group col-md-3">
-                                <label>Fee (₹)</label>
+                                <label>Fee (Rs.)</label>
                                 <input type="number" step="0.01" name="fee" class="form-control" value="<?= $procedure['fee'] ?>" required>
                             </div>
 
