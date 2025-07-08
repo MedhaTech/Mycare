@@ -6,15 +6,17 @@ $sql = "SELECT pr.*,
                p.phone AS patient_phone,
                p.gender,
                p.dob,
+               TIMESTAMPDIFF(YEAR, p.dob, CURDATE()) AS age, -- ✅ Calculate Age
                p.blood_group,
                d.name AS doctor_name,
-               d.department,  -- ✅ Add this line
+               d.department,
                a.appointment_id AS op_id
         FROM procedures pr
         LEFT JOIN patients p ON pr.patient_id = p.id
         LEFT JOIN doctors d ON pr.doctor_id = d.id
-        LEFT JOIN appointments a ON pr.appointment_id = a.id
+        LEFT JOIN appointments a ON pr.appointment_id = a.appointment_id
         ORDER BY pr.id DESC";
+
 
 $result = $conn->query($sql);
 ?>

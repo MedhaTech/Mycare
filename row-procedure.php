@@ -19,7 +19,7 @@ $badgeClass = match ($status) {
         <br><small class="text-muted"><?= date("h:i A", strtotime($row['procedure_time'])) ?></small>
     </td>
     <td>
-        <?= !empty($row['op_id']) ? $row['op_id'] : '<span class="text-muted">-</span>' ?>
+         <?= !empty($row['appointment_id']) ? '#' . htmlspecialchars($row['appointment_id']) : '<span class="text-muted">-</span>' ?>
     </td>
     <td>
         <span class="badge <?= $badgeClass ?>"><?= $status ?></span>
@@ -71,7 +71,7 @@ $badgeClass = match ($status) {
                         <div><strong>Status:</strong>
                             <span class="badge <?= $badgeClass ?>"><?= $status ?></span>
                         </div>
-                        <div><strong>Fee:</strong> Rs.<?= number_format($row['fee'] ?? 0, 2) ?></div>
+                        <div><strong>Fee:</strong> ₹<?= number_format($row['fee'] ?? 0, 2) ?></div>
                         <div><strong>Payment Mode:</strong> <?= htmlspecialchars($row['payment_mode'] ?? '') ?></div>
                     </div>
 
@@ -81,7 +81,7 @@ $badgeClass = match ($status) {
                         <div><strong>Date & Time:</strong> <?= date("d M Y", strtotime($row['procedure_date'])) . ', ' . date("h:i A", strtotime($row['procedure_time'])) ?></div>
                         <div><strong>Type:</strong> <?= htmlspecialchars($row['type'] ?? '') ?></div>
                         <div><strong>Duration:</strong> <?= intval($row['duration'] ?? 0) ?> mins</div>
-                        <div><strong>Doctor:</strong> Dr. <?= htmlspecialchars($row['doctor_name'] ?? '') ?></div>
+                        <div><strong>Doctor:</strong>  <?= htmlspecialchars($row['doctor_name'] ?? '') ?></div>
                         <div><strong>Department:</strong> <?= htmlspecialchars($row['department'] ?? 'N/A') ?></div>
                         <div><strong>Reason:</strong><br><?= nl2br(htmlspecialchars($row['reason'] ?? '')) ?></div>
 
