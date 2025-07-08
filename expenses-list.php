@@ -107,7 +107,7 @@
                         <td><?= $row['category']; ?></td>
                         <td><?= $row['details']; ?></td>
                         <td><?= $row['payment_mode']; ?></td>
-                        <td>Rs. <?= number_format($row['amount'], 2); ?></td>
+                        <td>₹ <?= number_format($row['amount'], 2); ?></td>
                         <td>
                             <span class="badge badge-<?= strtolower($row['payment_status']) === 'paid' ? 'success' : 'warning' ?>">
                                 <?= ucfirst($row['payment_status']) ?>
@@ -137,7 +137,7 @@
                                             <div><strong>Voucher No:</strong> <?= 'VCH' . str_pad($sl, 3, '0', STR_PAD_LEFT); ?></div>
                                             <div><strong>Category:</strong> <?= $row['category'] ?></div>
                                             <div><strong>Date:</strong> <?= date('Y-m-d', strtotime($row['expense_date'])) ?></div>
-                                            <div><strong>Amount:</strong> Rs. <?= number_format($row['amount'], 2) ?></div>
+                                            <div><strong>Amount:</strong> ₹ <?= number_format($row['amount'], 2) ?></div>
                                             <div><strong>Payment Mode:</strong> <?= $row['payment_mode'] ?></div>
                                             <div><strong>Status:</strong>
                                                 <span class="badge badge-<?= strtolower($row['payment_status']) === 'paid' ? 'success' : 'secondary' ?>">
@@ -165,8 +165,7 @@
 <div id="slipModalContent" style="display: none;"></div>
 
 <!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script> <!-- ✅ Add this -->
+
 <script src="https://cdn.jsdelivr.net/npm/metismenu"></script>
 <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
@@ -369,9 +368,5 @@ function openExpenseSlip(id) {
 <?php unset($_SESSION['toast_error']); endif; ?>
 
 <!-- DataTables CSS + JS -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
 
 <?php include 'footer.php'; ?>
