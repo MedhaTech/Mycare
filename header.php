@@ -45,6 +45,16 @@ if ($current_page !== 'login.php' && !isset($_SESSION['email'])) {
     <script data-pace-options='{ "ajax": false, "selectors": [ "img" ]}' src="assets/js/pace.min.js"></script>
 
     <style>
+        body {
+    margin: 0;
+    font-family: "Poppins", "Helvetica Neue", Arial, sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.71429;
+    color: #0e0808;
+    text-align: left;
+    background-color: #dcdada;
+}
         .dropdown-menu {
             min-width: 220px;
             max-width: 240px;
