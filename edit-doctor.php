@@ -120,8 +120,8 @@ $conn->close();
                                         <input type="text" name="phone" class="form-control" required pattern="\d{10}" value="<?= $doctor['phone'] ?>">
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>Email<span style="color: red;">*</span></label>
-                                        <input type="email" name="email" class="form-control" required value="<?= $doctor['email'] ?>">
+                                        <label>Email</label>
+                                        <input type="email" name="email" class="form-control" value="<?= $doctor['email'] ?>">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>Department<span style="color: red;">*</span></label>
@@ -141,48 +141,48 @@ $conn->close();
                                         <input type="text" name="designation" class="form-control" required value="<?= $doctor['designation'] ?>">
                                     </div>
                                     <div class="form-group col-md-2">
-                                        <label>Gender<span style="color: red;">*</span></label>
-                                        <select name="gender" class="form-control" required>
+                                        <label>Gender</label>
+                                        <select name="gender" class="form-control">
                                             <option value="">Select</option>
                                             <option value="Male" <?= $doctor['gender'] === 'Male' ? 'selected' : '' ?>>Male</option>
                                             <option value="Female" <?= $doctor['gender'] === 'Female' ? 'selected' : '' ?>>Female</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-2">
-                                        <label>DOB<span style="color: red;">*</span></label>
-                                        <input type="date" name="dob" class="form-control" required value="<?= $doctor['dob'] ?>">
+                                        <label>DOB</label>
+                                        <input type="date" name="dob" class="form-control" value="<?= $doctor['dob'] ?>">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>Qualification<span style="color: red;">*</span></label>
-                                        <input type="text" name="qualification" class="form-control" required value="<?= $doctor['qualification'] ?>">
+                                        <input type="text" name="qualification" required class="form-control" value="<?= $doctor['qualification'] ?>">
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>License<span style="color: red;">*</span></label>
-                                        <input type="text" name="license" class="form-control" required value="<?= $doctor['license'] ?>">
+                                        <label>License</label>
+                                        <input type="text" name="license" class="form-control" value="<?= $doctor['license'] ?>">
                                     </div>
                                     <div class="form-group col-md-2">
-                                        <label>Experience (Years)<span style="color: red;">*</span></label>
-                                        <input type="number" name="experience" class="form-control" required value="<?= $doctor['experience'] ?>">
+                                        <label>Experience (Years)</label>
+                                        <input type="number" name="experience" class="form-control" value="<?= $doctor['experience'] ?>">
                                     </div>
                                     <div class="form-group col-md-2">
-                                        <label>DOJ<span style="color: red;">*</span></label>
-                                        <input type="date" name="doj" class="form-control" required value="<?= $doctor['date_of_joining'] ?? '' ?>">
+                                        <label>DOJ</label>
+                                        <input type="date" name="doj" class="form-control" value="<?= $doctor['date_of_joining'] ?? '' ?>">
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label>Address Line 1<span style="color: red;">*</span></label>
-                                        <input type="text" name="address1" class="form-control" required value="<?= $doctor['address1'] ?>">
+                                        <label>Address Line 1</label>
+                                        <input type="text" name="address1" class="form-control"  value="<?= $doctor['address1'] ?>">
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label>Address Line 2</label>
                                         <input type="text" name="address2" class="form-control" value="<?= $doctor['address2'] ?>">
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>City<span style="color: red;">*</span></label>
-                                        <input type="text" name="city" class="form-control" required value="<?= $doctor['city'] ?>">
+                                        <label>City</label>
+                                        <input type="text" name="city" class="form-control"  value="<?= $doctor['city'] ?>">
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>State<span style="color: red;">*</span></label>
-                                        <select name="state" class="form-control" required>
+                                        <label>State</label>
+                                        <select name="state" class="form-control" >
                                             <option value="">Select</option>
                                             <?php
                                             $states = ["Karnataka", "Andhra Pradesh", "Tamil Nadu", "Telangana", "Kerala"];
@@ -194,32 +194,32 @@ $conn->close();
                                         </select>
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>Pincode<span style="color: red;">*</span></label>
-                                        <input type="text" name="pincode" class="form-control" required value="<?= $doctor['pincode'] ?>">
+                                        <label>Pincode</label>
+                                        <input type="text" name="pincode" class="form-control" value="<?= $doctor['pincode'] ?>">
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>Bank Name<span style="color: red;">*</span></label>
-                                        <input type="text" name="bank_name" class="form-control" required value="<?= $doctor['bank_name'] ?>">
+                                        <label>Bank Name</label>
+                                        <input type="text" name="bank_name" class="form-control" value="<?= $doctor['bank_name'] ?>">
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>Account Name<span style="color: red;">*</span></label>
-                                        <input type="text" name="account_name" class="form-control" required value="<?= $doctor['account_name'] ?>">
+                                        <label>Account Name</label>
+                                        <input type="text" name="account_name" class="form-control" value="<?= $doctor['account_name'] ?>">
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>Account Number<span style="color: red;">*</span></label>
-                                        <input type="text" name="account_number" class="form-control" required value="<?= $doctor['account_number'] ?>">
+                                        <label>Account Number</label>
+                                        <input type="text" name="account_number" class="form-control"  value="<?= $doctor['account_number'] ?>">
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>Branch<span style="color: red;">*</span></label>
-                                        <input type="text" name="branch" class="form-control" required value="<?= $doctor['branch'] ?>">
+                                        <label>Branch</label>
+                                        <input type="text" name="branch" class="form-control"  value="<?= $doctor['branch'] ?>">
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>IFSC<span style="color: red;">*</span></label>
-                                        <input type="text" name="ifsc" class="form-control" required value="<?= $doctor['ifsc'] ?>">
+                                        <label>IFSC
+                                        <input type="text" name="ifsc" class="form-control"  value="<?= $doctor['ifsc'] ?>">
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>Status<span style="color: red;">*</span></label>
-                                        <select name="status" class="form-control" required>
+                                        <label>Status</label>
+                                        <select name="status" class="form-control">
                                             <option value="Active" <?= $doctor['status'] === 'Active' ? 'selected' : '' ?>>Active</option>
                                             <option value="Inactive" <?= $doctor['status'] === 'Inactive' ? 'selected' : '' ?>>Inactive</option>
                                         </select>

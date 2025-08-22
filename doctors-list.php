@@ -95,7 +95,7 @@
                     <?php while ($row = $result->fetch_assoc()):
                         $row_id = $row['id'];
                         $formatted_id = str_pad($row_id, 3, '0', STR_PAD_LEFT);
-                        $doctor_id = "MC" . $formatted_id;
+                        $doctor_id = "D" . $formatted_id;
                     ?>
                     <!-- View Modal -->
                         <div class="modal fade" id="viewDoctor<?= $row['id']; ?>" tabindex="-1">
@@ -173,7 +173,7 @@
                         <td>#<?= $doctor_id; ?></td>
                         <td>Dr. <?= $row['name']; ?></td>
                         <td><?= $row['department']; ?></td>
-                        <td><?= $row['email']; ?><br><?= $row['phone']; ?></td>
+                        <td><?= $row['phone']; ?></td>
                         <td>
                             <span class="badge badge-<?= strtolower($row['status']) === 'active' ? 'success' : 'danger'; ?>">
                                 <?= $row['status']; ?>
