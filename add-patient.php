@@ -145,7 +145,7 @@
                                 <button type="submit" class="btn btn-primary">+ Add Patient</button>
                             </div>
                             <div class="col-md-6 text-right">
-                                <a href="patients-list.php" class="btn btn-secondary">Back to List</a>
+                                <a href="patient-list.php" class="btn btn-secondary">Back to List</a>
                             </div>
                         </div>
                     </form>

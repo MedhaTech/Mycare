@@ -125,7 +125,7 @@ html {
 article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
   display: block; }
 
-body {
+/* body {
   margin: 0;
   font-family: "Poppins", "Helvetica Neue", Arial, sans-serif;
   font-size: 0.875rem;
@@ -136,7 +136,17 @@ body {
   background-color: #f8f8f8; }
 
 [tabindex="-1"]:focus {
-  outline: 0 !important; }
+  outline: 0 !important; } */
+         body {
+    margin: 0;
+    font-family: "Poppins", "Helvetica Neue", Arial, sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.71429;
+    color: #0e0808;
+    text-align: left;
+    background-color: #dcdada;
+}
 
 hr {
   -webkit-box-sizing: content-box;
@@ -24570,6 +24580,7 @@ SIDEBAR
       display: -webkit-box;
       display: -ms-flexbox;
       display: flex;
+      color:#000;
       -webkit-box-align: center;
           -ms-flex-align: center;
               align-items: center;

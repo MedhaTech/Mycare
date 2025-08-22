@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Step 3: Generate doctor_id (like MC001)
         $last_id = $conn->insert_id;
         $formatted_id = str_pad($last_id, 3, "0", STR_PAD_LEFT);
-        $doctor_code = "MC" . $formatted_id;
+        $doctor_code = "D" . $formatted_id;
 
         // Step 4: Update the row with doctor_id
         $update = $conn->prepare("UPDATE doctors SET doctor_id = ? WHERE id = ?");
@@ -120,8 +120,8 @@ $conn->close();
                                         <input type="text" name="phone" class="form-control" required pattern="\d{10}" title="Enter a valid 10-digit phone number">
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>Email<span style="color: red;">*</span></label>
-                                        <input type="email" name="email" class="form-control" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.(com|in)$" title="Enter a valid email with .com or .in">
+                                        <label>Email</label>
+                                        <input type="email" name="email" class="form-control"  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.(com|in)$" title="Enter a valid email with .com or .in">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>Department<span style="color: red;">*</span></label>
@@ -143,51 +143,51 @@ $conn->close();
                                         <input type="text" name="designation" class="form-control" required>
                                     </div>
                                     <div class="form-group col-md-2">
-                                        <label>Gender<span style="color: red;">*</span></label>
-                                        <select name="gender" class="form-control" required>
+                                        <label>Gender</label>
+                                        <select name="gender" class="form-control" >
                                             <option value="" disabled selected>Select</option>
                                             <option>Male</option>
                                             <option>Female</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-2">
-                                        <label>DOB<span style="color: red;">*</span></label>
-                                        <input type="date" name="dob" class="form-control" required>
+                                        <label>DOB</label>
+                                        <input type="date" name="dob" class="form-control" >
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>Qualification<span style="color: red;">*</span></label>
                                         <input type="text" name="qualification" class="form-control" required>
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>License<span style="color: red;">*</span></label>
-                                        <input type="text" name="license" class="form-control" required>
+                                        <label>License</label>
+                                        <input type="text" name="license" class="form-control" >
                                     </div>
                                     <div class="form-group col-md-2">
-                                        <label>Experience (Years)<span style="color: red;">*</span></label>
-                                        <input type="number" name="experience" class="form-control" required>
+                                        <label>Experience (Years)</label>
+                                        <input type="number" name="experience" class="form-control">
                                     </div>
                                     <div class="form-group col-md-2">
-                                        <label>DOJ<span style="color: red;">*</span></label>
-                                        <input type="date" name="doj" class="form-control" required>
+                                        <label>DOJ</label>
+                                        <input type="date" name="doj" class="form-control">
                                     </div>
                                     <div class="form-group col-12">
                                         <h4 class="box-title text-start mb-2">Address Info</h4>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label>Address Line 1<span style="color: red;">*</span></label>
-                                        <input type="text" name="address1" class="form-control" required>
+                                        <label>Address Line 1</label>
+                                        <input type="text" name="address1" class="form-control" >
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label>Address Line 2</label>
                                         <input type="text" name="address2" class="form-control">
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>City<span style="color: red;">*</span></label>
-                                        <input type="text" name="city" class="form-control" required>
+                                        <label>City</label>
+                                        <input type="text" name="city" class="form-control">
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>State<span style="color: red;">*</span></label>
-                                        <select name="state" class="form-control" required>
+                                        <label>State</label>
+                                        <select name="state" class="form-control" >
                                             <option value="" disabled selected>Select</option>
                                             <option>Karnataka</option>
                                             <option>Andhra Pradesh</option>
@@ -197,31 +197,31 @@ $conn->close();
                                         </select>
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>Pincode<span style="color: red;">*</span></label>
-                                        <input type="text" name="pincode" class="form-control" required>
+                                        <label>Pincode</label>
+                                        <input type="text" name="pincode" class="form-control" >
                                     </div>
                                     <div class="form-group col-12">
                                         <h4 class="box-title text-start mb-2">Bank Info</h4>
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>Bank Name<span style="color: red;">*</span></label>
-                                        <input type="text" name="bank_name" class="form-control" required>
+                                        <label>Bank Name</label>
+                                        <input type="text" name="bank_name" class="form-control" >
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>Account Name<span style="color: red;">*</span></label>
-                                        <input type="text" name="account_name" class="form-control" required>
+                                        <label>Account Name</label>
+                                        <input type="text" name="account_name" class="form-control">
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>Account Number<span style="color: red;">*</span></label>
-                                        <input type="text" name="account_number" class="form-control" required>
+                                        <label>Account Number</label>
+                                        <input type="text" name="account_number" class="form-control">
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>Branch<span style="color: red;">*</span></label>
-                                        <input type="text" name="branch" class="form-control" required>
+                                        <label>Branch</label>
+                                        <input type="text" name="branch" class="form-control">
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>IFSC<span style="color: red;">*</span></label>
-                                        <input type="text" name="ifsc" class="form-control" required>
+                                        <label>IFSC</label>
+                                        <input type="text" name="ifsc" class="form-control" >
                                     </div>
                                 </div>
 

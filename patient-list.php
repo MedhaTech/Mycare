@@ -109,7 +109,7 @@ function calculateAge($dob) {
                 if ($result->num_rows > 0):
                     while ($row = $result->fetch_assoc()):
                         $id = $row['id'];
-                        $patientID = 'PAT' . str_pad($id, 3, '0', STR_PAD_LEFT);
+                        $patientID = 'UHID' . str_pad($id, 3, '0', STR_PAD_LEFT);
                         $modals = '';
                 ?>
                     <tr>
