@@ -29,7 +29,7 @@
                         </ol>
                     </div>
                     <!-- /.page-title-right -->
-                </div>
+      </div>
 
         <div class="widget-holder col-md-12">
             <div class="widget-bg">

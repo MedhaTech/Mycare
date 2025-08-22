@@ -15,14 +15,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $designation = $_POST['designation'];
     $dob = $_POST['dob'];
     $doj = $_POST['doj'];
-    $gender = $_POST['gender'];
+    $gender = isset($_POST['gender']) ? $_POST['gender'] : null;
     $qualification = $_POST['qualification'];
     $license = $_POST['license'];
     $experience = $_POST['experience'];
     $address1 = $_POST['address1'];
     $address2 = $_POST['address2'];
     $city = $_POST['city'];
-    $state = $_POST['state'];
+    $state = isset($_POST['state']) ? $_POST['state'] : null;
     $pincode = $_POST['pincode'];
     $bank_name = $_POST['bank_name'];
     $account_name = $_POST['account_name'];
