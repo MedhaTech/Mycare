@@ -86,6 +86,10 @@ if ($current_page !== 'login.php' && !isset($_SESSION['email'])) {
         .modal-footer .btn {
             min-width: 100px;
         }
+        @media (max-width: 1500px) {
+            .site-sidebar { display: none !important; background: #ccc; }
+            .site-sidebar.active { display: block !important; position: absolute; top: 0; left: 0; width: 300px; z-index: 2000; }
+        }
     </style>
 </head>
 
@@ -107,9 +111,9 @@ if ($current_page !== 'login.php' && !isset($_SESSION['email'])) {
                 <!-- Sidebar Toggle -->
                 <ul class="nav navbar-nav">
                     <li class="sidebar-toggle dropdown">
-                        <a href="javascript:void(0)" class="ripple">
-                            <i class="material-icons list-icon md-24">menu</i>
-                        </a>
+                       <a href="javascript:void(0)" class="ripple" id="sidebarToggle">
+    <i class="material-icons list-icon md-24">menu</i>
+</a>
                     </li>
                 </ul>
 
@@ -182,6 +186,15 @@ if ($current_page !== 'login.php' && !isset($_SESSION['email'])) {
         </div>
 
     </div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+  $('#sidebarToggle').off('click').on('click', function(){
+    console.log("Minimal toggle click!");
+    $('.site-sidebar').toggleClass('active');
+  });
+</script>
+
 
     <!-- JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

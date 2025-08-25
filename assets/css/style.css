@@ -145,7 +145,7 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
     line-height: 1.71429;
     color: #0e0808;
     text-align: left;
-    background-color: #dcdada;
+    background-color: rgb(248, 248, 248);
 }
 
 hr {
@@ -25225,6 +25225,11 @@ SIDEBAR
   .right-sidebar-dark .chat-panel textarea:-ms-input-placeholder {
     color: #fff;
     opacity: .7; }
+
+    .exp{
+      margin-top: 40px;
+      margin-bottom: -88px;
+    }
 
 /********************************
 *********************************
