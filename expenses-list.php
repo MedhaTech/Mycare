@@ -101,7 +101,7 @@
                 while ($row = $result->fetch_assoc()):
                 ?>
                     <tr data-date="<?= $row['expense_date']; ?>">
-                        <td><?= 'VCH' . str_pad($sl, 3, '0', STR_PAD_LEFT); ?></td>
+                        <td><?= $row['voucher_no']; ?></td>
                         <td><?= $row['expense_date']; ?></td>
                         <td><?= $row['expense_name']; ?></td>
                         <td><?= $row['category']; ?></td>

@@ -22,6 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($conn->query($sql) === TRUE) {
         $new_id = $conn->insert_id;
         $voucher_no = "VOU-" . str_pad($new_id, 4, "0", STR_PAD_LEFT);
+        $conn->query("UPDATE expenses SET voucher_no = '$voucher_no' WHERE id = $new_id");
         $_SESSION['toast_success'] = "Expense added successfully. Voucher No: $voucher_no";
         header("Location: expenses-list.php");
         exit();
@@ -33,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 <!-- Breadcrumb -->
-<main class="main-wrapper clearfix">
+<main class="main-wrapper clearfix exp">
            <div class="container">
                 <div class="row page-title clearfix">
                     <div class="page-title-left">
@@ -57,9 +58,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="widget-holder col-md-10 mx-auto">
                 <div class="widget-bg">
                     <div class="widget-body">
-                            <div>
+                            <!-- <div>
                               <h6>Add Expense form</h6>
-                            </div>
+                            </div> -->
                             <div>
                                 <form method="POST" class="mt-4">
                                     <div class="row">
@@ -161,6 +162,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" name="payment_mode" id="bank" value="Bank Transfer">
                                                     <label class="form-check-label" for="bank">Bank Transfer</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="payment_mode" id="cheque" value="Cheque">
+                                                    <label class="form-check-label" for="cheque">Cheque</label>
                                                 </div>
                                             </div>
                                         </div>
