@@ -29,9 +29,9 @@ include 'init.php';
 <div class="container mt-2 mb-3">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <ul class="nav nav-tabs tabs-bordered">
-            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#tab-all">All Appointments</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tab-all">All Appointments</a></li>
             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tab-upcoming">Upcoming</a></li>
-            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tab-today">Today</a></li>
+            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#tab-today">Today</a></li>
             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tab-completed">Completed</a></li>
             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tab-cancelled">Cancelled</a></li>
         </ul>
@@ -41,9 +41,9 @@ include 'init.php';
 
 <div class="container">
     <div class="tab-content">
-        <div class="tab-pane fade show active" id="tab-all"><?php include 'tab-all.php'; ?></div>
+        <div class="tab-pane fade" id="tab-all"><?php include 'tab-all.php'; ?></div>
         <div class="tab-pane fade" id="tab-upcoming"><?php include 'tab-upcoming.php'; ?></div>
-        <div class="tab-pane fade" id="tab-today"><?php include 'tab-today.php'; ?></div>
+        <div class="tab-pane fade show active" id="tab-today"><?php include 'tab-today.php'; ?></div>
         <div class="tab-pane fade" id="tab-completed"><?php include 'tab-completed.php'; ?></div>
         <div class="tab-pane fade" id="tab-cancelled"><?php include 'tab-cancelled.php'; ?></div>
     </div>

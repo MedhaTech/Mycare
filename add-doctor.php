@@ -90,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 $conn->close();
 ?>
-<main class="main-wrapper clearfix">
+<main class="main-wrapper clearfix exp">
     <div class="container">
         <div class="row page-title clearfix">
             <div class="page-title-left">

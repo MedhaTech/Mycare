@@ -110,7 +110,7 @@
                                             <!-- LEFT COLUMN -->
                                             <div class="col-md-6">
                                                 <div><strong>Doctor ID :</strong> #<?= $doctor_id; ?></div>
-                                                <div><strong>Name :</strong> Dr. <?= $row['name']; ?></div>
+                                                <div><strong>Name :</strong>  <?= $row['name']; ?></div>
                                                 <div><strong>Department :</strong> <?= $row['department']; ?></div>
                                                 <div><strong>Designation :</strong> <?= $row['designation']; ?></div>
                                                 <div><strong>Qualification :</strong> <?= $row['qualification']; ?></div>

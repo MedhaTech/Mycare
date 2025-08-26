@@ -40,6 +40,9 @@ if ($current_page !== 'login.php' && !isset($_SESSION['email'])) {
     <link href="assets/css/style.css" rel="stylesheet" type="text/css">
     <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
 
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <!-- JS -->
     <script src="assets/js/modernizr.min.js"></script>
     <script data-pace-options='{ "ajax": false, "selectors": [ "img" ]}' src="assets/js/pace.min.js"></script>
@@ -151,7 +154,10 @@ if ($current_page !== 'login.php' && !isset($_SESSION['email'])) {
                             <i class="material-icons ml-1">expand_more</i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right animated flipInY" aria-labelledby="profileDropdown">
-                            <a class="dropdown-item" href="manage-account.php">
+                            <!-- <a class="dropdown-item" href="manage-account.php">
+                                <i class="material-icons">manage_accounts</i><span>Manage Account</span>
+                            </a> -->
+                             <a class="dropdown-item" href="#">
                                 <i class="material-icons">manage_accounts</i><span>Manage Account</span>
                             </a>
                             <a class="dropdown-item" href="change-password.php">
