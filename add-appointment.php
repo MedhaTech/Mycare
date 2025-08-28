@@ -330,7 +330,7 @@ document.getElementById('searchPatient').addEventListener('input', function () {
                         document.getElementById('selectedPatientId').value = patient.id;
                         document.getElementById('p_name').value = patient.name;
                         document.getElementById('p_phone').value = patient.phone;
-                        document.getElementById('p_id').value = 'PAT' + patient.id.toString().padStart(4, '0');
+                        document.getElementById('p_id').value = 'UHID' + patient.id.toString().padStart(4, '0');
                         results.innerHTML = '';
                     };
                     results.appendChild(li);
