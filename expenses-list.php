@@ -94,7 +94,7 @@
                         <th>Expense Date</th>
                         <th>Name</th>
                         <th>Category</th>
-                        <th>Details</th>
+                        <!-- <th>Details</th> -->
                         <th>Mode of Payment</th>
                         <th>Amount</th>
                         <th>Actions</th>
@@ -125,7 +125,7 @@
                         <td><?= htmlspecialchars($row['expense_date']); ?></td>
                         <td><?= htmlspecialchars($row['expense_name']); ?></td>
                         <td><?= htmlspecialchars($row['category']); ?></td>
-                        <td><?= htmlspecialchars($row['details']); ?></td>
+                        <!-- <td><?= htmlspecialchars($row['details']); ?></td> -->
                         <td><?= htmlspecialchars($row['payment_mode']); ?></td>
                         <td>₹ <?= number_format($row['amount'], 2); ?></td>
                         <td class="text-center">
@@ -149,20 +149,33 @@
                                     <div class="row">
                                         <div class="col-md-6 text-secondary">
                                             <div><strong>Voucher No:</strong> <?= 'VCH' . str_pad($sl, 3, '0', STR_PAD_LEFT); ?></div>
-                                            <div><strong>Category:</strong> <?= htmlspecialchars($row['category']) ?></div>
-                                            <div><strong>Date:</strong> <?= date('Y-m-d', strtotime($row['expense_date'])) ?></div>
+                                            <div><strong>Name:</strong> <?= htmlspecialchars($row['expense_name']) ?></div>
+                                            <div><strong>Mobile:</strong> <?= htmlspecialchars($row['mobile']) ?></div>
+                                            <!-- <div><strong>Category:</strong> <?= htmlspecialchars($row['category']) ?></div> -->
                                             <div><strong>Amount:</strong> ₹ <?= number_format($row['amount'], 2) ?></div>
-                                            <div><strong>Payment Mode:</strong> <?= htmlspecialchars($row['payment_mode']) ?></div>
+                                            <div><strong>Details:</strong> <?= $row['details'] ?: '–' ?></div>
+                                            <div><strong>Remarks:</strong> <?= $row['remarks'] ?: '–' ?></div>
+                                            <!-- <div><strong>Date:</strong> <?= date('Y-m-d', strtotime($row['expense_date'])) ?></div> -->
+                                            <!-- <div><strong>Amount:</strong> ₹ <?= number_format($row['amount'], 2) ?></div> -->
+                                            <!-- <div><strong>Payment Mode:</strong> <?= htmlspecialchars($row['payment_mode']) ?></div> -->
+                                            <!-- <div><strong>Status:</strong>
+                                                <span class="badge badge-<?= strtolower($row['payment_status']) === 'paid' ? 'success' : 'secondary' ?>">
+                                                    <?= ucfirst($row['payment_status']) ?>
+                                                </span>
+                                            </div> -->
+                                        </div>
+                                        <div class="col-md-6 text-secondary">
                                             <div><strong>Status:</strong>
                                                 <span class="badge badge-<?= strtolower($row['payment_status']) === 'paid' ? 'success' : 'secondary' ?>">
                                                     <?= ucfirst($row['payment_status']) ?>
                                                 </span>
                                             </div>
-                                        </div>
-                                        <div class="col-md-6 text-secondary">
-                                            <div><strong>Name:</strong> <?= htmlspecialchars($row['expense_name']) ?></div>
-                                            <div><strong>Details:</strong> <?= $row['details'] ?: '–' ?></div>
-                                            <div><strong>Remarks:</strong> <?= $row['remarks'] ?: '–' ?></div>
+                                             <div><strong>Date:</strong> <?= date('Y-m-d', strtotime($row['expense_date'])) ?></div>
+                                             <div><strong>Category:</strong> <?= htmlspecialchars($row['category']) ?></div>
+                                            <div><strong>Payment Mode:</strong> <?= htmlspecialchars($row['payment_mode']) ?></div>
+                                            <!-- <div><strong>Name:</strong> <?= htmlspecialchars($row['expense_name']) ?></div> -->
+                                            <!-- <div><strong>Details:</strong> <?= $row['details'] ?: '–' ?></div>
+                                            <div><strong>Remarks:</strong> <?= $row['remarks'] ?: '–' ?></div> -->
                                         </div>
                                     </div>
                                 </div>

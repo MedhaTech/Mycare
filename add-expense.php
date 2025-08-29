@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($conn->query($sql) === TRUE) {
         $new_id = $conn->insert_id;
-        $voucher_no = "VOU-" . str_pad($new_id, 4, "0", STR_PAD_LEFT);
+        $voucher_no = "V-" . str_pad($new_id, 4, "0", STR_PAD_LEFT);
         $conn->query("UPDATE expenses SET voucher_no = '$voucher_no' WHERE id = $new_id");
         $_SESSION['toast_success'] = "Expense added successfully. Voucher No: $voucher_no";
         header("Location: expenses-list.php");
@@ -169,9 +169,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group col-md-6">
+                                        <!-- <div class="form-group col-md-6">
                                             <label>Amount</label>
                                             <input type="number" name="amount" class="form-control" required>
+                                        </div> -->
+                                        <div class="form-group col-md-6">
+                                            <label>Amount</label>
+                                            <input type="number" name="amount" class="form-control" required step="any">
                                         </div>
                                     </div>
 

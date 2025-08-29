@@ -60,6 +60,7 @@ $badgeClass = match ($status) {
                         <div><strong>OP ID:</strong> <?= $row['appointment_id']; ?></div>
                         <div><strong>Patient:</strong> <?= htmlspecialchars($row['patient_name'] ?? ''); ?></div>
                         <div><strong>Doctor:</strong> <?= htmlspecialchars($row['doctor_name'] ?? ''); ?></div>
+                        <div><strong>Source:</strong> <?= htmlspecialchars($row['source'] ?? ''); ?></div>
                         <div><strong>Department:</strong> <?= htmlspecialchars($row['department'] ?? ''); ?></div>
                         <div><strong>Date:</strong> <?= $row['appointment_date']; ?></div>
                         <div><strong>Time:</strong> <?= date("h:i A", strtotime($row['appointment_time'])); ?></div>

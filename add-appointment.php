@@ -25,19 +25,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // $appointment_date = $_POST['appointment_date'];
     // $appointment_time = $_POST['appointment_time'];
     $datetime = $_POST['appointment_datetime'];
-$appointment_date = date('Y-m-d', strtotime($datetime));
-$appointment_time = date('H:i:s', strtotime($datetime));
+    $appointment_date = date('Y-m-d', strtotime($datetime));
+    $appointment_time = date('H:i:s', strtotime($datetime));
     $type = $_POST['type'];
+    $source = $_POST['source']; // NEW: Source field
     // $duration = $_POST['duration'];
     $duration = NULL;
     $reason = $_POST['reason'];
     $status = 'Confirmed';
     $fee = $_POST['fee'];
 
+    // $stmt = $conn->prepare("INSERT INTO appointments 
+    //     (patient_id, doctor_id, appointment_date, appointment_time, type, duration, reason, status, fee) 
+    //     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    // $stmt->bind_param("iisssissi", $patient_id, $doctor_id, $appointment_date, $appointment_time, $type, $duration, $reason, $status, $fee);
     $stmt = $conn->prepare("INSERT INTO appointments 
-        (patient_id, doctor_id, appointment_date, appointment_time, type, duration, reason, status, fee) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("iisssissi", $patient_id, $doctor_id, $appointment_date, $appointment_time, $type, $duration, $reason, $status, $fee);
+    (patient_id, doctor_id, appointment_date, appointment_time, type, duration, reason, status, fee, source) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+$stmt->bind_param("iisssissds", 
+    $patient_id, 
+    $doctor_id, 
+    $appointment_date, 
+    $appointment_time, 
+    $type, 
+    $duration, 
+    $reason, 
+    $status, 
+    $fee, 
+    $source
+);
     if ($stmt->execute()) {
     $last_id = $stmt->insert_id; // Step 2: Get auto-incremented ID
     $appointment_id = 'OP' . str_pad($last_id, 3, '0', STR_PAD_LEFT); // Step 3: Format OP ID
@@ -207,86 +224,93 @@ while ($doc = $doctors->fetch_assoc()) {
                 </div>
             </form> -->
             <form method="POST" id="appointmentForm">
-    <input type="hidden" name="patient_id" id="selectedPatientId" value="<?= $preSelectedPatient['id'] ?? '' ?>">
-    <div class="card">
-        <div class="card-body">
-            <div class="form-row">
-                <div class="form-group col-md-4">
-                    <label>Patient Name<span style="color: red;">*</span></label>
-                    <input type="text" class="form-control text-dark font-weight-bold" id="p_name" value="<?= $preSelectedPatient['name'] ?? '' ?>" readonly>
-                </div>
-                <div class="form-group col-md-4">
-                    <label>Patient Mobile No<span style="color: red;">*</span></label>
-                    <input type="text" class="form-control text-dark font-weight-bold" id="p_phone" value="<?= $preSelectedPatient['phone'] ?? '' ?>" readonly>
-                </div>
-                <div class="form-group col-md-4">
-                    <label>Patient ID<span style="color: red;">*</span></label>
-                    <input type="text" class="form-control text-dark font-weight-bold" id="p_id" value="<?= isset($preSelectedPatient['id']) ? 'PAT' . str_pad($preSelectedPatient['id'], 4, '0', STR_PAD_LEFT) : '' ?>" readonly>
-                </div>
+                <input type="hidden" name="patient_id" id="selectedPatientId" value="<?= $preSelectedPatient['id'] ?? '' ?>">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label>Patient Name<span style="color: red;">*</span></label>
+                                <input type="text" class="form-control text-dark font-weight-bold" id="p_name" value="<?= $preSelectedPatient['name'] ?? '' ?>" readonly>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Patient Mobile No<span style="color: red;">*</span></label>
+                                <input type="text" class="form-control text-dark font-weight-bold" id="p_phone" value="<?= $preSelectedPatient['phone'] ?? '' ?>" readonly>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Patient ID<span style="color: red;">*</span></label>
+                                <input type="text" class="form-control text-dark font-weight-bold" id="p_id" value="<?= isset($preSelectedPatient['id']) ? 'PAT' . str_pad($preSelectedPatient['id'], 4, '0', STR_PAD_LEFT) : '' ?>" readonly>
+                            </div>
 
-                <!-- Doctor Dropdown with Search -->
-                <div class="form-group col-md-6">
-                    <label>Doctor<span style="color: red;">*</span></label>
-                    <select name="doctor_id" id="doctorSelect" class="form-control" required>
-                        <option value="">Select Doctor</option>
-                        <?php
-                        $allDocs = $conn->query("SELECT id, name FROM doctors WHERE status = 'Active'");
-                        while ($doc = $allDocs->fetch_assoc()):
-                        ?>
-                            <option value="<?= $doc['id'] ?>"><?= $doc['name'] ?></option>
-                        <?php endwhile; ?>
-                    </select>
-                </div>
+                            <!-- Doctor Dropdown with Search -->
+                            <div class="form-group col-md-4">
+                                <label>Doctor<span style="color: red;">*</span></label>
+                                <select name="doctor_id" id="doctorSelect" class="form-control" required>
+                                    <option value="">Select Doctor</option>
+                                    <?php
+                                    $allDocs = $conn->query("SELECT id, name FROM doctors WHERE status = 'Active'");
+                                    while ($doc = $allDocs->fetch_assoc()):
+                                    ?>
+                                        <option value="<?= $doc['id'] ?>"><?= $doc['name'] ?></option>
+                                    <?php endwhile; ?>
+                                </select>
+                            </div>
 
-                <!-- Merged Date & Time -->
-                <div class="form-group col-md-6">
-                    <label>Appointment Date & Time<span style="color: red;">*</span></label>
-                    <input type="datetime-local" name="appointment_datetime" class="form-control" required>
-                </div>
+                            <!-- Merged Date & Time -->
+                            <div class="form-group col-md-4">
+                                <label>Appointment Date & Time<span style="color: red;">*</span></label>
+                                <input type="datetime-local" name="appointment_datetime" class="form-control" required>
+                            </div>
 
-                <!-- Appointment Type -->
-                <div class="form-group col-md-6">
-                    <label>Appointment Type<span style="color: red;">*</span></label>
-                    <select name="type" class="form-control" required>
-                        <option value="Check-Up">Check-Up</option>
-                        <option value="Consultation" selected>Consultation</option>
-                        <option value="Follow-Up">Follow-Up</option>
-                        <option value="Procedure">Procedure</option>
-                        <option value="Emergency">Emergency</option>
-                        <option value="Vaccination">Vaccination</option>
-                        <option value="Physical Therapy">Physical Therapy</option>
-                    </select>
-                </div>
+                            <div class="form-group col-md-4">
+                                <label>Appointment Type<span style="color: red;">*</span></label>
+                                <select name="type" class="form-control" required>
+                                    <option value="Check-Up">Check-Up</option>
+                                    <option value="Consultation" selected>Consultation</option>
+                                    <option value="Follow-Up">Follow-Up</option>
+                                    <option value="Procedure">Procedure</option>
+                                    <option value="Emergency">Emergency</option>
+                                    <option value="Vaccination">Vaccination</option>
+                                    <option value="Physical Therapy">Physical Therapy</option>
+                                </select>
+                            </div>
 
-                <!-- Fee & Payment Mode -->
-                <div class="form-group col-md-3">
-                    <label>Fee (Rs.)<span style="color: red;">*</span></label>
-                    <input type="number" step="0.01" name="fee" class="form-control" required>
-                </div>
-                <div class="form-group col-md-3">
-                    <label>Mode of Payment<span style="color: red;">*</span></label>
-                    <select name="payment_mode" class="form-control" required>
-                        <option value="UPI">UPI</option>
-                        <option value="Cash">Cash</option>
-                        <option value="Net Banking">Net Banking</option>
-                        <option value="Card">Card</option>
-                    </select>
-                </div>
+                            <!-- Fee & Payment Mode -->
+                            <div class="form-group col-md-4">
+                                <label>Fee (Rs.)<span style="color: red;">*</span></label>
+                                <input type="number" step="0.01" name="fee" class="form-control" required>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Mode of Payment<span style="color: red;">*</span></label>
+                                <select name="payment_mode" class="form-control" required>
+                                    <option value="UPI">UPI</option>
+                                    <option value="Cash">Cash</option>
+                                    <option value="Net Banking">Net Banking</option>
+                                    <option value="Card">Card</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Source<span style="color: red;">*</span></label>
+                                <select name="source" class="form-control" required>
+                                    <option value="Direct Walk-In">Direct Walk-In</option>
+                                    <option value="Ravi">Ravi</option>
+                                    <option value="Reference">Reference</option>
+                                </select>
+                            </div>
 
-                <!-- Additional Info -->
-                <div class="form-group col-md-12">
-                    <label>Additional Information<span style="color: red;">*</span></label>
-                    <textarea name="reason" class="form-control" rows="3" placeholder="Describe..."></textarea>
-                </div>
+                            <!-- Additional Info -->
+                            <div class="form-group col-md-12">
+                                <label>Additional Information<span style="color: red;">*</span></label>
+                                <textarea name="reason" class="form-control" rows="3" placeholder="Describe..."></textarea>
+                            </div>
 
-                <div class="col-md-12 text-right">
-                    <button type="submit" class="btn btn-primary">Save Appointment</button>
-                    <a href="appointments.php" class="btn btn-secondary">Back to list</a>
+                            <div class="col-md-12 text-right">
+                                <button type="submit" class="btn btn-primary">Save Appointment</button>
+                                <a href="appointments.php" class="btn btn-secondary">Back to list</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</form>
+            </form>
 
         </div>
     </div>

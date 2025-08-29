@@ -121,11 +121,11 @@ if ($current_page !== 'login.php' && !isset($_SESSION['email'])) {
                 </ul>
 
                 <!-- Search Bar -->
-                <form class="navbar-search d-none d-sm-block" role="search">
+                <!-- <form class="navbar-search d-none d-sm-block" role="search">
                     <i class="material-icons list-icon">search</i>
                     <input type="search" class="search-query" placeholder="Search anything...">
                     <a href="javascript:void(0);" class="remove-focus"><i class="material-icons md-24">close</i></a>
-                </form>
+                </form> -->
 
                 <div class="spacer"></div>
 
