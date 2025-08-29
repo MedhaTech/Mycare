@@ -3,6 +3,7 @@ require 'dbconnection.php';
 $id = intval($_GET['id']);
 $sql = "SELECT 
             a.*, 
+            a.source,
             p.name AS patient_name, 
             p.phone, 
             p.gender, 
@@ -64,7 +65,7 @@ function badge($s) {
         <tr><td><strong>Phone:</strong></td><td><?= $data['phone'] ?: '—' ?></td></tr>
         <tr><td><strong>Gender:</strong></td><td><?= $data['gender'] ?: '—' ?></td></tr>
         <tr><td><strong>DOB:</strong></td><td><?= $data['dob'] ?: '—' ?></td></tr>
-
+        <tr><td><strong>Source:</strong></td><td><?= $data['source'] ?: '—' ?></td></tr>
     </table>
 
     <h5 style="font-size: 16px; margin-bottom: 10px;">Doctor Details</h5>

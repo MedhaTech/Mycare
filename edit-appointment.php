@@ -49,13 +49,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $date = $_POST['appointment_date'];
     $time = $_POST['appointment_time'];
     $type = $_POST['type'];
+    $source = $_POST['source'];
     $duration = $_POST['duration'];
     $reason = $_POST['reason'];
     $status = $_POST['status'];
     $fee = $_POST['fee'];
 
-    $update = $conn->prepare("UPDATE appointments SET patient_id=?, doctor_id=?, appointment_date=?, appointment_time=?, type=?, duration=?, reason=?, status=?, fee=? WHERE id=?");
-    $update->bind_param("iisssisssi", $patient_id, $doctor_id, $date, $time, $type, $duration, $reason, $status, $fee, $appointment_id);
+    // $update = $conn->prepare("UPDATE appointments SET patient_id=?, doctor_id=?, appointment_date=?, appointment_time=?, type=?, duration=?, reason=?, status=?, fee=? WHERE id=?");
+    // $update->bind_param("iisssisssi", $patient_id, $doctor_id, $date, $time, $type, $duration, $reason, $status, $fee, $appointment_id);
+
+    $update = $conn->prepare("UPDATE appointments 
+    SET patient_id=?, doctor_id=?, appointment_date=?, appointment_time=?, type=?, duration=?, reason=?, status=?, fee=?, source=? 
+    WHERE id=?");
+
+$update->bind_param("iisssissdsi", 
+    $patient_id, 
+    $doctor_id, 
+    $date, 
+    $time, 
+    $type, 
+    $duration, 
+    $reason, 
+    $status, 
+    $fee, 
+    $source, 
+    $appointment_id
+);
 
     if ($update->execute()) {
         $_SESSION['success'] = "Appointment updated successfully!";
@@ -215,6 +234,22 @@ include 'header.php';
                                         echo "<option value=\"$s\" $selected>$s</option>";
                                     }
                                     ?>
+                                </select>
+                            </div>
+                             <!-- <div class="form-group col-md-3">
+                                <label>Source<span style="color: red;">*</span></label>
+                                <select name="source" class="form-control" required>
+                                    <option value="Direct Walk-In">Direct Walk-In</option>
+                                    <option value="Ravi">Ravi</option>
+                                    <option value="Reference">Reference</option>
+                                </select>
+                            </div> -->
+                            <div class="form-group col-md-4">
+                                <label>Source<span style="color: red;">*</span></label>
+                                <select name="source" class="form-control" required>
+                                    <option value="Direct Walk-In" <?= $appointment['source'] === 'Direct Walk-In' ? 'selected' : '' ?>>Direct Walk-In</option>
+                                    <option value="Ravi" <?= $appointment['source'] === 'Ravi' ? 'selected' : '' ?>>Ravi</option>
+                                    <option value="Reference" <?= $appointment['source'] === 'Reference' ? 'selected' : '' ?>>Reference</option>
                                 </select>
                             </div>
 
